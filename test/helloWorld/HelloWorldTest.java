@@ -1,7 +1,11 @@
+package helloWorld;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+import helloWorld.HelloWorld;
 
 public class HelloWorldTest {
     @Test

@@ -1,3 +1,5 @@
+package helloWorld;
+
 public class HelloWorld {
   private String hello = "Hello World";
 
