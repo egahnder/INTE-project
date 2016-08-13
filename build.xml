@@ -1,61 +1,72 @@
-<?xml version="1.0"?>
-<project name="INTE-project" default="test" basedir=".">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copied from: https://github.com/schnatterer/AntTestReporting -->
+<!DOCTYPE project>
 
-  <!-- Set up path variables  -->
-  <property name="main.build.dir" value="build/main" />
-  <property name="main.src.dir" value="src" />
-  <property name="test.build.dir" value="build/test" />
-  <property name="test.src.dir" value="test" />
+<project name="INTE-project" basedir="." default="jar">
 
-  <path id="classpath.base" />
+	<!-- general -->
+	<property name="DEBUG" value="true" />
+	<property name="VERBOSE" value="true" />
+	<property name="TARGET" value="1.8" />
 
-  <!--  Set up test dependency path -->
-  <path id="classpath.test">
-    <pathelement location="lib/junit-4.11.jar" />
-    <pathelement location="lib/hamcrest-core-1.3.jar" />
-    <pathelement location="${main.build.dir}"/>
-    <path refid="classpath.base" />
-  </path>
+	<!-- folder -->
+	<property name="build.dir" value="bin" />
+	<property name="src" value="src" />
+	<property name="lib" value="lib" />
 
-  <target name="test" depends="run, clean" />
+	<!-- classpath -->
+	<path id="classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
 
-  <!-- Compiles source  -->
-  <target name="compile">
-    <mkdir dir="${main.build.dir}"/>
-    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
-      <classpath refid="classpath.base"/>
-    </javac>
-  </target>
+	<!-- targets -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
 
-  <!-- Compiles tests  -->
-  <target name="test-compile" depends="compile">
-    <mkdir dir="${test.build.dir}"/>
-    <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
-        <classpath refid="classpath.test"/>
-    </javac>
-    <echo message="Build done" />
-  </target>
+	<target name="compile" depends="clean">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dir}/build" />
 
-  <!-- Runs test  -->
-  <target name="run" depends="test-compile">
-    <junit printsummary="on" haltonfailure="yes">
-        <classpath>
-          <path refid="classpath.test" />
-          <pathelement location="${test.build.dir}"/>
-        </classpath>
-        <formatter type="brief" usefile="false" />
-        <!-- Runs all tests with filenames that end with ..Test.java  -->
-        <batchtest>
-            <fileset dir="${test.src.dir}" includes="**/*Test*.java" />
-        </batchtest>
-    </junit>
-  </target>
+		<!-- Create the time stamp -->
+		<tstamp>
+			<format property="lastUpdated" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
 
-  <!-- Deletesss all class files after tests are finishes  -->
-  <target name="clean">
-    <delete>
-        <fileset dir="${basedir}" includes="**/*.class" />
-    </delete>
-    <echo message="clean done" />
-  </target>
+		<javac target="${TARGET}" debug="${DEBUG}" verbose="${VERBOSE}" classpathref="classpath" optimize="true" destdir="${build.dir}">
+			<src path="${src}" />
+		</javac>
+
+		<fileset id="srcFiles" dir="${src}">
+		   	<exclude name="**/*.java"/>
+			<exclude name="**/*.html"/>
+			<include name="**/*.*" />
+		</fileset>
+
+		<copy todir="${build.dir}">
+			<fileset refid="srcFiles"/>
+		</copy>
+
+	</target>
+
+	<!-- <target name="jar" depends="compile, test">  -->
+	<target name="jar" depends="compile">
+
+		<jar jarfile="${build.dir}/build/${ant.project.name}.jar" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Build-Time" value="${lastUpdated}" />
+				<attribute name="Main-Class" value="com.some.pckge.SomeClass"/>
+			</manifest>
+		</jar>
+
+		<!-- Remove contents of build dir after packaging -->
+		<!-- <delete>
+		   <fileset dir="${build.dir}">
+		   	<include name="**/*.*" />
+		   </fileset>
+		</delete> -->
+	</target>
+
 </project>
