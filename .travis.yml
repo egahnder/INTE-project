@@ -1,5 +1,20 @@
+# This file configures the travis-ci.org builds
+
+  # Project language
 language: java
+
+  # Defines what jdk:s the build will run in
 jdk:
   - oraclejdk8
-script: 
+
+  #custom ant build instead of default "ant test"
+script:
   - ant -f build-test.xml
+
+
+
+  # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
+  # name is specified in travis repo settings
+addons:
+  artifacts:
+    - s3_region: "eu-central-1" # defaults to "us-east-1"
