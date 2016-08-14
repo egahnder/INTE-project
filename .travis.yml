@@ -16,4 +16,11 @@ script:
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
 addons:
-- artifacts: true
+  artifacts:
+    debug: true
+    paths:
+      - ./bin/test
+    target_paths: $TRAVIS_BUILD_NUMBER
+    working_dir: WORKING_DIR
+    bucket: inte
+    s3_region: eu-central-1
