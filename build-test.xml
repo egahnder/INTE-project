@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copied from: https://github.com/schnatterer/AntTestReporting -->
 <!DOCTYPE project>
-<project name="INTE-project-test" basedir="." default="all-test" xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="helloWorld-test" basedir="." default="all-test" xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<import file="build.xml" />
 
@@ -103,7 +102,7 @@
 				<file file="${test.data.dir}/jacoco.exec" />
 			</executiondata>
 
-			<structure name="AntTestReporting">
+			<structure name="helloWorld">
 				<classfiles>
 					<fileset dir="${build.dir}">
 						<include name="**/*.class" />

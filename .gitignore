@@ -6,3 +6,6 @@
 # Package Files #
 *.war
 *.ear
+
+#Folders
+/build/*
