@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copied from: https://github.com/schnatterer/AntTestReporting -->
 <!DOCTYPE project>
 
-<project name="INTE-project" basedir="." default="jar">
+<project name="helloWorld" basedir="." default="jar">
 
 	<!-- general -->
 	<property name="DEBUG" value="true" />
 	<property name="VERBOSE" value="true" />
-	<property name="TARGET" value="1.8" />
+	<property name="TARGET" value="1.6" />
 
 	<!-- folder -->
 	<property name="build.dir" value="bin" />
