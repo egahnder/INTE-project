@@ -22,5 +22,5 @@ addons:
       - ./bin/test
     target_paths: $TRAVIS_BUILD_NUMBER
     working_dir: WORKING_DIR
-    bucket: inte
-    s3_region: eu-central-1
+    bucket: inte-project
+    s3_region: us-east-1
