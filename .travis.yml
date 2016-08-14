@@ -16,5 +16,4 @@ script:
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
 addons:
-  artifacts:
-    - s3_region: "eu-central-1" # defaults to "us-east-1"
+- artifacts: true
