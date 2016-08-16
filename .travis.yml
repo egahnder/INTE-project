@@ -23,4 +23,4 @@ addons:
     target_paths: $TRAVIS_BUILD_NUMBER
     working_dir: WORKING_DIR
     bucket: inte-project
-    s3_region: us-east-1
+    s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
