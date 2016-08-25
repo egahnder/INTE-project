@@ -9,3 +9,6 @@
 
 #Folders
 /bin/*
+/bin/
+/.gradle/
+/build/
