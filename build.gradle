@@ -32,3 +32,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+// Tell Gradle to generate jaCoCo reports
+// get Gradle to generate report by running "gradle build jacocoTestReport"
+
+	jacocoTestReport {
+	    group = "Reporting"
+	    description = "Generate jaCoCo coverage report"
+	    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+	}
+
+
