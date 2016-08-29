@@ -17,7 +17,7 @@ cache:
     - $HOME/.gradle/wrapper/
     
    # Custom gradle build command to generate jaCoCo coverage
- script:
+script:
     - gradle check
     - gradle jacocoTestReport
     
