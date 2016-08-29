@@ -16,6 +16,9 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     
+   # Custom gradle build command to generate jaCoCo coverage
+ script:
+    - gradle build jacocoTestReport
     
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
