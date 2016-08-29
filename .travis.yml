@@ -16,6 +16,10 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     
+   # Custom gradle build command to generate jaCoCo coverage
+script:
+    - gradle check
+    - gradle jacocoTestReport
     
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
@@ -23,7 +27,7 @@ addons:
   artifacts:
     debug: true
     paths:
-      - ./build/reports/tests/test
+      - ./build/reports/
     target_paths: $TRAVIS_BUILD_NUMBER
     working_dir: WORKING_DIR
     bucket: inte-project
