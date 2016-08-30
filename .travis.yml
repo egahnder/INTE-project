@@ -6,6 +6,13 @@ language: java
   # Defines what jdk:s the build will run in
 jdk:
   - oraclejdk8
+  
+install:
+- curl https://www.jpm4j.org/install/script | sh
+- jpm install com.codacy:codacy-coverage-reporter:assembly
+
+before_script:
+- export CODACY_PROJECT_TOKEN=CODACY_TOKEN
 
 
 before_cache:
@@ -32,3 +39,6 @@ addons:
     working_dir: WORKING_DIR
     bucket: inte-project
     s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
+    
+after_sucess:
+- codacy-coverage-reporter -l Java -r coverage.xml
