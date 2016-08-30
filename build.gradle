@@ -12,6 +12,7 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'eclipse'
+apply plugin: 'findbugs'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -40,5 +41,14 @@ dependencies {
 	    description = "Generate jaCoCo coverage report"
 	    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
 	}
+	
+// Generate Findbugs HTML report
+	
+	tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
 
 
