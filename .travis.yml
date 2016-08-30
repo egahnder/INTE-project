@@ -13,7 +13,7 @@ before_install:
   - ${HOME}/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
 
 before_script:
-- export CODACY_PROJECT_TOKEN=CODACY_TOKEN
+- export CODACY_PROJECT_TOKEN=$CODACY_TOKEN
 
 
 before_cache:
