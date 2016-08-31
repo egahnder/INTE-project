@@ -28,7 +28,6 @@ cache:
 script:
     - gradle check
     - gradle jacocoTestReport
-    - ${HOME}/jpm/bin/codacy-coverage-reporter -l Java -r coverage.xml
     
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
