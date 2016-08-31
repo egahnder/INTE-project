@@ -42,6 +42,6 @@ script:
    # bucket: inte-project
    # s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
    
-   "after_script": [
-    "/home/travis/jpm/bin/codacy-coverage-reporter -l Java -r build/test-results/jacoco/INTE.xml"
-  ],
+after_script:
+- /home/travis/jpm/bin/codacy-coverage-reporter -l Java -r build/test-results/jacoco/INTE.xml
+
