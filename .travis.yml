@@ -10,7 +10,7 @@ jdk:
 before_install:
   - curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar >jpm4j.jar
   - java -jar jpm4j.jar --user init
-  - ${HOME}/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
+  - /home/travis/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
 
 before_script:
 - export CODACY_PROJECT_TOKEN=$CODACY_TOKEN
@@ -41,3 +41,7 @@ script:
    # working_dir: WORKING_DIR
    # bucket: inte-project
    # s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
+   
+   "after_script": [
+    "/home/travis/jpm/bin/codacy-coverage-reporter -l Java -r build/test-results/jacoco/INTE.xml"
+  ],
