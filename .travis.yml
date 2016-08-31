@@ -28,6 +28,7 @@ cache:
 script:
     - gradle check
     - gradle jacocoTestReport
+    - ${HOME}/jpm/bin/codacy-coverage-reporter -l Java -r coverage.xml
     
   # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
   # name is specified in travis repo settings
@@ -40,6 +41,3 @@ script:
    # working_dir: WORKING_DIR
    # bucket: inte-project
    # s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
-    
-after_sucess:
-- ${HOME}/jpm/bin/codacy-coverage-reporter -l Java -r coverage.xml
