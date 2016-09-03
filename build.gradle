@@ -12,6 +12,9 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'eclipse'
+apply plugin: 'findbugs'
+
+
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -19,6 +22,12 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
+
+configurations {
+    providedRuntime
+    codacy
+  }
+
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
@@ -30,20 +39,67 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    
+    //Codacy reporter
+    codacy group: 'com.codacy', name: 'codacy-coverage-reporter', version: '1.0.10'
 }
 
+
 // Tell Gradle to generate jaCoCo reports
-// get Gradle to generate report by running "gradle jacocoTestReport"
+// get Gradle to generate report by running "Gradle jacocoTestReport"
 
 	jacocoTestReport {
 		dependsOn 'build'
 	    group = "Reporting"
 	    description = "Generate jaCoCo coverage report"
 	    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-	    
-	    reports{
-	    	html.enabled = true
+
+	    reports {
+      xml.enabled true
+      xml.destination "${buildDir}/reports/jacoco/${archivesBaseName}.xml"
+      csv.enabled false
+      html.enabled true
+      html.destination "${buildDir}/reports/jacoco/html"
+
+	}
+	
+// Generate Findbugs HTML report
+	
+	tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+// Send coverage statistics to Codacy
+//
+	task uploadCoverageToCodacy(type: JavaExec, dependsOn : jacocoTestReport) {
+	   main = "com.codacy.CodacyCoverageReporter"
+	   classpath = configurations.codacy
+	   args = [
+	            "-l",
+	            "Java",
+	            "-r",
+	            "${buildDir}/reports/jacoco/${archivesBaseName}.xml"
+	           ]
+	}
+	
+	task (codacyDepsize) << {
+	def size = 0;
+	configurations.codacy.collect { it.length() / (1024 * 1024) }.each { size += it }
+	println "Total dependencies size: ${Math.round(size * 100) / 100} Mb"
+	
+	configurations
+	        .codacy
+	        .sort { -it.length() }
+	        .each { println "${it.name} : ${Math.round(it.length() / (1024) * 100) / 100} kb" }
+	}
+	
+	task (codacyLocs) << {
+	    configurations.codacy.each {
+	        String jarName = it
+	        println jarName
 	    }
 	}
-
 
