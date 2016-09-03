@@ -12,6 +12,7 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'eclipse'
+apply plugin: 'findbugs'
 
 
 
@@ -59,6 +60,15 @@ dependencies {
       html.destination "${buildDir}/reports/jacoco/html"
     }
 	}
+	
+// Generate Findbugs HTML report
+	
+	tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
 
 // Send coverage statistics to Codacy
 //
