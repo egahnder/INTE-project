@@ -6,6 +6,14 @@ language: java
   # Defines what jdk:s the build will run in
 jdk:
   - oraclejdk8
+  
+before_install:
+  - curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar >jpm4j.jar
+  - java -jar jpm4j.jar --user init
+  - /home/travis/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
+
+before_script:
+- export CODACY_PROJECT_TOKEN=$CODACY_TOKEN
 
 
 before_cache:
@@ -21,14 +29,7 @@ script:
     - gradle check
     - gradle jacocoTestReport
     
-  # uploads testresults and coverage to s3 bucket, access keys and s3 bucket
-  # name is specified in travis repo settings
-addons:
-  artifacts:
-    debug: true
-    paths:
-      - ./build/reports/
-    target_paths: $TRAVIS_BUILD_NUMBER
-    working_dir: WORKING_DIR
-    bucket: inte-project
-    s3_region: us-east-1 #eu-central-1 does not support v2 auth (can't use)
+    # Sends coverage data to codacy
+after_script:
+- /home/travis/jpm/bin/codacy-coverage-reporter -l Java -r build/reports/jacoco/INTE-project.xml
+
