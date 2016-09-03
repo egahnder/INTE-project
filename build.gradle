@@ -33,12 +33,17 @@ dependencies {
 }
 
 // Tell Gradle to generate jaCoCo reports
-// get Gradle to generate report by running "gradle build jacocoTestReport"
+// get Gradle to generate report by running "gradle jacocoTestReport"
 
 	jacocoTestReport {
+		dependsOn 'build'
 	    group = "Reporting"
 	    description = "Generate jaCoCo coverage report"
 	    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+	    
+	    reports{
+	    	html.enabled = true
+	    }
 	}
 
 
