@@ -44,21 +44,24 @@ dependencies {
     codacy group: 'com.codacy', name: 'codacy-coverage-reporter', version: '1.0.10'
 }
 
-// Generate jaCoCo Report
-// ! get Gradle to generate report by running "gradle build jacocoTestReport"
+
+// Tell Gradle to generate jaCoCo reports
+// get Gradle to generate report by running "Gradle jacocoTestReport"
 
 	jacocoTestReport {
+		dependsOn 'build'
 	    group = "Reporting"
 	    description = "Generate jaCoCo coverage report"
 	    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-	    
+
 	    reports {
       xml.enabled true
       xml.destination "${buildDir}/reports/jacoco/${archivesBaseName}.xml"
       csv.enabled false
       html.enabled true
       html.destination "${buildDir}/reports/jacoco/html"
-    }
+      }
+
 	}
 	
 // Generate Findbugs HTML report
