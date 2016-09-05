@@ -10,5 +10,9 @@ public class WorkingDirectory {
 	public WorkingDirectory(String path) {
 		this.path = Paths.get("/tmp/foo");
 	}
+	
+	public Path getPath() {
+		return path;
+	}
 
 }
