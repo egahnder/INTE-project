@@ -6,8 +6,12 @@ public class Controller{
 
     }
 
-	public void parseCommand(String input) {
-
-		
+	public String parseCommand(String input) {
+		return input;
 	}
+	
+	public String displayPrompt(){
+		return null;
+	}
+	
 }
