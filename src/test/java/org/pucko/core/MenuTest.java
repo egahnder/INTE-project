@@ -15,18 +15,17 @@ public class MenuTest {
 	public void testControllerIsCalledWhenUserGivesInput(){
 		
 		String input = "";
-		String inStream = input+"\n";
-		createInputStream(inStream);
+		InputStream inStream = createInputStream(input+"\n");
 		Controller controller = mock(Controller.class);		
-		Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(inStream);
 		Menu menu = new Menu(controller, scanner);
 		menu.run();
 		verify(controller, times(1)).parseCommand(input);
 	}
 	
 
-	private void createInputStream(String input) {
+	private InputStream createInputStream(String input) {
         InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        return in;
     }
 }
