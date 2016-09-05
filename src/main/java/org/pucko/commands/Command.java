@@ -26,15 +26,23 @@ public abstract class Command {
 	
 	public abstract void undo();
 	
-	public abstract void addArg(String arg);
+	public void addArg(String arg) {
+		
+	}
 	
-	public abstract String getOutput();
+	public String getOutput() {
+		return null;
+	}
 	
 	public abstract boolean valiadate();
 	
-	public abstract ArrayList<String> getErrors();
+	public ArrayList<String> getErrors() {
+		return new ArrayList<String>();
+	}
 	
-	public abstract void pipeTo(Command command);
+	public void pipeTo(Command command) {
+		
+	}
 	
 	
 
