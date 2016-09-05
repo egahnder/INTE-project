@@ -11,10 +11,7 @@ public class WorkingDirectoryTest {
 		WorkingDirectory wd = new WorkingDirectory(path);
 	}
 
-	@Test
-	public void test() {
-		WorkingDirectory wd = new WorkingDirectory();
-	}
+	
 
 
 }
