@@ -1,5 +1,20 @@
 package org.pucko.core;
 
-public class Menu {
+import java.util.Scanner;
 
+public class Menu {
+	Scanner scanner;
+	Controller controller;
+
+	public Menu(Controller controller, Scanner scanner) {
+		this.scanner = scanner;
+		this.controller = controller;
+	}
+
+	public void run() {
+		while (scanner.hasNextLine()) {
+			String input = scanner.nextLine();
+			controller.parseCommand(input);
+		}
+	}
 }
