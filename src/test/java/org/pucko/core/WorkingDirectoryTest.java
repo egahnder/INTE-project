@@ -28,7 +28,7 @@ public class WorkingDirectoryTest {
 		String oldPath = "/tmp/foo";
 		WorkingDirectory wd = createWD(oldPath);
 		String newPath = "/tmp/bar";
-		wd.changeDirectory(newPath);
+		wd.changePath(newPath);
 		
 		assertEquals(newPath, wd.getPath().toString());
 		

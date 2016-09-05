@@ -14,5 +14,9 @@ public class WorkingDirectory {
 	public Path getPath() {
 		return path;
 	}
+	
+	public void changePath(String newPath) {
+		path = Paths.get(newPath);
+	}
 
 }
