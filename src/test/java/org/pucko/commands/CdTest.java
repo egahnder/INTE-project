@@ -3,7 +3,9 @@ package org.pucko.commands;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -113,6 +115,59 @@ public class CdTest {
         
         
     }
+    
+    @Test
+    public void tesInvalidDir() throws IOException {
+        
+        // Lets create a temporary directory in system "temp" dir
+        Path tempDir = Files.createTempDirectory("tempFiles");
+        
+        Path invalidDir = tempDir.resolve("invalidDirectory");
+        System.out.println(invalidDir.toString());
+        
+        boolean isRegularReadableFile = Files.isRegularFile(invalidDir) &
+                Files.isReadable(invalidDir);
+        
+        if (isRegularReadableFile) {
+            try {
+                Files.delete(invalidDir);
+            } catch (NoSuchFileException x) {
+                System.err.format("%s: no such" + " file or directory%n", invalidDir);
+            } catch (DirectoryNotEmptyException x) {
+                System.err.format("%s not empty%n", invalidDir);
+            } catch (IOException x) {
+                // File permission problems are caught here.
+                System.err.println(x);
+            }
+        }
+        
+        // Create the ArrayList with the invalid Dir
+        ArrayList<String> args = new ArrayList<>();
+        args.add("invalidDir");
+        
+   
+        // And lets make sure to delete the tempFolder on exit
+        tempDir.toFile().deleteOnExit();
+        
+        //Then we create a new WorkingDirectory object with the old Path
+        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        
+        // Creating the Cd object
+        Cd cd = new Cd(args, wd);
+        
+        // Cd changes the directory
+        boolean executedOk = cd.execute();
+        
+        // We make sure cd.execute return false since the directory does not exist.
+        
+        assertEquals(true, executedOk);
+        
+        
+        
+    }
+    
+    
+    
     
     public WorkingDirectory createWorkingDirectory(Path path) {
         
