@@ -28,10 +28,13 @@ public class CdTest {
             args.add("bar");
             
             // Lets create a temporary directory in system "temp" dir
+            // Lets also create the directory bar within it
             Path tempDir = Files.createTempDirectory("tempFiles");
+            Path newPath = Files.createDirectory(tempDir.resolve(Paths.get("bar")));
             
             // And lets make sure to delete the tempFolder on exit
             tempDir.toFile().deleteOnExit();
+            newPath.toFile().deleteOnExit();
             
             //Then we create a new WorkingDirectory object with the old Path
             WorkingDirectory wd = createWorkingDirectory(tempDir);
@@ -41,9 +44,6 @@ public class CdTest {
             
             // Cd changes the directory
             cd.execute();
-            
-            // This is the new Path to compare to the one Cd has changed
-            Path newPath = Paths.get(tempDir.toString() +"/bar");
             
             // We compare our specially prepared path with the one WorkingDirectory returns
             assertEquals(newPath, wd.getPath());
@@ -107,7 +107,6 @@ public class CdTest {
         // This is the new Path to compare to the one Cd has changed
         String homePath = System.getProperty("user.home");
         Path newPath = Paths.get(homePath);
-        System.out.println(newPath);
         
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
@@ -123,7 +122,6 @@ public class CdTest {
         Path tempDir = Files.createTempDirectory("tempFiles");
         
         Path invalidDir = tempDir.resolve("invalidDirectory");
-        System.out.println(invalidDir.toString());
         
         boolean isRegularReadableFile = Files.isRegularFile(invalidDir) &
                 Files.isReadable(invalidDir);
@@ -160,7 +158,7 @@ public class CdTest {
         
         // We make sure cd.execute return false since the directory does not exist.
         
-        assertEquals(true, executedOk);
+        assertEquals(false, executedOk);
         
         
         
