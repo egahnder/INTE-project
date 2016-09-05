@@ -42,6 +42,10 @@ dependencies {
     
     //Codacy reporter
     codacy group: 'com.codacy', name: 'codacy-coverage-reporter', version: '1.0.10'
+    
+    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+	compile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+    
 }
 
 
