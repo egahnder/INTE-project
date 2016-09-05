@@ -7,16 +7,16 @@ public class WorkingDirectory {
 
     private Path path;
 
-    public WorkingDirectory(String path) {
-        this.path = Paths.get("/tmp/foo");
+    public WorkingDirectory(Path path) {
+        this.path = path;
     }
 
     public Path getPath() {
         return path;
     }
 
-    public void changePath(String newPath) {
-        path = Paths.get(newPath);
+    public void changePath(Path newPath) {
+        this.path = newPath;
     }
 
 }
