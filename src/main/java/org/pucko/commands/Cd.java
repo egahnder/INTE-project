@@ -16,10 +16,15 @@ public class Cd {
     }
     
     public boolean execute() {
-        String oldPath = wd.getPath().toString();
-        String newPath = oldPath + "/" + args.get(0);
-        Path replacementPath = Paths.get(newPath);
-        wd.changePath(replacementPath);
+        
+        // Lets get the old Path
+        Path oldPath = wd.getPath();
+        
+        //Them create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
+        Path newPath = oldPath.resolve(Paths.get(args.get(0)));
+        
+        // Then we change the path using WorkingDirectorys changePath().
+        wd.changePath(newPath);
         return true;
     }
 
