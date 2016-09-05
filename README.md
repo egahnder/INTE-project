@@ -8,8 +8,8 @@
 ## Gruppmedlemmar är:
 * Daniel Andersson - loxtank
 * Eric Egan - etegan
-* Anna Tenander - 
-* Tobias Ahnhem - antennan
+* Anna Tenander - antennan
+* Tobias Ahnhem - 
 
 ## Classdiagram
 * https://www.lucidchart.com/invitations/accept/ada8c51c-4dd3-4d89-aa60-0c9b5ec7fa3a
