@@ -31,7 +31,7 @@ public class CdTest {
             
             cd.execute();
 
-            assertEquals(newPath, wd.getPath().toString());
+            assertEquals(newPath, wd.getPath());
         
     }
     
