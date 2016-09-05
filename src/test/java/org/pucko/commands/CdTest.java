@@ -28,6 +28,9 @@ public class CdTest {
             // Lets create a temporary directory in system "temp" dir
             Path tempDir = Files.createTempDirectory("tempFiles");
             
+            // And lets make sure to delete the tempFolder on exit
+            tempDir.toFile().deleteOnExit();
+            
             //Then we create a new WorkingDirectory object with the old Path
             WorkingDirectory wd = createWorkingDirectory(tempDir);
             
@@ -42,6 +45,40 @@ public class CdTest {
             
             // We compare our specially prepared path with the one WorkingDirectory returns
             assertEquals(newPath, wd.getPath());
+        
+    }
+    
+    @Test
+    public void testParentDir() throws IOException {
+        
+     // Create the ArrayList with the new .. indication we want to move up one level in the hiearchy
+        ArrayList<String> args = new ArrayList<>();
+        args.add("..");
+        
+     // Lets create a temporary directory in system "temp" dir
+        Path tempDir = Files.createTempDirectory("tempFiles");
+        System.out.println(tempDir);
+        
+        // And lets make sure to delete the tempFolder on exit
+        tempDir.toFile().deleteOnExit();
+        
+        //Then we create a new WorkingDirectory object with the old Path
+        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        
+        // Creating the Cd object
+        Cd cd = new Cd(args, wd);
+        
+        // Cd changes the directory
+        cd.execute();
+        
+        // This is the new Path to compare to the one Cd has changed
+        Path newPath = tempDir.getParent();
+        System.out.println(newPath);
+        
+        // We compare our specially prepared path with the one WorkingDirectory returns
+        assertEquals(newPath, wd.getPath());
+        
+        
         
     }
     
