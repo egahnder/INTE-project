@@ -9,7 +9,7 @@
 * Daniel Andersson - loxtank
 * Eric Egan - etegan
 * Anna Tennander - antennan
-* Tobias Ahnhem - 
+* Tobias Ahnhem - tahnhem
 
 ## Classdiagram
 * https://www.lucidchart.com/invitations/accept/ada8c51c-4dd3-4d89-aa60-0c9b5ec7fa3a
