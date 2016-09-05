@@ -4,19 +4,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class WorkingDirectory {
-	
-	private Path path;
-	
-	public WorkingDirectory(String path) {
-		this.path = Paths.get("/tmp/foo");
-	}
-	
-	public Path getPath() {
-		return path;
-	}
-	
-	public void changePath(String newPath) {
-		path = Paths.get(newPath);
-	}
+
+    private Path path;
+
+    public WorkingDirectory(String path) {
+        this.path = Paths.get("/tmp/foo");
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void changePath(String newPath) {
+        path = Paths.get(newPath);
+    }
 
 }
