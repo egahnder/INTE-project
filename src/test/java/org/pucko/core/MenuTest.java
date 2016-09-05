@@ -13,13 +13,15 @@ public class MenuTest {
 	
 	@Test
 	public void testControllerIsCalledWhenUserGivesInput(){
-		String input = "cd\n";
-		createInputStream(input);
+		
+		String input = "";
+		String inStream = input+"\n";
+		createInputStream(inStream);
 		Controller controller = mock(Controller.class);		
 		Scanner scanner = new Scanner(System.in);
 		Menu menu = new Menu(controller, scanner);
 		menu.run();
-		verify(controller, times(1)).parseCommand(any(String.class));
+		verify(controller, times(1)).parseCommand(input);
 	}
 	
 

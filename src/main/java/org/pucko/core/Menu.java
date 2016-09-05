@@ -14,9 +14,10 @@ public class Menu {
 
 	public void run() {
 		while (true) {
-			String input = scanner.nextLine();
-			controller.parseCommand(input);
-			
+			if (scanner.hasNextLine()) {
+				String input = scanner.nextLine();
+				controller.parseCommand(input);				
+			}
 		}		
 	}
 }
