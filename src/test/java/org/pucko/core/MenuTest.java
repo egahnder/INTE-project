@@ -13,13 +13,9 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 import org.pucko.testutilities.InputBuilder;
 
 import static org.mockito.Mockito.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class MenuTest {
-	private InputBuilder inputBuilder;
 	private Controller controller;
 	private Scanner scanner;
 	private Menu menu;
@@ -34,7 +30,6 @@ public class MenuTest {
 	
 	@Before
 	public void setUp(){
-		inputBuilder = new InputBuilder();
 		controller = mock(Controller.class);
 		scanner = new Scanner(System.in);
 		menu = new Menu(controller, scanner);
@@ -61,6 +56,5 @@ public class MenuTest {
 		when(controller.getPrompt()).thenReturn(testPromt);
 		menu.run();
 		assertEquals(out.getLog(), testPromt);
-		
 	}
 }
