@@ -12,8 +12,13 @@ public class Menu {
 	}
 
 	public void run() {
+		String promt = controller.getPrompt();
+		System.out.print(promt);
 		while (scanner.hasNextLine()) {
 			String input = scanner.nextLine();
+			if (input.equals("exit")) {
+				System.exit(0);
+			}
 			controller.parseCommand(input);
 		}
 	}

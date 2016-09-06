@@ -10,8 +10,9 @@ public class InputBuilder {
 		this.builder = new StringBuilder();
 	}
 	
-	public void addLine(String line){
+	public InputBuilder addLine(String line){
 		builder.append(line+System.lineSeparator());
+		return this;
 	}
 	
 	public InputStream build(){

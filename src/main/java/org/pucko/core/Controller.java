@@ -10,7 +10,7 @@ public class Controller{
 		return input;
 	}
 	
-	public String displayPrompt(){
+	public String getPrompt(){
 		return null;
 	}
 	
