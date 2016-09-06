@@ -1,8 +1,9 @@
 package org.pucko.core;
 
 
-import org.pucko.core.*;
 import org.junit.Test;
+import org.pucko.testutilities.InputBuilder;
+
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayInputStream;
@@ -15,17 +16,13 @@ public class MenuTest {
 	public void testControllerIsCalledWhenUserGivesInput(){
 		
 		String input = "";
-		InputStream inStream = createInputStream(input+"\n");
+		InputBuilder inputBuilder = new InputBuilder();
+		inputBuilder.addLine(input);
+		InputStream inputStream = inputBuilder.build();
 		Controller controller = mock(Controller.class);		
-		Scanner scanner = new Scanner(inStream);
+		Scanner scanner = new Scanner(inputStream);
 		Menu menu = new Menu(controller, scanner);
 		menu.run();
 		verify(controller, times(1)).parseCommand(input);
 	}
-	
-
-	private InputStream createInputStream(String input) {
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        return in;
-    }
 }
