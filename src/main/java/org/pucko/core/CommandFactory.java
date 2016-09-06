@@ -6,7 +6,7 @@ import org.pucko.commands.Command;
 
 public class CommandFactory {
 	
-	public ArrayList<Command> createCommands(String commandString){
+	public ArrayList<Command> createCommands(String commandString, WorkingDirectory workingDirectory){
 		return null;
 		
 	}
