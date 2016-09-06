@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
+
+import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 import org.pucko.testutilities.InputBuilder;
 
@@ -20,6 +22,7 @@ public class MenuTest {
 	private InputBuilder inputBuilder;
 	private Controller controller;
 	private Scanner scanner;
+	private Menu menu;
 	@Rule
 	public ExpectedSystemExit exit = ExpectedSystemExit.none();
 	
@@ -34,28 +37,30 @@ public class MenuTest {
 		inputBuilder = new InputBuilder();
 		controller = mock(Controller.class);
 		scanner = new Scanner(System.in);
+		menu = new Menu(controller, scanner);
 	}
 	
 	@Test
 	public void testControllerIsCalledWhenUserGivesInput(){	
 		String inputString = "";		
 		input.provideLines(inputString);
-		Menu menu = new Menu(controller, scanner);
 		menu.run();
 		verify(controller, times(1)).parseCommand(inputString);
 	}
 	
 	@Test
 	public void testSystemExit(){
-
 		input.provideLines("exit");
-		Menu menu = new Menu(controller, scanner);
 		exit.expectSystemExitWithStatus(0);
 		menu.run();
 	}
 	
 	@Test
 	public void testSystemOutIsCalledWithPromt(){
+		String testPromt = "test";
+		when(controller.getPrompt()).thenReturn(testPromt);
+		menu.run();
+		assertEquals(out.getLog(), testPromt);
 		
 	}
 }
