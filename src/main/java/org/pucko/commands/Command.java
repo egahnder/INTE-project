@@ -6,20 +6,29 @@ import org.pucko.core.WorkingDirectory;
 
 public abstract class Command {
 
-	private String name;
-	private String output;
-	private Command pipe;
-	private ArrayList<String> args;
-	private ArrayList<String> validationErrors;
-	private WorkingDirectory workingDirectory;
-	boolean valid;
+	protected String name;
+	protected String output;
+	protected Command pipe;
+	protected ArrayList<String> args;
+	protected ArrayList<String> validationErrors;
+	protected WorkingDirectory workingDirectory;
+	protected boolean valid;
 
 	public Command(ArrayList<String> commands, WorkingDirectory workingDirectory) {
+	    this.args = commands;
+	    this.workingDirectory = workingDirectory;
 
 	}
 
 	public Command(ArrayList<String> commands, WorkingDirectory workingDirectory, Command command) {
+	    this.args = commands;
+        this.workingDirectory = workingDirectory;
+        this.pipe = command;
 
+	}
+	
+	public void setValid(boolean valid) {
+	    this.valid = valid;
 	}
 
 	public abstract boolean execute();

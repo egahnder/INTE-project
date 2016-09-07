@@ -27,6 +27,7 @@ configurations {
     providedRuntime
     codacy
   }
+  
 
 
 // In this section you declare the dependencies for your production and test code
@@ -45,12 +46,18 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.mockito/mockito-all
 	compile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+	
+	// https://mvnrepository.com/artifact/com.github.stefanbirkner/system-rules
+	compile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.16.0'
+	
     
 }
 
 
+
 // Tell Gradle to generate jaCoCo reports
 // get Gradle to generate report by running "Gradle jacocoTestReport"
+
 
 	jacocoTestReport {
 		dependsOn 'build'
