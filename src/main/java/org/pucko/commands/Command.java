@@ -25,6 +25,10 @@ public abstract class Command {
         this.pipe = command;
 
 	}
+	
+	protected void setValid(boolean valid) {
+	    this.valid = valid;
+	}
 
 	public abstract boolean execute();
 	
