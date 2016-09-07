@@ -10,7 +10,6 @@ public abstract class Command {
 	protected String output;
 	protected Command pipe;
 	protected ArrayList<String> args;
-	protected ArrayList<String> validationErrors;
 	protected WorkingDirectory workingDirectory;
 	protected boolean valid;
 
@@ -26,10 +25,6 @@ public abstract class Command {
         this.pipe = command;
 
 	}
-	
-	public void setValid(boolean valid) {
-	    this.valid = valid;
-	}
 
 	public abstract boolean execute();
 	
@@ -43,11 +38,8 @@ public abstract class Command {
 		return null;
 	}
 	
-	public abstract boolean valiadate();
+	public abstract boolean validate();
 	
-	public ArrayList<String> getErrors() {
-		return new ArrayList<String>();
-	}
 	
 	public void pipeTo(Command command) {
 		
