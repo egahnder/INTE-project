@@ -14,7 +14,7 @@ public class CommandRunner {
 	
 	public String runCommands(ArrayList<Command> commands){
 		for (Command command : commands) {
-			if (command.valiadate()) {
+			if (command.validate()) {
 				command.execute();
 				extractOutput(command);
 			}
