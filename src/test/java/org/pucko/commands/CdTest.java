@@ -62,28 +62,24 @@ public class CdTest {
         ArrayList<String> args = new ArrayList<>();
         args.add("..");
         
-        // Lets create a temporary directory in system "temp" dir
-        Path tempDir = Files.createTempDirectory("tempFiles");
+        File testDir = testFolder.getRoot();
         
-        // And lets make sure to delete the tempFolder on exit
-        tempDir.toFile().deleteOnExit();
+        Path oldDir = testDir.toPath();
+        
+        // This is the new Path to compare to the one Cd has changed
+        Path newPath = oldDir.getParent();
         
         //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
         Cd cd = new Cd(args, wd);
         
         // Cd changes the directory
-        cd.execute();
-        
-        // This is the new Path to compare to the one Cd has changed
-        Path newPath = tempDir.getParent();
+        cd.execute(); 
         
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
-        
-        
         
     }
     
@@ -94,14 +90,12 @@ public class CdTest {
         ArrayList<String> args = new ArrayList<>();
         args.add("~");
         
-        // Lets create a temporary directory in system "temp" dir
-        Path tempDir = Files.createTempDirectory("tempFiles");
-   
-        // And lets make sure to delete the tempFolder on exit
-        tempDir.toFile().deleteOnExit();
+        File testDir = testFolder.getRoot();
+        
+        Path oldDir = testDir.toPath();
         
         //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
         Cd cd = new Cd(args, wd);
@@ -122,48 +116,24 @@ public class CdTest {
     
     @Test
     public void tesInvalidDir() throws IOException {
-        
-        // Lets create a temporary directory in system "temp" dir
-        Path tempDir = Files.createTempDirectory("tempFiles");
-        
-        Path invalidDir = tempDir.resolve("invalidDirectory");
-        
-        boolean isRegularReadableFile = Files.isRegularFile(invalidDir) &
-                Files.isReadable(invalidDir);
-        
-        if (isRegularReadableFile) {
-            try {
-                Files.delete(invalidDir);
-            } catch (NoSuchFileException x) {
-                System.err.format("%s: no such" + " file or directory%n", invalidDir);
-            } catch (DirectoryNotEmptyException x) {
-                System.err.format("%s not empty%n", invalidDir);
-            } catch (IOException x) {
-                // File permission problems are caught here.
-                System.err.println(x);
-            }
-        }
-        
-        // Create the ArrayList with the invalid Dir
         ArrayList<String> args = new ArrayList<>();
         args.add("invalidDir");
         
-   
-        // And lets make sure to delete the tempFolder on exit
-        tempDir.toFile().deleteOnExit();
+        // Lets create a temporary directory in system "temp" dir
         
+        File testDir = testFolder.getRoot();
+        
+        Path oldDir = testDir.toPath();
+  
         //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
         Cd cd = new Cd(args, wd);
         
-        // Cd changes the directory
-        boolean executedOk = cd.execute();
-        
         // We make sure cd.execute return false since the directory does not exist.
         
-        assertEquals(false, executedOk);
+        assertEquals(false, cd.execute());
            
     }
     
