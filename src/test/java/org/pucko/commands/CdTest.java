@@ -144,10 +144,12 @@ public class CdTest {
         args.add(null);
         
         
-        Path tempDir = Paths.get("/tmp/");
+        File testDir = testFolder.getRoot();
+        
+        Path oldDir = testDir.toPath();
         
         //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
         Cd cd = new Cd(args, wd);
