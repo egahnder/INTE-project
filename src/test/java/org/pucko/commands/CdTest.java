@@ -159,12 +159,31 @@ public class CdTest {
         // We make sure cd.execute return false since the directory does not exist.
         
         assertEquals(false, executedOk);
-        
-        
-        
+           
     }
     
-    
+    @Test
+    public void nullPathTest() {
+     // Create the ArrayList with the invalid Dir
+        ArrayList<String> args = new ArrayList<>();
+        args.add(null);
+        
+        Path tempDir = Paths.get("/tmp/");
+        
+        //Then we create a new WorkingDirectory object with the old Path
+        WorkingDirectory wd = createWorkingDirectory(tempDir);
+        
+        // Creating the Cd object
+        Cd cd = new Cd(args, wd);
+        
+        // Cd changes the directory
+        boolean executedOk = cd.execute();
+        
+        // We make sure cd.execute return false since the directory argument is null;
+        
+        assertEquals(false, executedOk);
+        
+    }
     
     
     public WorkingDirectory createWorkingDirectory(Path path) {

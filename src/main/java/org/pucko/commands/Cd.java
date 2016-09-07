@@ -22,12 +22,16 @@ public class Cd extends Command {
         // Lets get the old Path
         Path oldPath = workingDirectory.getPath();
 
+        // If args contains null, return false
         // If the argument is ".." create the new Path by calling getParent() on the old path
         // If the argument is "~" create a Path to user home
         // Otherwise create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
 
-
-        if (args.get(0).equals("..")) {
+        if (args.contains(null)) {
+            return false;
+        }
+        
+          else if (args.get(0).equals("..")) {
             newPath = workingDirectory.getPath().getParent();
         } else if (args.get(0).equals("~")) {
             String homePath = System.getProperty("user.home");
@@ -37,6 +41,7 @@ public class Cd extends Command {
         }
         
         //Lets make sure the directory exists
+        
         boolean isRegularReadableFile = Files.isReadable(newPath);
         
         if (!isRegularReadableFile) {
