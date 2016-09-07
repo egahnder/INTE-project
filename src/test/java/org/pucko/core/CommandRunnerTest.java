@@ -96,9 +96,9 @@ public class CommandRunnerTest {
 	}
 	
 	private void setCommandValidations(boolean first, boolean second, boolean third){
-		when(firstCommand.valiadate()).thenReturn(first);
-		when(secondCommand.valiadate()).thenReturn(second);
-		when(thirdCommand.valiadate()).thenReturn(third);
+		when(firstCommand.validate()).thenReturn(first);
+		when(secondCommand.validate()).thenReturn(second);
+		when(thirdCommand.validate()).thenReturn(third);
 	}
 	
 	private void setCommandOutput(String first, String second, String third){
