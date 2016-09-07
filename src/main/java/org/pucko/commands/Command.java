@@ -43,7 +43,7 @@ public abstract class Command {
 		return null;
 	}
 	
-	public abstract boolean valiadate();
+	public abstract boolean validate();
 	
 	public ArrayList<String> getErrors() {
 		return new ArrayList<String>();
