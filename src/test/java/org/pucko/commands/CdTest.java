@@ -2,6 +2,7 @@ package org.pucko.commands;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
@@ -11,10 +12,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.pucko.core.WorkingDirectory;
 
 public class CdTest {
+    
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws Exception {
@@ -27,17 +33,16 @@ public class CdTest {
             ArrayList<String> args = new ArrayList<>();
             args.add("bar");
             
-            // Lets create a temporary directory in system "temp" dir
-            // Lets also create the directory bar within it
-            Path tempDir = Files.createTempDirectory("tempFiles");
-            Path newPath = Files.createDirectory(tempDir.resolve(Paths.get("bar")));
+            File testDir = testFolder.getRoot();
             
-            // And lets make sure to delete the tempFolder on exit
-            tempDir.toFile().deleteOnExit();
-            newPath.toFile().deleteOnExit();
+            Path oldDir = testDir.toPath();
+            
+            File newDir = testFolder.newFolder(args.get(0));
+            
+            Path newPath = newDir.toPath();
             
             //Then we create a new WorkingDirectory object with the old Path
-            WorkingDirectory wd = createWorkingDirectory(tempDir);
+            WorkingDirectory wd = createWorkingDirectory(oldDir);
             
             // Creating the Cd object
             Cd cd = new Cd(args, wd);
@@ -168,6 +173,7 @@ public class CdTest {
         ArrayList<String> args = new ArrayList<>();
         args.add(null);
         
+        
         Path tempDir = Paths.get("/tmp/");
         
         //Then we create a new WorkingDirectory object with the old Path
@@ -182,6 +188,33 @@ public class CdTest {
         // We make sure cd.execute return false since the directory argument is null;
         
         assertEquals(false, executedOk);
+        
+    }
+    
+    @Test
+    public void forceValidateTest() throws IOException {
+     // Create the ArrayList with the invalid Dir
+        ArrayList<String> args = new ArrayList<>();
+        args.add("foo");
+        
+        File testDir = testFolder.getRoot();
+        
+        Path oldDir = testDir.toPath();
+        
+        File newDir = testFolder.newFolder("foo");
+        
+        Path newPath = newDir.toPath();
+        
+        
+        //Then we create a new WorkingDirectory object with the old Path
+        WorkingDirectory wd = createWorkingDirectory(oldDir);
+        
+        // Creating the Cd object
+        Cd cd = new Cd(args, wd);
+        
+        // We make sure cd.validate() return true since the directory is valid;
+        
+        assertEquals(true, cd.validate());
         
     }
     
