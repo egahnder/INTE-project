@@ -19,7 +19,11 @@ public class Cd extends Command {
     }
 
     public boolean execute() {
-        validate();
+        
+        // If the command is not valid, we return false
+        if(!validate()) {
+            return false; 
+        }
        
         // Then we change the path using WorkingDirectorys changePath().
         workingDirectory.changePath(newPath);
