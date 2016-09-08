@@ -29,6 +29,12 @@ public class EchoTest {
 		invalidArgs.add("");
 	}
 	
+	@Test
+	public void testExecuteSetsOutput(){
+		Echo e = new Echo(validArgs, wd);
+		e.execute();
+		assertEquals(validArgs.get(0), e.getOutput());
+	}
 	
 	@Test
 	public void testExecute(){

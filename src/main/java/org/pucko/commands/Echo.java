@@ -12,7 +12,9 @@ public class Echo extends Command {
 
 	@Override
 	public boolean execute() {
-		// TODO Auto-generated method stub
+
+		output = args.get(0);
+		
 		return true;
 	}
 
