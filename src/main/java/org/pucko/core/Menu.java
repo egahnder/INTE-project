@@ -2,7 +2,7 @@ package org.pucko.core;
 
 import java.util.Scanner;
 
-public class Menu {
+public class Menu implements OutputHandler {
 	Scanner scanner;
 	Controller controller;
 
@@ -21,5 +21,10 @@ public class Menu {
 			}
 			controller.parseCommand(input);
 		}
+	}
+
+	@Override
+	public void handleOutput(String output) {
+		// TODO Auto-generated method stub
 	}
 }
