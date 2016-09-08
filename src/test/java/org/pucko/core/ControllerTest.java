@@ -40,15 +40,6 @@ public class ControllerTest {
 	}
 	
 	@Test
-	public void testControllerReturnsRunnerOutput(){
-		String output = "";
-		ArrayList<Command> commands = new ArrayList<>();
-		when(commandRunner.runCommands(commands)).thenReturn(output);
-		String controllerOutput = controller.parseCommand("");
-		assertEquals(output, controllerOutput);
-	}
-	
-	@Test
 	public void testControllerSendsBackPrompt(){
 		Path path = mock(Path.class);
 		String pathString = "test";
