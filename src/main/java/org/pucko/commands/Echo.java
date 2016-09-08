@@ -20,19 +20,19 @@ public class Echo extends Command {
 		return true;
 	}
 
-
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+
+		if (args != null && args.size() != 0) {
+			return true;
+		}
+
 		return false;
 	}
 
-	
-	
 	@Override
 	public void undo() {
 
 	}
 
-	
 }

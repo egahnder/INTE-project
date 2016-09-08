@@ -39,8 +39,35 @@ public class EchoTest {
 		assertEquals("Hello World!", e.getOutput());
 
 	}
-	
-	
+
+	@Test
+	public void testValidateWithNullInput() {
+
+		ArrayList<String> input = null;
+		Echo e = new Echo(input, wd);
+		assertFalse(e.validate());
+
+	}
+
+	@Test
+	public void testValidateWithZeroInput() {
+
+		ArrayList<String> input = new ArrayList<>();
+		Echo e = new Echo(input, wd);
+		assertFalse(e.validate());
+
+	}
+
+	@Test
+	public void testValidateWithValidInput() {
+		ArrayList<String> input = new ArrayList<>();
+		input.add("Hello");
+		Echo e = new Echo(input, wd);
+
+		assertTrue(e.validate());
+
+	}
+
 	@Test
 	public void testExecute() {
 		ArrayList<String> inputArgs = new ArrayList<>();
