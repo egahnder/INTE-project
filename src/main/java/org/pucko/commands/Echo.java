@@ -12,17 +12,14 @@ public class Echo extends Command {
 
 	@Override
 	public boolean execute() {
-
-		output = args.get(0);
-		
+		output = "";
+		for (String s : args) {
+			output += s + " ";
+		}
+		output = output.trim();
 		return true;
 	}
 
-	@Override
-	public void undo() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean validate() {
@@ -30,4 +27,12 @@ public class Echo extends Command {
 		return false;
 	}
 
+	
+	
+	@Override
+	public void undo() {
+
+	}
+
+	
 }

@@ -10,42 +10,53 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
-
 public class EchoTest {
 
 	private WorkingDirectory wd;
-	private ArrayList<String> validArgs;
-	private ArrayList<String> invalidArgs;
-	
-	
-	
+
 	@Before
-	public void setUp(){
+	public void setUp() {
 		wd = mock(WorkingDirectory.class);
-		validArgs = new ArrayList<>();
-		validArgs.add("Hello World");
-		invalidArgs = new ArrayList<>();
-		invalidArgs.add(null);
-		invalidArgs.add("");
 	}
-	
+
 	@Test
-	public void testExecuteSetsOutput(){
-		Echo e = new Echo(validArgs, wd);
+	public void testExecuteSetsSingleWordOutput() {
+		ArrayList<String> inputArgs = new ArrayList<>();
+		inputArgs.add("Hello");
+
+		Echo e = new Echo(inputArgs, wd);
 		e.execute();
-		assertEquals(validArgs.get(0), e.getOutput());
+		assertEquals("Hello", e.getOutput());
 	}
+
+	@Test
+	public void testExecuteSetsMultipleWordOutput() {
+		String[] input = { "Hello", "World!" };
+		ArrayList<String> inputArgs = populateArrayList(input);
+
+		Echo e = new Echo(inputArgs, wd);
+		e.execute();
+		assertEquals("Hello World!", e.getOutput());
+
+	}
+	
 	
 	@Test
-	public void testExecute(){
-		
-		Echo e = new Echo(validArgs, wd);
+	public void testExecute() {
+		ArrayList<String> inputArgs = new ArrayList<>();
+		inputArgs.add("Hello");
+
+		Echo e = new Echo(inputArgs, wd);
 		assertTrue(e.execute());
-		
 	}
-	
-	
-	
-	
-	
+
+	private ArrayList<String> populateArrayList(String[] input) {
+		ArrayList<String> output = new ArrayList<>();
+		for (String s : input) {
+			output.add(s);
+		}
+		return output;
+
+	}
+
 }
