@@ -16,14 +16,6 @@ public abstract class Command {
 	public Command(ArrayList<String> commands, WorkingDirectory workingDirectory) {
 	    this.args = commands;
 	    this.workingDirectory = workingDirectory;
-
-	}
-
-	public Command(ArrayList<String> commands, WorkingDirectory workingDirectory, Command command) {
-	    this.args = commands;
-        this.workingDirectory = workingDirectory;
-        this.pipe = command;
-
 	}
 	
 	protected void setValid(boolean valid) {
@@ -35,18 +27,18 @@ public abstract class Command {
 	public abstract void undo();
 	
 	public void addArg(String arg) {
-		
+		args.add(arg);
 	}
 	
 	public String getOutput() {
-		return null;
+		return output;
 	}
 	
 	public abstract boolean validate();
 	
 	
 	public void pipeTo(Command command) {
-		
+		pipe = command;
 	}
 	
 	
