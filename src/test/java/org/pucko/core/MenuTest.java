@@ -10,7 +10,7 @@ import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
-import org.pucko.testutilities.InputBuilder;
+
 
 import static org.mockito.Mockito.*;
 import java.util.Scanner;
@@ -40,7 +40,7 @@ public class MenuTest {
 		String inputString = "";		
 		input.provideLines(inputString);
 		menu.run();
-		verify(controller, times(1)).parseCommand(inputString);
+		verify(controller, times(1)).parseCommand(inputString, menu);
 	}
 	
 	@Test
@@ -56,5 +56,11 @@ public class MenuTest {
 		when(controller.getPrompt()).thenReturn(testPromt);
 		menu.run();
 		assertEquals(out.getLog(), testPromt);
+	}
+	
+	@Test
+	public void testHandleOutput(){
+		menu.handleOutput("test");
+		assertEquals(out.getLog(), "test\n");
 	}
 }
