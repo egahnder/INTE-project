@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 import static org.mockito.Mockito.*;
@@ -13,10 +14,12 @@ import java.util.ArrayList;
 public class EchoTest {
 
 	private WorkingDirectory wd;
+	private OutputHandler oh;
 
 	@Before
 	public void setUp() {
 		wd = mock(WorkingDirectory.class);
+		oh = mock(OutputHandler.class);
 	}
 
 	@Test
@@ -24,9 +27,10 @@ public class EchoTest {
 		ArrayList<String> inputArgs = new ArrayList<>();
 		inputArgs.add("Hello");
 
-		Echo e = new Echo(inputArgs, wd);
+		Echo e = new Echo(inputArgs, wd, oh);
 		e.execute();
-		assertEquals("Hello", e.getOutput());
+		verify(oh, times(1)).handleOutput("Hello");
+
 	}
 
 	@Test
@@ -34,9 +38,9 @@ public class EchoTest {
 		String[] input = { "Hello", "World!" };
 		ArrayList<String> inputArgs = populateArrayList(input);
 
-		Echo e = new Echo(inputArgs, wd);
+		Echo e = new Echo(inputArgs, wd, oh);
 		e.execute();
-		assertEquals("Hello World!", e.getOutput());
+		verify(oh, times(1)).handleOutput("Hello World!");
 
 	}
 
@@ -44,7 +48,7 @@ public class EchoTest {
 	public void testValidateWithNullInput() {
 
 		ArrayList<String> input = null;
-		Echo e = new Echo(input, wd);
+		Echo e = new Echo(input, wd, oh);
 		assertFalse(e.validate());
 
 	}
@@ -53,7 +57,7 @@ public class EchoTest {
 	public void testValidateWithZeroInput() {
 
 		ArrayList<String> input = new ArrayList<>();
-		Echo e = new Echo(input, wd);
+		Echo e = new Echo(input, wd, oh);
 		assertFalse(e.validate());
 
 	}
@@ -62,7 +66,7 @@ public class EchoTest {
 	public void testValidateWithValidInput() {
 		ArrayList<String> input = new ArrayList<>();
 		input.add("Hello");
-		Echo e = new Echo(input, wd);
+		Echo e = new Echo(input, wd, oh);
 
 		assertTrue(e.validate());
 
@@ -73,7 +77,7 @@ public class EchoTest {
 		ArrayList<String> inputArgs = new ArrayList<>();
 		inputArgs.add("Hello");
 
-		Echo e = new Echo(inputArgs, wd);
+		Echo e = new Echo(inputArgs, wd, oh);
 		assertTrue(e.execute());
 	}
 
