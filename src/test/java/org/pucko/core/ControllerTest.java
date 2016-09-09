@@ -15,9 +15,11 @@ public class ControllerTest {
 	private CommandFactory commandFactory;
 	private CommandRunner commandRunner;
 	private Controller controller;
+	private OutputHandler outputHandler;
 
 	@Before
 	public void setUp(){
+		outputHandler = mock(OutputHandler.class);
 		workingDirectory = mock(WorkingDirectory.class);
 		commandFactory = mock(CommandFactory.class);
 		commandRunner = mock(CommandRunner.class);
@@ -27,25 +29,16 @@ public class ControllerTest {
 	@Test
 	public void testControllerCallsFactoryWithCommandString(){
 		String command = "command";
-		controller.parseCommand(command);
-		verify(commandFactory, times(1)).createCommands(command, workingDirectory);
+		controller.parseCommand(command, outputHandler);
+		verify(commandFactory, times(1)).createCommands(command, workingDirectory, outputHandler);
 	}
 	
 	@Test
 	public void testControllerSendsCommandsToRunner(){
 		ArrayList<Command> commandList = new ArrayList<>();
-		when(commandFactory.createCommands(anyString(), any(WorkingDirectory.class))).thenReturn(commandList);
-		controller.parseCommand("");
+		when(commandFactory.createCommands("", workingDirectory, outputHandler)).thenReturn(commandList);
+		controller.parseCommand("", outputHandler);
 		verify(commandRunner, times(1)).runCommands(commandList);
-	}
-	
-	@Test
-	public void testControllerReturnsRunnerOutput(){
-		String output = "";
-		ArrayList<Command> commands = new ArrayList<>();
-		when(commandRunner.runCommands(commands)).thenReturn(output);
-		String controllerOutput = controller.parseCommand("");
-		assertEquals(output, controllerOutput);
 	}
 	
 	@Test
@@ -55,8 +48,6 @@ public class ControllerTest {
 		when(path.toString()).thenReturn(pathString);
 		when(workingDirectory.getPath()).thenReturn(path);
 		String prompt = controller.getPrompt();
-		assertEquals(pathString, prompt);
-		
+		assertEquals(pathString, prompt);	
 	}
-
 }

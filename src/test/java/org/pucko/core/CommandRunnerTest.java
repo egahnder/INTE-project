@@ -61,38 +61,6 @@ public class CommandRunnerTest {
 		commandRunner.runCommands(commands);
 		inOrder.verify(secondCommand, times(1)).undo();
 		inOrder.verify(firstCommand, times(1)).undo();
-		
-	}
-	
-	@Test
-	public void testValidCommandsReturnOutput(){
-		setCommandValidations(true, true, true);
-		setCommandOutput("test1", "test2", "test3");
-		String output = commandRunner.runCommands(commands);
-		assertEquals("test1\ntest2\ntest3\n", output);
-	}
-	
-	@Test
-	public void testUnvalidCommandReturnsOutput(){
-		setCommandValidations(true, true, false);
-		setCommandOutput("test1", "test2", "test3");
-		String output = commandRunner.runCommands(commands);
-		assertEquals("test1\ntest2\ntest3\ntest2\ntest1\n", output);	
-	}
-	
-	@Test
-	public void testNullStringOutputIsNotShown(){
-		setCommandOutput("test1", null, "test3");
-		setCommandValidations(true, true, true);
-		String output = commandRunner.runCommands(commands);
-		assertEquals("test1\ntest3\n", output);
-	}
-	@Test
-	public void testEmptyStringOutputIsNotShown(){
-		setCommandOutput("test1", "", "test3");
-		setCommandValidations(true, true, true);
-		String output = commandRunner.runCommands(commands);
-		assertEquals("test1\ntest3\n", output);
 	}
 	
 	private void setCommandValidations(boolean first, boolean second, boolean third){
@@ -100,12 +68,4 @@ public class CommandRunnerTest {
 		when(secondCommand.validate()).thenReturn(second);
 		when(thirdCommand.validate()).thenReturn(third);
 	}
-	
-	private void setCommandOutput(String first, String second, String third){
-		when(firstCommand.getOutput()).thenReturn(first);
-		when(secondCommand.getOutput()).thenReturn(second);
-		when(thirdCommand.getOutput()).thenReturn(third);
-	}
-	
-	
 }

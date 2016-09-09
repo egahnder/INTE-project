@@ -19,12 +19,12 @@ public class Menu implements OutputHandler {
 			if (input.equals("exit")) {
 				System.exit(0);
 			}
-			controller.parseCommand(input);
+			controller.parseCommand(input, this);
 		}
 	}
 
 	@Override
 	public void handleOutput(String output) {
-		// TODO Auto-generated method stub
+		System.out.println(output);
 	}
 }
