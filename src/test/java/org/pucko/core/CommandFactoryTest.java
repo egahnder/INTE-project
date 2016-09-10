@@ -3,7 +3,9 @@ package org.pucko.core;
 
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.pucko.commands.Cd;
 import org.pucko.commands.Command;
+import org.pucko.commands.Echo;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -48,8 +50,31 @@ public class CommandFactoryTest {
          
         returnedCommands = cf.createCommands(command, wd, oh);
         
-        
         assertFalse(returnedCommands.isEmpty());
         
     }
+    
+    @Test
+    public void testCFCreatesCommadsofCdClass() {
+        command = "cd ..";
+         
+        returnedCommands = cf.createCommands(command, wd, oh);
+        Command returnedCommand = returnedCommands.get(0);
+        
+        assertEquals(Cd.class, returnedCommand.getClass());
+        
+    }
+    
+    @Test
+    public void testCFCreatesCommadsofEchoClass() {
+        command = "echo Hello";
+         
+        returnedCommands = cf.createCommands(command, wd, oh);
+        Command returnedCommand = returnedCommands.get(0);
+        
+        assertEquals(Echo.class, returnedCommand.getClass());
+        
+    }
+    
+    
 }
