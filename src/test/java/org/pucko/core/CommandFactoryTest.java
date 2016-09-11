@@ -2,18 +2,14 @@ package org.pucko.core;
 
 
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.pucko.commands.Cd;
 import org.pucko.commands.Command;
 import org.pucko.commands.Echo;
 import org.junit.Before;
-import org.junit.Rule;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
