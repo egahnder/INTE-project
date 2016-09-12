@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Cd extends Command {
@@ -13,8 +14,8 @@ public class Cd extends Command {
     
 
 
-    public Cd(ArrayList<String> args, WorkingDirectory wd) {
-        super(args, wd);
+    public Cd(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
+        super(args, wd, oh);
       
     }
 
