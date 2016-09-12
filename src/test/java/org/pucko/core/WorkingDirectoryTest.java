@@ -7,7 +7,15 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
-public class WorkingDirectoryTest {
+public class WorkingDirectoryTest{
+
+
+    @Test
+    public void testZeroArgsConstructorStartsInHome() {
+        WorkingDirectory dir = new WorkingDirectory();
+        String path = dir.getPath().toString();
+        assertEquals(System.getProperty("user.home"), path);
+    }
 
 
     @Test

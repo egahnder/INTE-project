@@ -7,6 +7,11 @@ public class WorkingDirectory {
 
     private Path path;
 
+    public WorkingDirectory(){
+        Path home = Paths.get(System.getProperty("user.home"));
+        this.path = home;
+    }
+
     public WorkingDirectory(Path path) {
         this.path = path;
     }
