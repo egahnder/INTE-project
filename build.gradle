@@ -16,7 +16,11 @@ apply plugin: 'eclipse'
 // We will use findbugs at a later stage.
 // apply plugin: 'findbugs' 
 
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.pucko.core.Program'
+    }
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {

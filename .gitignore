@@ -12,3 +12,9 @@
 /bin/
 /.gradle/
 /build/
+/.classpath
+/.project
+/.settings/
+/.idea/
+/src/test/test.iml
+/src/main/main.iml
