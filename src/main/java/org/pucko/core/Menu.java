@@ -13,7 +13,7 @@ public class Menu implements OutputHandler {
 
 	public void run() {
 		String promt = controller.getPrompt();
-		System.out.print(promt);
+		System.out.print(promt+" ");
 		while (scanner.hasNextLine()) {
 			String input = scanner.nextLine();
 			if (input.equals("exit")) {
