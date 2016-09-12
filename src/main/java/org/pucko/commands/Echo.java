@@ -7,8 +7,8 @@ import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
 
-	public Echo(ArrayList<String> args, WorkingDirectory wd) {
-		super(args, wd);
+	public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
+		super(args, wd, oh);
 	}
 
 	@Override

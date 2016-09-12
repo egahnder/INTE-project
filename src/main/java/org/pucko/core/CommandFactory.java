@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.pucko.commands.CdCommandMethod;
 import org.pucko.commands.Command;
+import org.pucko.commands.CommandMethod;
 import org.pucko.commands.EchoCommandMethod;
 
 public class CommandFactory {
@@ -29,11 +30,12 @@ public class CommandFactory {
 	        System.out.println("Invalid Command");
 	        return null;
 	    }
+	    
 	   String commandToCreate = allArgs[0];
 	   
 	   // Remove the command from allArgs array
 	   allArgs = Arrays.copyOfRange(allArgs, 1, allArgs.length);
-	   createdCommand.add(validCommands.get(commandToCreate).runMethod(allArgs, wd));
+	   createdCommand.add(validCommands.get(commandToCreate).runMethod(allArgs, wd, outputHandler));
 	    
 		return createdCommand;		
 	}
