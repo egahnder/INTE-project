@@ -55,7 +55,7 @@ public class MenuTest {
 		String testPromt = "test";
 		when(controller.getPrompt()).thenReturn(testPromt);
 		menu.run();
-		assertEquals(out.getLog(), testPromt);
+		assertEquals(out.getLog(), testPromt + " ");
 	}
 	
 	@Test
