@@ -8,7 +8,7 @@ import org.pucko.core.WorkingDirectory;
 public abstract class Command implements OutputHandler{
 
 	protected String name;
-	private OutputHandler outputHandler;
+	protected OutputHandler outputHandler;
 	protected ArrayList<String> args;
 	protected WorkingDirectory workingDirectory;
 	protected boolean valid;

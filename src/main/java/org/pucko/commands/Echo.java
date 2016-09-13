@@ -18,7 +18,7 @@ public class Echo extends Command {
 			outputString += s + " ";
 		}
 		outputString = outputString.trim();
-		output(outputString);
+		outputHandler.handleOutput(outputString);
 		return true;
 	}
 
