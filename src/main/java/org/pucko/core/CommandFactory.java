@@ -32,7 +32,7 @@ public class CommandFactory {
 	   // Remove the command from allArgs array
 	   allArgs = Arrays.copyOfRange(allArgs, 1, allArgs.length);
 	   createdCommand.add(validCommands.get(commandToCreate).runMethod(allArgs, workingDirectory, outputHandler));
-	    
+
 		return createdCommand;		
 	}
 

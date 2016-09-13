@@ -13,6 +13,9 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 
 
 import static org.mockito.Mockito.*;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class MenuTest {
@@ -55,12 +58,14 @@ public class MenuTest {
 		String testPromt = "test";
 		when(controller.getPrompt()).thenReturn(testPromt);
 		menu.run();
-		assertEquals(out.getLog(), testPromt + " ");
+		assertEquals(testPromt, out.getLog());
 	}
 	
 	@Test
 	public void testHandleOutput(){
 		menu.handleOutput("test");
-		assertEquals(out.getLog(), "test\n");
+		assertEquals("test\n", out.getLog());
 	}
+
+
 }
