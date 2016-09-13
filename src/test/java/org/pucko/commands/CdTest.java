@@ -1,10 +1,12 @@
 package org.pucko.commands;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,19 +15,20 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.*;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class CdTest {
-
-    OutputHandler outputHandler;
+    
+    OutputHandler oh;
     
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws Exception {
-         outputHandler = mock(OutputHandler.class);
+        oh = mock(OutputHandler.class);
     }
 
     @Test
@@ -47,7 +50,7 @@ public class CdTest {
             WorkingDirectory wd = createWorkingDirectory(oldDir);
             
             // Creating the Cd object
-            Cd cd = new Cd(args, wd, outputHandler);
+            Cd cd = new Cd(args, wd, oh);
             
             // Cd changes the directory
             cd.execute();
@@ -75,7 +78,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, outputHandler);
+        Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
         cd.execute(); 
@@ -100,7 +103,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, outputHandler);
+        Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
         cd.execute();
@@ -131,7 +134,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, outputHandler);
+        Cd cd = new Cd(args, wd, oh);
         
         // We make sure cd.execute return false since the directory does not exist.
         
@@ -154,7 +157,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, outputHandler);
+        Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
         boolean executedOk = cd.execute();
@@ -184,7 +187,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, outputHandler);
+        Cd cd = new Cd(args, wd, oh);
         
         // We make sure cd.validate() return true since the directory is valid;
         
