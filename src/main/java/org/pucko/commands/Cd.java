@@ -22,7 +22,6 @@ public class Cd extends Command {
     public boolean execute() {
         
         // Then we change the path using WorkingDirectorys changePath().
-        resolveNewPath();
         setWorkingDirectory(newPath);
         return true;
     }
@@ -32,16 +31,15 @@ public class Cd extends Command {
         // If the argument is ".." create the new Path by calling getParent() on the old path
         // If the argument is "~" create a Path to user home
         // Otherwise create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
-        
-        if (getArg(0).equals("..")) {
-            newPath = oldPath.getParent();
-        } else if (getArg(0).equals("~")) {
-            String homePath = System.getProperty("user.home");
-            newPath = Paths.get(homePath);
-        } else  {
-            newPath = oldPath.resolve(Paths.get(getArg(0)));
-        
-        }
+            if (getArg(0).equals("..")) {
+                newPath = oldPath.getParent();
+            } else if (getArg(0).equals("~")) {
+                String homePath = System.getProperty("user.home");
+                newPath = Paths.get(homePath);
+            } else {
+                newPath = oldPath.resolve(Paths.get(getArg(0)));
+
+            }
     }
 
     @Override
@@ -53,14 +51,15 @@ public class Cd extends Command {
     protected boolean verifyExecutable() {
 
         // If args contains null, return false
-        if (getArg(0).contains(null)) {
+        if (getArg(0) == null) {
             return false;
         }
         
         // Lets resolve the new Path and set newPath
+
         resolveNewPath();
-        
-       
+
+
         //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
             return false;

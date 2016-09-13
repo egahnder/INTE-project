@@ -50,7 +50,7 @@ public class CdTest {
             Cd cd = new Cd(args, wd, oh);
             
             // Cd changes the directory
-            cd.execute();
+            cd.runCommand();
             
             // We compare our specially prepared path with the one WorkingDirectory returns
             assertEquals(newPath, wd.getPath());
@@ -78,7 +78,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        cd.execute(); 
+        cd.runCommand();
         
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
@@ -103,7 +103,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        cd.execute();
+        cd.runCommand();
         
         // This is the new Path to compare to the one Cd has changed
         String homePath = System.getProperty("user.home");
@@ -135,7 +135,7 @@ public class CdTest {
         
         // We make sure cd.execute return false since the directory does not exist.
         
-        assertEquals(false, cd.execute());
+        assertEquals(false, cd.runCommand());
            
     }
     
@@ -157,7 +157,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        boolean executedOk = cd.execute();
+        boolean executedOk = cd.runCommand();
         
         // We make sure cd.execute return false since the directory argument is null;
         
