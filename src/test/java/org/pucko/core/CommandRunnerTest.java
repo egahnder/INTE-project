@@ -35,7 +35,7 @@ public class CommandRunnerTest {
 		setCommandValidations(true, true, true);
 		commandRunner.runCommands(commands);
 		for (Command command : commands) {
-			verify(command, times(1)).execute();
+			verify(command, times(1)).runCommand();
 		}
 	}
 
@@ -43,15 +43,15 @@ public class CommandRunnerTest {
 	public void testUnvalidCommandIsNotRun(){
 		setCommandValidations(false, true, true);
 		commandRunner.runCommands(commands);
-		verify(firstCommand, times(0)).execute();
+		verify(firstCommand, times(0)).runCommand();
 	}
 	
 	@Test
 	public void testRemainingCommandsAreNotCalledAfterInvalidCommand(){
 		setCommandValidations(false, true, true);
 		commandRunner.runCommands(commands);
-		verify(secondCommand, times(0)).execute();
-		verify(thirdCommand, times(0)).execute();
+		verify(secondCommand, times(0)).runCommand();
+		verify(thirdCommand, times(0)).runCommand();
 	}
 	
 	@Test
@@ -59,13 +59,13 @@ public class CommandRunnerTest {
 		InOrder inOrder = inOrder(firstCommand, secondCommand);
 		setCommandValidations(true, true, false);
 		commandRunner.runCommands(commands);
-		inOrder.verify(secondCommand, times(1)).undo();
-		inOrder.verify(firstCommand, times(1)).undo();
+		inOrder.verify(secondCommand, times(1)).revertCommand();
+		inOrder.verify(firstCommand, times(1)).revertCommand();
 	}
-	
+
 	private void setCommandValidations(boolean first, boolean second, boolean third){
-		when(firstCommand.validate()).thenReturn(first);
-		when(secondCommand.validate()).thenReturn(second);
-		when(thirdCommand.validate()).thenReturn(third);
+		when(firstCommand.runCommand()).thenReturn(first);
+		when(secondCommand.runCommand()).thenReturn(second);
+		when(thirdCommand.runCommand()).thenReturn(third);
 	}
 }
