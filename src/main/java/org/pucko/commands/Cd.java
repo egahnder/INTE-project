@@ -27,6 +27,7 @@ public class Cd extends Command {
         }
        
         // Then we change the path using WorkingDirectorys changePath().
+        resolveNewPath();
         workingDirectory.changePath(newPath);
         return true;
     }
@@ -38,7 +39,7 @@ public class Cd extends Command {
         // Otherwise create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
         
         if (args.get(0).equals("..")) {
-            newPath = workingDirectory.getPath().getParent();
+            newPath = oldPath.getParent();
         } else if (args.get(0).equals("~")) {
             String homePath = System.getProperty("user.home");
             newPath = Paths.get(homePath);

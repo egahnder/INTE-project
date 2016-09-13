@@ -7,10 +7,10 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class EchoCommandMethod implements CommandMethod {
-    ArrayList<String> args = new ArrayList<>();
 
     @Override
     public Command runMethod(String[] allArgs, WorkingDirectory wd, OutputHandler oh) {
+        ArrayList<String> args = new ArrayList<>();
         for (String s : allArgs) {
             args.add(s);
         }

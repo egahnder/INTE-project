@@ -12,14 +12,15 @@ public class Menu implements OutputHandler {
 	}
 
 	public void run() {
-		String promt = controller.getPrompt();
-		System.out.print(promt+" ");
+		System.out.print(controller.getPrompt());
 		while (scanner.hasNextLine()) {
+
 			String input = scanner.nextLine();
 			if (input.equals("exit")) {
 				System.exit(0);
 			}
 			controller.parseCommand(input, this);
+			System.out.print(controller.getPrompt());
 		}
 	}
 

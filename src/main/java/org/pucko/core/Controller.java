@@ -25,7 +25,7 @@ public class Controller{
 	
 	public String getPrompt(){
 		Path path = workingDirectory.getPath();
-		return path.toString();
+		return path.toString()+" $ ";
 	}
 	
 }
