@@ -13,18 +13,24 @@ public class DefaultCommand extends Command {
     public DefaultCommand(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
         super(args, wd, oh);
     }
+
     @Override
     public boolean execute() {
         return false;
     }
 
     @Override
-    public void undo() {
-
+    protected boolean verifyExecutable() {
+        return false;
     }
 
     @Override
-    public boolean validate() {
+    protected boolean undo() {
+        return false;
+    }
+
+    @Override
+    protected boolean verifyUndoable() {
         return false;
     }
 }
