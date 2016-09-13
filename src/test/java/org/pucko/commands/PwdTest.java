@@ -41,18 +41,4 @@ public class PwdTest {
 
 	}
 
-	@Test
-	public void testValidateReturnTrue() {
-		Pwd p = new Pwd(input, wd, oh);
-		assertTrue(p.validate());
-
-	}
-
-	@Test
-	public void testValidateReturnFalse() {
-		Pwd p = new Pwd(input, null, oh);
-		assertFalse(p.validate());
-
-	}
-
 }
