@@ -48,6 +48,6 @@ public class ControllerTest {
 		when(path.toString()).thenReturn(pathString);
 		when(workingDirectory.getPath()).thenReturn(path);
 		String prompt = controller.getPrompt();
-		assertEquals(pathString, prompt);	
+		assertEquals(pathString+" $ ", prompt);
 	}
 }
