@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.pucko.commands.Cd;
 import org.pucko.commands.Command;
 import org.pucko.commands.DefaultCommand;
+import org.pucko.commands.Pwd;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,11 @@ public class CommandFactoryTest {
     @Test
     public void testCommandFactoryReturnsCdCommand(){
         testCommandIsCreated("cd", Cd.class);
+    }
+
+    @Test
+    public void testCommandFactoryReturnsEchoCommand(){
+        testCommandIsCreated("pwd", Pwd.class);
     }
 
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {
