@@ -37,6 +37,8 @@ public class Cd extends Command {
 
         if (getArg(0).equals("..")) {
             newPath = oldPath.getParent();
+        } else if (getArg(0).equals(".")) {
+            newPath = oldPath;
         } else if (getArg(0).equals("~")) {
             String homePath = System.getProperty("user.home");
             newPath = Paths.get(homePath);
