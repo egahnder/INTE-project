@@ -4,6 +4,7 @@ package org.pucko.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.pucko.commands.Cd;
 import org.pucko.commands.Command;
 import org.pucko.commands.DefaultCommand;
 
@@ -36,7 +37,19 @@ public class CommandFactoryTest {
 
     @Test
     public void testCommandFactoryReturnsDefaultCommand(){
-        Command command = commandFactory.createCommand("testCommand", mockList, workingDirectory, outputHandler);
-        assertThat(command, is(instanceOf(DefaultCommand.class)));
+        testCommandIsCreated("TestCommand", DefaultCommand.class);
     }
+
+
+    @Test
+    public void testCommandFactoryReturnsCdCommand(){
+        testCommandIsCreated("cd", Cd.class);
+    }
+
+    private void testCommandIsCreated(String commandString, Class<?> commandClass) {
+        Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler);
+        assertThat(command, is(instanceOf(commandClass)));
+    }
+
+
 }
