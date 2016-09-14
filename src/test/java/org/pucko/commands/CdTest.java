@@ -18,9 +18,8 @@ import org.pucko.core.WorkingDirectory;
 
 public class CdTest {
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
     private OutputHandler oh;
+    private OutputHandler eh;
     private WorkingDirectory wd;
     private File testDir;
     private Path oldDir;
@@ -28,9 +27,13 @@ public class CdTest {
     private Path newPath;
     private ArrayList<String> args;
 
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
+
     @Before
     public void setUp() throws Exception {
         oh = mock(OutputHandler.class);
+        eh = mock(OutputHandler.class);
         testDir = testFolder.getRoot();
         oldDir = testDir.toPath();
         args = new ArrayList<>();
@@ -46,13 +49,10 @@ public class CdTest {
         newDir = testFolder.newFolder(args.get(0));
         newPath = newDir.toPath();
 
-        // Creating the Cd object
         Cd cd = new Cd(args, wd, oh);
 
-        // Cd changes the directory
         cd.runCommand();
 
-        // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
 
     }
@@ -62,16 +62,12 @@ public class CdTest {
 
         args.add("..");
 
-        // This is the new Path to compare to the one Cd has changed
         newPath = oldDir.getParent();
 
-        // Creating the Cd object
         Cd cd = new Cd(args, wd, oh);
 
-        // Cd changes the directory
         cd.runCommand();
 
-        // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
 
     }
@@ -83,7 +79,6 @@ public class CdTest {
 
         args.add("..");
 
-        // Creating the Cd object
         Cd cd = new Cd(args, wd, oh);
 
         // Make sure cd returns false since there are no directories above /
@@ -100,11 +95,9 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         cd.runCommand();
 
-        // This is the new Path to compare to the one Cd has changed
         String homePath = System.getProperty("user.home");
         Path newPath = Paths.get(homePath);
 
-        // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
 
     }
@@ -118,22 +111,18 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         cd.runCommand();
 
-        // This is the new Path to compare to the one Cd has changed
         Path newPath = Paths.get("/");
 
-        // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
 
     }
 
     @Test
-    public void tesInvalidDir() throws IOException {
-        ArrayList<String> args = new ArrayList<>();
+    public void testInvalidDir() throws IOException {
+
         args.add("invalidDir");
 
         Cd cd = new Cd(args, wd, oh);
-
-        // We make sure cd.execute return false since the directory does not exist.
 
         assertEquals(false, cd.runCommand());
 
@@ -146,13 +135,19 @@ public class CdTest {
 
         Cd cd = new Cd(args, wd, oh);
 
-        // We make sure cd.execute return false since the directory argument is null;
-
         assertEquals(false, cd.runCommand());
 
     }
 
+    @Test
+    public void printsErrorOnNoParam() {
+        Cd cd = new Cd(args, wd, oh, eh);
+
+        verify(eh, times(1)).handleOutput("ERROR: No argument provided");
+    }
+
     private void setWorkingDirectoryPath(String path) {
+
         wd.changePath(Paths.get(path));
     }
 
