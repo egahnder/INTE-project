@@ -147,6 +147,15 @@ public class CdTest {
         verify(eh, times(1)).handleOutput("ERROR: No argument provided");
     }
 
+    @Test
+    public void printsErrorOnPathDoesNotExist() {
+        args.add("Nonexistent dir");
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        verify(eh, times(1)).handleOutput("ERROR: Directory does not exist");
+    }
+
     private void setWorkingDirectoryPath(String path) {
 
         wd.changePath(Paths.get(path));
