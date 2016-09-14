@@ -21,7 +21,6 @@ public class CdTest {
     private OutputHandler oh;
     private OutputHandler eh;
     private WorkingDirectory wd;
-    private File testDir;
     private Path oldDir;
     private File newDir;
     private Path newPath;
@@ -34,7 +33,7 @@ public class CdTest {
     public void setUp() throws Exception {
         oh = mock(OutputHandler.class);
         eh = mock(OutputHandler.class);
-        testDir = testFolder.getRoot();
+        File testDir = testFolder.getRoot();
         oldDir = testDir.toPath();
         args = new ArrayList<>();
         wd = new WorkingDirectory(oldDir);
@@ -165,7 +164,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("cd: You do not have permission to acces this directory");
+        verify(eh, times(1)).handleOutput("cd: You do not have permission to access this directory");
     }
 
     @Test
