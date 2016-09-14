@@ -1,76 +1,63 @@
 package org.pucko.core;
 
 
-import org.junit.Test;
-import org.pucko.commands.Cd;
-import org.pucko.commands.Command;
-import org.pucko.commands.Echo;
 import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.pucko.commands.*;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 
 
 public class CommandFactoryTest {
-    
-    private CommandFactory cf;
-    private WorkingDirectory wd;
-    private OutputHandler oh;
-    private String command;
-    ArrayList<Command> returnedCommands;
-    
+
+    @Mock
+    private ArrayList<String> mockList;
+    CommandFactory commandFactory;
+    WorkingDirectory workingDirectory;
+    OutputHandler outputHandler;
+
     @Before
-    public void setUp() throws Exception {
-        
-        
-        cf = new CommandFactory();
-        wd = new WorkingDirectory(Paths.get("/tmp"));
-        oh = mock(OutputHandler.class);
-        command = "cd ..";
-        
+    public void setUp(){
+        initMocks(this);
+        commandFactory = new CommandFactory();
+        workingDirectory = mock(WorkingDirectory.class);
+        outputHandler = mock(OutputHandler.class);
     }
-    
+
     @Test
-    public void testCFReturnsArrayList() {
-        returnedCommands = cf.createCommands(command, wd, oh);
-        
-        assertTrue(returnedCommands instanceof ArrayList<?>);
-        
+    public void testCommandFactoryReturnsDefaultCommand(){
+        testCommandIsCreated("TestCommand", DefaultCommand.class);
     }
-    
+
+
     @Test
-    public void testCFReturnsNonEmptyArrayList() {
-         
-        returnedCommands = cf.createCommands(command, wd, oh);
-        
-        assertFalse(returnedCommands.isEmpty());
-        
+    public void testCommandFactoryReturnsCdCommand(){
+        testCommandIsCreated("cd", Cd.class);
     }
-    
+
     @Test
-    public void testCFCreatesCommadsofCdClass() {
-        command = "cd ..";
-         
-        returnedCommands = cf.createCommands(command, wd, oh);
-        Command returnedCommand = returnedCommands.get(0);
-        
-        assertEquals(Cd.class, returnedCommand.getClass());
-        
+    public void testCommandFactoryReturnsPwdCommand(){
+        testCommandIsCreated("pwd", Pwd.class);
     }
-    
+
     @Test
-    public void testCFCreatesCommadsofEchoClass() {
-        command = "echo Hello";
-         
-        returnedCommands = cf.createCommands(command, wd, oh);
-        Command returnedCommand = returnedCommands.get(0);
-        
-        assertEquals(Echo.class, returnedCommand.getClass());
-        
+    public void testCommandFactoryReturnsEchoCommand(){
+        testCommandIsCreated("echo", Echo.class);
     }
-    
-    
+
+    private void testCommandIsCreated(String commandString, Class<?> commandClass) {
+        Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler);
+        assertThat(command, is(instanceOf(commandClass)));
+    }
+
+
 }

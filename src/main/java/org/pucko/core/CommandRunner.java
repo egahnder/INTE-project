@@ -7,10 +7,6 @@ import java.util.List;
 import org.pucko.commands.Command;
 
 public class CommandRunner {
-	private StringBuilder stringBuilder;
-	public CommandRunner() {
-		stringBuilder = new StringBuilder();
-	}
 	
 	public void runCommands(ArrayList<Command> commands){
 		for (Command command : commands) {

@@ -48,7 +48,7 @@ public class CdTest {
         newDir = testFolder.newFolder(args.get(0));
         newPath = newDir.toPath();
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
 
         cd.runCommand();
 
@@ -63,7 +63,7 @@ public class CdTest {
 
         newPath = oldDir.getParent();
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
 
         cd.runCommand();
 
@@ -78,7 +78,7 @@ public class CdTest {
 
         args.add("..");
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
 
         // Make sure cd returns false since there are no directories above /
         assertEquals(false, cd.runCommand());
@@ -91,7 +91,7 @@ public class CdTest {
         // Add the ~ (Tilde) symbol that corresponds to the user home directory to the ArrayList
         args.add("~");
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
         String homePath = System.getProperty("user.home");
@@ -107,7 +107,7 @@ public class CdTest {
         // Add the / symbol that corresponds to the System Root to the ArrayList
         args.add("/");
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
         Path newPath = Paths.get("/");
@@ -121,7 +121,7 @@ public class CdTest {
 
         args.add("invalidDir");
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
 
         assertEquals(false, cd.runCommand());
 
@@ -132,7 +132,7 @@ public class CdTest {
 
         args.add(null);
 
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
 
         assertEquals(false, cd.runCommand());
 

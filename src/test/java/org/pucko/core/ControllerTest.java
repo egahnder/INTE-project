@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ControllerTest {
 	private WorkingDirectory workingDirectory;
-	private CommandFactory commandFactory;
+	private CommandParser commandParser;
 	private CommandRunner commandRunner;
 	private Controller controller;
 	private OutputHandler outputHandler;
@@ -21,22 +21,22 @@ public class ControllerTest {
 	public void setUp(){
 		outputHandler = mock(OutputHandler.class);
 		workingDirectory = mock(WorkingDirectory.class);
-		commandFactory = mock(CommandFactory.class);
+		commandParser = mock(CommandParser.class);
 		commandRunner = mock(CommandRunner.class);
-		controller = new Controller(workingDirectory, commandRunner, commandFactory);
+		controller = new Controller(workingDirectory, commandRunner, commandParser);
 	}
 
 	@Test
 	public void testControllerCallsFactoryWithCommandString(){
 		String command = "command";
 		controller.parseCommand(command, outputHandler);
-		verify(commandFactory, times(1)).createCommands(command, workingDirectory, outputHandler);
+		verify(commandParser, times(1)).parseCommands(command, workingDirectory, outputHandler);
 	}
 	
 	@Test
 	public void testControllerSendsCommandsToRunner(){
 		ArrayList<Command> commandList = new ArrayList<>();
-		when(commandFactory.createCommands("", workingDirectory, outputHandler)).thenReturn(commandList);
+		when(commandParser.parseCommands("", workingDirectory, outputHandler)).thenReturn(commandList);
 		controller.parseCommand("", outputHandler);
 		verify(commandRunner, times(1)).runCommands(commandList);
 	}

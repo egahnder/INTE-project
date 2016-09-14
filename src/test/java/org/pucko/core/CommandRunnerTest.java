@@ -38,20 +38,13 @@ public class CommandRunnerTest {
 			verify(command, times(1)).runCommand();
 		}
 	}
-
-	@Test
-	public void testUnvalidCommandIsNotRun(){
-		setCommandValidations(false, true, true);
-		commandRunner.runCommands(commands);
-		verify(firstCommand, times(0)).runCommand();
-	}
 	
 	@Test
 	public void testRemainingCommandsAreNotCalledAfterInvalidCommand(){
 		setCommandValidations(false, true, true);
 		commandRunner.runCommands(commands);
-		verify(secondCommand, times(0)).runCommand();
-		verify(thirdCommand, times(0)).runCommand();
+		verify(secondCommand, never()).runCommand();
+		verify(thirdCommand, never()).runCommand();
 	}
 	
 	@Test

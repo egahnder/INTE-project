@@ -20,6 +20,7 @@ public class PwdTest {
 	private WorkingDirectory wd;
 	private OutputHandler oh;
 	private ArrayList<String> input;
+	private OutputHandler eh;
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
@@ -28,6 +29,7 @@ public class PwdTest {
 	public void setUp() {
 		wd = mock(WorkingDirectory.class);
 		oh = mock(OutputHandler.class);
+        eh = mock(OutputHandler.class);
 		input = new ArrayList<>();
 	}
 
@@ -35,7 +37,7 @@ public class PwdTest {
 	public void testExecuteSetsOutput() {
 		Path tempDir = testFolder.getRoot().toPath();
 		when(wd.getPath()).thenReturn(tempDir);
-		Pwd p = new Pwd(input, wd, oh);
+		Pwd p = new Pwd(input, wd, oh, eh);
 		p.execute();
 		verify(oh, times(1)).handleOutput(tempDir.toAbsolutePath().toString());
 
