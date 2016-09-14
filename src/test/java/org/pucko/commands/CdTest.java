@@ -17,10 +17,15 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class CdTest {
-    
+
     private OutputHandler oh;
     private OutputHandler eh;
-    
+    private WorkingDirectory wd;
+    private Path oldDir;
+    private File newDir;
+    private Path newPath;
+    private ArrayList<String> args;
+
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
@@ -28,150 +33,153 @@ public class CdTest {
     public void setUp() throws Exception {
         oh = mock(OutputHandler.class);
         eh = mock(OutputHandler.class);
+        File testDir = testFolder.getRoot();
+        oldDir = testDir.toPath();
+        args = new ArrayList<>();
+        wd = new WorkingDirectory(oldDir);
+
     }
 
     @Test
-    public void testChangeDirDown() throws IOException {
-        
-            // Create the ArrayList with the new path string
-            ArrayList<String> args = new ArrayList<>();
-            args.add("bar");
-            
-            File testDir = testFolder.getRoot();
-            
-            Path oldDir = testDir.toPath();
-            
-            File newDir = testFolder.newFolder(args.get(0));
-            
-            Path newPath = newDir.toPath();
-            
-            //Then we create a new WorkingDirectory object with the old Path
-            WorkingDirectory wd = createWorkingDirectory(oldDir);
-            
-            // Creating the Cd object
-            Cd cd = new Cd(args, wd, oh, eh);
-            
-            // Cd changes the directory
-            cd.runCommand();
-            
-            // We compare our specially prepared path with the one WorkingDirectory returns
-            assertEquals(newPath, wd.getPath());
-        
+    public void testChildDir() throws IOException {
+
+        args.add("bar");
+
+        newDir = testFolder.newFolder(args.get(0));
+        newPath = newDir.toPath();
+
+        Cd cd = new Cd(args, wd, oh, eh);
+
+        cd.runCommand();
+
+        assertEquals(newPath, wd.getPath());
+
     }
-    
+
     @Test
     public void testParentDir() throws IOException {
-        
-        // Create the ArrayList with the new .. indication we want to move up one level in the hierarchy
-        ArrayList<String> args = new ArrayList<>();
+
         args.add("..");
-        
-        File testDir = testFolder.getRoot();
-        
-        Path oldDir = testDir.toPath();
-        
-        // This is the new Path to compare to the one Cd has changed
-        Path newPath = oldDir.getParent();
-        
-        //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(oldDir);
-        
-        // Creating the Cd object
+
+        newPath = oldDir.getParent();
+
         Cd cd = new Cd(args, wd, oh, eh);
-        
-        // Cd changes the directory
+
         cd.runCommand();
-        
-        // We compare our specially prepared path with the one WorkingDirectory returns
+
         assertEquals(newPath, wd.getPath());
-        
+
     }
-    
+
+    @Test
+    public void testParentDirWhenInSystemRoot() throws IOException {
+
+        setWorkingDirectoryPath("/");
+
+        args.add("..");
+
+        Cd cd = new Cd(args, wd, oh, eh);
+
+        // Make sure cd returns false since there are no directories above /
+        assertEquals(false, cd.runCommand());
+
+    }
+
     @Test
     public void testHomeDir() throws IOException {
-        
-        // Create the ArrayList with the ~ (Tilde) symbol that corresponds to the user home directory
-        ArrayList<String> args = new ArrayList<>();
+
+        // Add the ~ (Tilde) symbol that corresponds to the user home directory to the ArrayList
         args.add("~");
-        
-        File testDir = testFolder.getRoot();
-        
-        Path oldDir = testDir.toPath();
-        
-        //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(oldDir);
-        
-        // Creating the Cd object
+
         Cd cd = new Cd(args, wd, oh, eh);
-        
-        // Cd changes the directory
         cd.runCommand();
-        
-        // This is the new Path to compare to the one Cd has changed
+
         String homePath = System.getProperty("user.home");
         Path newPath = Paths.get(homePath);
-        
-        // We compare our specially prepared path with the one WorkingDirectory returns
+
         assertEquals(newPath, wd.getPath());
-        
-        
-        
+
     }
-    
+
     @Test
-    public void tesInvalidDir() throws IOException {
-        ArrayList<String> args = new ArrayList<>();
+    public void testSystemRoot() throws IOException {
+
+        // Add the / symbol that corresponds to the System Root to the ArrayList
+        args.add("/");
+
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        Path newPath = Paths.get("/");
+
+        assertEquals(newPath, wd.getPath());
+
+    }
+
+    @Test
+    public void testInvalidDir() throws IOException {
+
         args.add("invalidDir");
-        
-        // Lets create a temporary directory in system "temp" dir
-        
-        File testDir = testFolder.getRoot();
-        
-        Path oldDir = testDir.toPath();
-  
-        //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(oldDir);
-        
-        // Creating the Cd object
+
         Cd cd = new Cd(args, wd, oh, eh);
-        
-        // We make sure cd.execute return false since the directory does not exist.
-        
+
         assertEquals(false, cd.runCommand());
-           
+
     }
-    
+
     @Test
-    public void nullPathTest() {
-     // Create the ArrayList with the invalid Dir
-        ArrayList<String> args = new ArrayList<>();
+    public void testNullPath() {
+
         args.add(null);
-        
-        
-        File testDir = testFolder.getRoot();
-        
-        Path oldDir = testDir.toPath();
-        
-        //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(oldDir);
-        
-        // Creating the Cd object
+
         Cd cd = new Cd(args, wd, oh, eh);
-        
-        // Cd changes the directory
-        boolean executedOk = cd.runCommand();
-        
-        // We make sure cd.execute return false since the directory argument is null;
-        
-        assertEquals(false, executedOk);
-        
+
+        assertEquals(false, cd.runCommand());
+
     }
-    
-    
-    private WorkingDirectory createWorkingDirectory(Path path) {
-        
-        return new WorkingDirectory(path);
-        
+
+    @Test
+    public void testPrintsErrorOnNoParam() {
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        verify(eh, times(1)).handleOutput("cd: No argument provided");
+    }
+
+    @Test
+    public void testPrintsErrorOnPathDoesNotExist() {
+        args.add("NonexistentDir");
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(0));
+    }
+
+    @Test
+    public void testPrintsErrorOnDirectoryNotReadable() throws IOException {
+        args.add("nonReadableDir");
+        newDir = testFolder.newFolder("nonReadableDir");
+        newDir.setReadable(false);
+
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        verify(eh, times(1)).handleOutput("cd: You do not have permission to access this directory");
+    }
+
+    @Test
+    public void testDotStaysInSameDirectory() throws IOException {
+
+        args.add(".");
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        assertEquals(oldDir, wd.getPath());
+    }
+
+    private void setWorkingDirectoryPath(String path) {
+
+        wd.changePath(Paths.get(path));
     }
 
 }
