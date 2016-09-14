@@ -4,10 +4,7 @@ package org.pucko.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.pucko.commands.Cd;
-import org.pucko.commands.Command;
-import org.pucko.commands.DefaultCommand;
-import org.pucko.commands.Pwd;
+import org.pucko.commands.*;
 
 import java.util.ArrayList;
 
@@ -48,8 +45,13 @@ public class CommandFactoryTest {
     }
 
     @Test
-    public void testCommandFactoryReturnsEchoCommand(){
+    public void testCommandFactoryReturnsPwdCommand(){
         testCommandIsCreated("pwd", Pwd.class);
+    }
+
+    @Test
+    public void testCommandFactoryReturnsEchoCommand(){
+        testCommandIsCreated("echo", Echo.class);
     }
 
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {

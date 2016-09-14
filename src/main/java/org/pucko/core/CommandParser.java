@@ -27,7 +27,7 @@ public class CommandParser {
         }
         ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
         Command command = commandFactory.createCommand(commandString, args, workingDirectory, outputHandler);
-
+        commandList.add(command);
         return commandList;
     }
 }

@@ -59,4 +59,10 @@ public class CommandParserTest {
         assertThat(argsList, contains("arg1", "arg2", "arg3"));
     }
 
+    @Test
+    public void testCommandParserReturnsNotEmptyList(){
+        ArrayList<Command> commands = parser.parseCommands("testString", workingDirectory, outputHandler);
+        assertThat(commands, is(not(empty())));
+    }
+
 }
