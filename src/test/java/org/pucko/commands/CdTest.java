@@ -39,7 +39,7 @@ public class CdTest {
     }
 
     @Test
-    public void testChangeDirDown() throws IOException {
+    public void testChildDir() throws IOException {
 
         args.add("bar");
 
@@ -62,7 +62,6 @@ public class CdTest {
 
         args.add("..");
 
-
         // This is the new Path to compare to the one Cd has changed
         newPath = oldDir.getParent();
 
@@ -74,6 +73,21 @@ public class CdTest {
 
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
+
+    }
+
+    @Test
+    public void testParentDirWhenInSystemRoot() throws IOException {
+
+        setWorkingDirectoryPath("/");
+
+        args.add("..");
+
+        // Creating the Cd object
+        Cd cd = new Cd(args, wd, oh);
+
+        // Make sure cd returns false since there are no directories above /
+        assertEquals(false, cd.runCommand());
 
     }
 
@@ -93,7 +107,22 @@ public class CdTest {
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
 
+    }
 
+    @Test
+    public void testSystemRoot() throws IOException {
+
+        // Add the / symbol that corresponds to the System Root to the ArrayList
+        args.add("/");
+
+        Cd cd = new Cd(args, wd, oh);
+        cd.runCommand();
+
+        // This is the new Path to compare to the one Cd has changed
+        Path newPath = Paths.get("/");
+
+        // We compare our specially prepared path with the one WorkingDirectory returns
+        assertEquals(newPath, wd.getPath());
 
     }
 
@@ -121,6 +150,10 @@ public class CdTest {
 
         assertEquals(false, cd.runCommand());
 
+    }
+
+    private void setWorkingDirectoryPath(String path) {
+        wd.changePath(Paths.get(path));
     }
 
 }
