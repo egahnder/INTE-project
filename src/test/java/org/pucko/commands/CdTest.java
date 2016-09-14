@@ -129,7 +129,7 @@ public class CdTest {
     }
 
     @Test
-    public void nullPathTest() {
+    public void testNullPath() {
 
         args.add(null);
 
@@ -140,7 +140,7 @@ public class CdTest {
     }
 
     @Test
-    public void printsErrorOnNoParam() {
+    public void testPrintsErrorOnNoParam() {
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
@@ -148,12 +148,24 @@ public class CdTest {
     }
 
     @Test
-    public void printsErrorOnPathDoesNotExist() {
+    public void testPrintsErrorOnPathDoesNotExist() {
         args.add("Nonexistent dir");
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
         verify(eh, times(1)).handleOutput("ERROR: Directory does not exist");
+    }
+
+    @Test
+    public void testPrintsErrorOnDirectoryNotReadable() throws IOException {
+        args.add("nonReadableDir");
+        newDir = testFolder.newFolder("nonReadableDir");
+        newDir.setReadable(false);
+
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        verify(eh, times(1)).handleOutput("ERROR: You do not have permission to acces this directory");
     }
 
     private void setWorkingDirectoryPath(String path) {
