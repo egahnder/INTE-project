@@ -86,6 +86,7 @@ public class Cd extends Command {
 
         //Lets make sure the directory is readable
         if (!Files.isReadable(newPath)) {
+            error("ERROR: You do not have permission to acces this directory");
             return false;
         }
 
