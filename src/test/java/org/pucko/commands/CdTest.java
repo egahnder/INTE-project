@@ -168,6 +168,16 @@ public class CdTest {
         verify(eh, times(1)).handleOutput("ERROR: You do not have permission to acces this directory");
     }
 
+    @Test
+    public void testDotStaysInSameDirectory() throws IOException {
+
+        args.add(".");
+        Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
+
+        assertEquals(oldDir, wd.getPath());
+    }
+
     private void setWorkingDirectoryPath(String path) {
 
         wd.changePath(Paths.get(path));
