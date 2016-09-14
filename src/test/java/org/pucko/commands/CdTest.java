@@ -4,9 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ import org.pucko.core.WorkingDirectory;
 
 public class CdTest {
     
-    OutputHandler oh;
+    private OutputHandler oh;
     
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -53,7 +50,7 @@ public class CdTest {
             Cd cd = new Cd(args, wd, oh);
             
             // Cd changes the directory
-            cd.execute();
+            cd.runCommand();
             
             // We compare our specially prepared path with the one WorkingDirectory returns
             assertEquals(newPath, wd.getPath());
@@ -63,7 +60,7 @@ public class CdTest {
     @Test
     public void testParentDir() throws IOException {
         
-        // Create the ArrayList with the new .. indication we want to move up one level in the hiearchy
+        // Create the ArrayList with the new .. indication we want to move up one level in the hierarchy
         ArrayList<String> args = new ArrayList<>();
         args.add("..");
         
@@ -81,7 +78,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        cd.execute(); 
+        cd.runCommand();
         
         // We compare our specially prepared path with the one WorkingDirectory returns
         assertEquals(newPath, wd.getPath());
@@ -106,7 +103,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        cd.execute();
+        cd.runCommand();
         
         // This is the new Path to compare to the one Cd has changed
         String homePath = System.getProperty("user.home");
@@ -138,7 +135,7 @@ public class CdTest {
         
         // We make sure cd.execute return false since the directory does not exist.
         
-        assertEquals(false, cd.execute());
+        assertEquals(false, cd.runCommand());
            
     }
     
@@ -160,7 +157,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh);
         
         // Cd changes the directory
-        boolean executedOk = cd.execute();
+        boolean executedOk = cd.runCommand();
         
         // We make sure cd.execute return false since the directory argument is null;
         
@@ -168,35 +165,8 @@ public class CdTest {
         
     }
     
-    @Test
-    public void forceValidateTest() throws IOException {
-     // Create the ArrayList with the invalid Dir
-        ArrayList<String> args = new ArrayList<>();
-        args.add("foo");
-        
-        File testDir = testFolder.getRoot();
-        
-        Path oldDir = testDir.toPath();
-        
-        File newDir = testFolder.newFolder("foo");
-        
-        Path newPath = newDir.toPath();
-        
-        
-        //Then we create a new WorkingDirectory object with the old Path
-        WorkingDirectory wd = createWorkingDirectory(oldDir);
-        
-        // Creating the Cd object
-        Cd cd = new Cd(args, wd, oh);
-        
-        // We make sure cd.validate() return true since the directory is valid;
-        
-        assertEquals(true, cd.validate());
-        
-    }
     
-    
-    public WorkingDirectory createWorkingDirectory(Path path) {
+    private WorkingDirectory createWorkingDirectory(Path path) {
         
         return new WorkingDirectory(path);
         

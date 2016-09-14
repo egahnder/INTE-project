@@ -6,35 +6,42 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
+    private ArrayList<String> localArgs;
 
-	public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
-		super(args, wd, oh);
-	}
+    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
+        super(args, wd, oh);
+        localArgs = args;
+    }
 
-	@Override
-	public boolean execute() {
-		String outputString = "";
-		for (String s : args) {
-			outputString += s + " ";
-		}
-		outputString = outputString.trim();
-		outputHandler.handleOutput(outputString);
-		return true;
-	}
+    @Override
+    public boolean execute() {
+        String outputString = "";
+        for (String s : localArgs) {
+            outputString += s + " ";
+        }
+        outputString = outputString.trim();
+        output(outputString);
+        return true;
+    }
 
-	@Override
-	public boolean validate() {
+    @Override
+    protected boolean undo() {
+        return false;
+    }
 
-		if (args != null && args.size() != 0) {
-			return true;
-		}
+    @Override
+    protected boolean verifyUndoable() {
+        return false;
+    }
 
-		return false;
-	}
+    @Override
+    public boolean verifyExecutable() {
 
-	@Override
-	public void undo() {
+        if (localArgs != null && localArgs.size() != 0) {
+            return true;
+        }
 
-	}
+        return false;
+    }
 
 }

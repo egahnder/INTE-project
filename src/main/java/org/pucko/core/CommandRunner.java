@@ -7,21 +7,18 @@ import java.util.List;
 import org.pucko.commands.Command;
 
 public class CommandRunner {
-	StringBuilder stringBuilder;
+	private StringBuilder stringBuilder;
 	public CommandRunner() {
 		stringBuilder = new StringBuilder();
 	}
 	
 	public void runCommands(ArrayList<Command> commands){
 		for (Command command : commands) {
-			if (command.validate()) {
-				command.execute();
-			}
-			else{
+			if (!command.runCommand()) {
 				undoCommands(commands, command);
 				break;
 			}
-		}		
+		}
 	}
 
 	private void undoCommands(ArrayList<Command> commands, Command command) {
@@ -29,7 +26,7 @@ public class CommandRunner {
 		List<Command> undoList = commands.subList(0, commandIndex);
 		Collections.reverse(undoList);
 		for (Command com : undoList) {
-			com.undo();
+			com.revertCommand();
 		}
 	}
 

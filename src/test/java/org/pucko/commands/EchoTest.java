@@ -49,7 +49,7 @@ public class EchoTest {
 
 		ArrayList<String> input = null;
 		Echo e = new Echo(input, wd, oh);
-		assertFalse(e.validate());
+		assertFalse(e.runCommand());
 
 	}
 
@@ -58,7 +58,7 @@ public class EchoTest {
 
 		ArrayList<String> input = new ArrayList<>();
 		Echo e = new Echo(input, wd, oh);
-		assertFalse(e.validate());
+		assertFalse(e.runCommand());
 
 	}
 
@@ -68,7 +68,7 @@ public class EchoTest {
 		input.add("Hello");
 		Echo e = new Echo(input, wd, oh);
 
-		assertTrue(e.validate());
+		assertTrue(e.runCommand());
 
 	}
 

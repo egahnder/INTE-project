@@ -13,26 +13,26 @@ public class Pwd extends Command {
 
 	@Override
 	public boolean execute() {
-
-		if (validate()) {
-			output(workingDirectory.getPath().toString());
+			output(getWorkingDirectory().toString());
 			return true;
-		} else {
-			return false;
-		}
 	}
 
 	@Override
-	public boolean validate() {
-
-		if (workingDirectory == null) {
+	protected boolean verifyExecutable() {
+		if (getWorkingDirectory() == null) {
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public void undo() {
+	protected boolean undo() {
+		return false;
+	}
 
+
+	@Override
+	protected boolean verifyUndoable() {
+		return false;
 	}
 }
