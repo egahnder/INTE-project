@@ -62,12 +62,12 @@ public class Cd extends Command {
         try {
             getArg(0);
         } catch (IndexOutOfBoundsException | NullPointerException e) {
-            error("ERROR: No argument provided");
+            error("cd: No argument provided");
             return false;
         }
 
         if (getArg(0) == null) {
-            error("ERROR: No argument provided");
+            error("cd: No argument provided");
             return false;
         }
 
@@ -75,20 +75,20 @@ public class Cd extends Command {
 
         // Lets make sure the path exists
         if (newPath == null) {
-            error("ERROR: Directory does not exist");
+            error("cd: No such file or directory");
             return false;
 
         }
 
         //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
-            error("ERROR: Directory does not exist");
+            error("cd: No such file or directory: " +getArg(0));
             return false;
         }
 
         //Lets make sure the directory is readable
         if (!Files.isReadable(newPath)) {
-            error("ERROR: You do not have permission to acces this directory");
+            error("cd: You do not have permission to acces this directory");
             return false;
         }
 

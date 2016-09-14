@@ -144,16 +144,16 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("ERROR: No argument provided");
+        verify(eh, times(1)).handleOutput("cd: No argument provided");
     }
 
     @Test
     public void testPrintsErrorOnPathDoesNotExist() {
-        args.add("Nonexistent dir");
+        args.add("NonexistentDir");
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("ERROR: Directory does not exist");
+        verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(0));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class CdTest {
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("ERROR: You do not have permission to acces this directory");
+        verify(eh, times(1)).handleOutput("cd: You do not have permission to acces this directory");
     }
 
     @Test
