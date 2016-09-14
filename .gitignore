@@ -11,10 +11,12 @@
 /bin/*
 /bin/
 /.gradle/
-/build/
+/build/*
+!/build/docs/javadoc
 /.classpath
 /.project
 /.settings/
 /.idea/
 /src/test/test.iml
 /src/main/main.iml
+
