@@ -73,12 +73,14 @@ public class Cd extends Command {
 
         // Lets make sure the path exists
         if (newPath == null) {
+            error("ERROR: Directory does not exist");
             return false;
 
         }
 
         //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
+            error("ERROR: Directory does not exist");
             return false;
         }
 
