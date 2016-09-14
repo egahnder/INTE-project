@@ -36,6 +36,8 @@ public class Cd extends Command {
             } else if (getArg(0).equals("~")) {
                 String homePath = System.getProperty("user.home");
                 newPath = Paths.get(homePath);
+            } else if (getArg(0).equals("/")) {
+                newPath = Paths.get("/");
             } else {
                 newPath = oldPath.resolve(Paths.get(getArg(0)));
 
@@ -59,7 +61,10 @@ public class Cd extends Command {
 
         resolveNewPath();
 
-
+        // Lets make sure the path exists
+        if (newPath==null) {
+            return false;
+        }
         //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
             return false;
