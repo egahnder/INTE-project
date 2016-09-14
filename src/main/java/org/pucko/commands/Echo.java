@@ -8,8 +8,8 @@ import org.pucko.core.WorkingDirectory;
 public class Echo extends Command {
     private ArrayList<String> localArgs;
 
-    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh) {
-        super(args, wd, oh);
+    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh) {
+        super(args, wd, oh, eh);
         localArgs = args;
     }
 

@@ -15,11 +15,13 @@ public class EchoTest {
 
 	private WorkingDirectory wd;
 	private OutputHandler oh;
+	private OutputHandler eh;
 
 	@Before
 	public void setUp() {
 		wd = mock(WorkingDirectory.class);
 		oh = mock(OutputHandler.class);
+        eh = mock(OutputHandler.class);
 	}
 
 	@Test
@@ -27,7 +29,7 @@ public class EchoTest {
 		ArrayList<String> inputArgs = new ArrayList<>();
 		inputArgs.add("Hello");
 
-		Echo e = new Echo(inputArgs, wd, oh);
+		Echo e = new Echo(inputArgs, wd, oh, eh);
 		e.execute();
 		verify(oh, times(1)).handleOutput("Hello");
 
@@ -38,7 +40,7 @@ public class EchoTest {
 		String[] input = { "Hello", "World!" };
 		ArrayList<String> inputArgs = populateArrayList(input);
 
-		Echo e = new Echo(inputArgs, wd, oh);
+		Echo e = new Echo(inputArgs, wd, oh, eh);
 		e.execute();
 		verify(oh, times(1)).handleOutput("Hello World!");
 
@@ -48,7 +50,7 @@ public class EchoTest {
 	public void testValidateWithNullInput() {
 
 		ArrayList<String> input = null;
-		Echo e = new Echo(input, wd, oh);
+		Echo e = new Echo(input, wd, oh, eh);
 		assertFalse(e.runCommand());
 
 	}
@@ -57,7 +59,7 @@ public class EchoTest {
 	public void testValidateWithZeroInput() {
 
 		ArrayList<String> input = new ArrayList<>();
-		Echo e = new Echo(input, wd, oh);
+		Echo e = new Echo(input, wd, oh, eh);
 		assertFalse(e.runCommand());
 
 	}
@@ -66,7 +68,7 @@ public class EchoTest {
 	public void testValidateWithValidInput() {
 		ArrayList<String> input = new ArrayList<>();
 		input.add("Hello");
-		Echo e = new Echo(input, wd, oh);
+		Echo e = new Echo(input, wd, oh, eh);
 
 		assertTrue(e.runCommand());
 
@@ -77,7 +79,7 @@ public class EchoTest {
 		ArrayList<String> inputArgs = new ArrayList<>();
 		inputArgs.add("Hello");
 
-		Echo e = new Echo(inputArgs, wd, oh);
+		Echo e = new Echo(inputArgs, wd, oh, eh);
 		assertTrue(e.execute());
 	}
 

@@ -19,6 +19,7 @@ import org.pucko.core.WorkingDirectory;
 public class CdTest {
     
     private OutputHandler oh;
+    private OutputHandler eh;
     
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -26,6 +27,7 @@ public class CdTest {
     @Before
     public void setUp() throws Exception {
         oh = mock(OutputHandler.class);
+        eh = mock(OutputHandler.class);
     }
 
     @Test
@@ -47,7 +49,7 @@ public class CdTest {
             WorkingDirectory wd = createWorkingDirectory(oldDir);
             
             // Creating the Cd object
-            Cd cd = new Cd(args, wd, oh);
+            Cd cd = new Cd(args, wd, oh, eh);
             
             // Cd changes the directory
             cd.runCommand();
@@ -75,7 +77,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         
         // Cd changes the directory
         cd.runCommand();
@@ -100,7 +102,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         
         // Cd changes the directory
         cd.runCommand();
@@ -131,7 +133,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         
         // We make sure cd.execute return false since the directory does not exist.
         
@@ -154,7 +156,7 @@ public class CdTest {
         WorkingDirectory wd = createWorkingDirectory(oldDir);
         
         // Creating the Cd object
-        Cd cd = new Cd(args, wd, oh);
+        Cd cd = new Cd(args, wd, oh, eh);
         
         // Cd changes the directory
         boolean executedOk = cd.runCommand();
