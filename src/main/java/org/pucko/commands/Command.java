@@ -71,7 +71,7 @@ public abstract class Command implements OutputHandler {
      * @return true if the command was executed properly. Returns false if there was an error running the command or if
      * the command was invalid.
      */
-    public final boolean runCommand() {
+    public boolean runCommand() {
         if (!validForExecute) {
             validateForExecution();
         }
@@ -83,7 +83,7 @@ public abstract class Command implements OutputHandler {
      * @return true if the command was reverted properly or if the command was never executed. Returns false if there
      * was an error reverting the command.
      */
-    public final boolean revertCommand() {
+    public boolean revertCommand() {
         if (!validForUndo) {
             validateForUndo();
         }
@@ -95,7 +95,7 @@ public abstract class Command implements OutputHandler {
      * @param output String that should be appended to the commands arguments.
      */
     @Override
-    public final void handleOutput(String output) {
+    public void handleOutput(String output) {
         args.add(output);
         invalidateForExecution();
         invalidateForUndo();
