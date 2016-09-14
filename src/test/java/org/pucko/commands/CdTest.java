@@ -142,6 +142,7 @@ public class CdTest {
     @Test
     public void printsErrorOnNoParam() {
         Cd cd = new Cd(args, wd, oh, eh);
+        cd.runCommand();
 
         verify(eh, times(1)).handleOutput("ERROR: No argument provided");
     }
