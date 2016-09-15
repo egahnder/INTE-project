@@ -26,10 +26,7 @@ public class Pwd extends Command {
 
 	@Override
 	protected boolean verifyExecutable() {
-		if (getWorkingDirectory() == null) {
-			return false;
-		}
-		return true;
+		return getWorkingDirectory() != null;
 	}
 
 	@Override

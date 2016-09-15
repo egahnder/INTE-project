@@ -17,10 +17,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CommandParserTest {
 
-    CommandParser parser;
-    CommandFactory factory;
-    WorkingDirectory workingDirectory;
-    OutputHandler outputHandler;
+    private CommandParser parser;
+    private CommandFactory factory;
+    private WorkingDirectory workingDirectory;
+    private OutputHandler outputHandler;
 
     @Captor
     private ArgumentCaptor<ArrayList<String>> argsCaptor;
@@ -52,7 +52,7 @@ public class CommandParserTest {
     }
 
     @Test
-    public void testCommadFactoryIsCalledWithOneArgCommand(){
+    public void testCommandFactoryIsCalledWithOneArgCommand(){
         parser.parseCommands("Command arg1 arg2 arg3", workingDirectory, outputHandler);
         verify(factory, times(1)).createCommand(eq("Command"), argsCaptor.capture(), eq(workingDirectory), eq(outputHandler));
         ArrayList<String> argsList = argsCaptor.getValue();

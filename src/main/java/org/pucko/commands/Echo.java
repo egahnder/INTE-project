@@ -37,11 +37,8 @@ public class Echo extends Command {
     @Override
     public boolean verifyExecutable() {
 
-        if (localArgs != null && localArgs.size() != 0) {
-            return true;
-        }
+        return localArgs != null && localArgs.size() != 0;
 
-        return false;
     }
 
 }

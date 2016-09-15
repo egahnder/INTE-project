@@ -5,18 +5,17 @@ import org.junit.Test;
 import org.mockito.InOrder;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
 import org.pucko.commands.Command;
 
 public class CommandRunnerTest {
-	ArrayList<Command> commands;
-	Command firstCommand;
-	Command secondCommand;
-	Command thirdCommand;
-	CommandRunner commandRunner;
+	private ArrayList<Command> commands;
+	private Command firstCommand;
+	private Command secondCommand;
+	private Command thirdCommand;
+	private CommandRunner commandRunner;
 	
 	@Before
 	public void setUp(){

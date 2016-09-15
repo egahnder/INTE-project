@@ -21,9 +21,7 @@ public class CommandRunner {
 		int commandIndex = commands.indexOf(command);
 		List<Command> undoList = commands.subList(0, commandIndex);
 		Collections.reverse(undoList);
-		for (Command com : undoList) {
-			com.revertCommand();
-		}
+		undoList.forEach(Command::revertCommand);
 	}
 
 }
