@@ -5,11 +5,7 @@ import org.pucko.core.WorkingDirectory;
 
 import java.util.ArrayList;
 
-/**
- * Created by loxtank on 12/09/16.
- */
 public class DefaultCommand extends Command {
-
 
     /**
      * @param args             Arguments used during execution of command.

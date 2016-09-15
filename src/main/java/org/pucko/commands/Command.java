@@ -8,11 +8,10 @@ import org.pucko.core.WorkingDirectory;
 
 public abstract class Command implements OutputHandler {
 
-    protected String name;
-    private WorkingDirectory workingDirectory;
-    private ArrayList<String> args;
-    private OutputHandler outputHandler;
-    private OutputHandler errorHandler;
+    private final WorkingDirectory workingDirectory;
+    private final ArrayList<String> args;
+    private final OutputHandler outputHandler;
+    private final OutputHandler errorHandler;
     private boolean validForExecute;
     private boolean executable;
     private boolean validForUndo;
@@ -101,7 +100,7 @@ public abstract class Command implements OutputHandler {
     }
 
     /**
-     * CHanges the path of the working directory
+     * Changes the path of the working directory
      * @param newPath The new path for the working directory.
      */
     protected final void setWorkingDirectory(Path newPath){
@@ -127,7 +126,7 @@ public abstract class Command implements OutputHandler {
     }
 
     /**
-     * Used to send out errors generaded in Command.
+     * Used to send out errors generated in Command.
      * @param error Error to send out
      */
     protected final void error(String error){

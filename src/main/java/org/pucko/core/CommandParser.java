@@ -5,11 +5,8 @@ import org.pucko.commands.Command;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by eric on 2016-09-14.
- */
 public class CommandParser {
-    private CommandFactory commandFactory;
+    private final CommandFactory commandFactory;
 
     public CommandParser(CommandFactory commandFactory){
         this.commandFactory = commandFactory;

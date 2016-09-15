@@ -17,13 +17,6 @@ public class WorkingDirectoryTest{
         assertEquals(System.getProperty("user.home"), path);
     }
 
-
-    @Test
-    public void testPath() {
-        Path path = Paths.get("/tmp/foo");
-        WorkingDirectory wd = new WorkingDirectory(path);
-    }
-
     @Test
     public void testGetPath() {
         String newPath = "/tmp/foo";
@@ -47,8 +40,7 @@ public class WorkingDirectoryTest{
     }
 
     private WorkingDirectory createWD(Path path) {
-        WorkingDirectory wd = new WorkingDirectory(path);
-        return wd;
+        return new WorkingDirectory(path);
     }
 
 

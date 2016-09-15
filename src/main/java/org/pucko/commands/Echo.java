@@ -6,7 +6,7 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
-    private ArrayList<String> localArgs;
+    private final ArrayList<String> localArgs;
 
     public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh) {
         super(args, wd, oh, eh);
@@ -37,11 +37,8 @@ public class Echo extends Command {
     @Override
     public boolean verifyExecutable() {
 
-        if (localArgs != null && localArgs.size() != 0) {
-            return true;
-        }
+        return localArgs != null && localArgs.size() != 0;
 
-        return false;
     }
 
 }

@@ -10,6 +10,7 @@ import org.pucko.core.WorkingDirectory;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class EchoTest {
 
@@ -85,9 +86,7 @@ public class EchoTest {
 
 	private ArrayList<String> populateArrayList(String[] input) {
 		ArrayList<String> output = new ArrayList<>();
-		for (String s : input) {
-			output.add(s);
-		}
+        Collections.addAll(output, input);
 		return output;
 
 	}

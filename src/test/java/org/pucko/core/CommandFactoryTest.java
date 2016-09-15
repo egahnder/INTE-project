@@ -9,7 +9,6 @@ import org.pucko.commands.*;
 import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
@@ -21,9 +20,9 @@ public class CommandFactoryTest {
 
     @Mock
     private ArrayList<String> mockList;
-    CommandFactory commandFactory;
-    WorkingDirectory workingDirectory;
-    OutputHandler outputHandler;
+    private CommandFactory commandFactory;
+    private WorkingDirectory workingDirectory;
+    private OutputHandler outputHandler;
 
     @Before
     public void setUp(){
