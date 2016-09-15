@@ -8,8 +8,7 @@ public class WorkingDirectory {
     private Path path;
 
     public WorkingDirectory(){
-        Path home = Paths.get(System.getProperty("user.home"));
-        this.path = home;
+        this.path = Paths.get(System.getProperty("user.home"));
     }
 
     public WorkingDirectory(Path path) {

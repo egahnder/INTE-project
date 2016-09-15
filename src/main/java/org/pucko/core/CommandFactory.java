@@ -10,7 +10,7 @@ public class CommandFactory {
         return createCommand(command, args, workingDirectory, outputHandler, outputHandler);
     }
 
-    public Command createCommand(String command, ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler){
+    private Command createCommand(String command, ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler){
 
         switch (command){
             case "echo":

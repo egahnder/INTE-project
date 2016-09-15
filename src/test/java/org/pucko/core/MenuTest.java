@@ -14,8 +14,6 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 
 import static org.mockito.Mockito.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class MenuTest {
@@ -54,11 +52,11 @@ public class MenuTest {
 	}
 	
 	@Test
-	public void testSystemOutIsCalledWithPromt(){
-		String testPromt = "test";
-		when(controller.getPrompt()).thenReturn(testPromt);
+	public void testSystemOutIsCalledWithPrompt(){
+		String testPrompt = "test";
+		when(controller.getPrompt()).thenReturn(testPrompt);
 		menu.run();
-		assertEquals(testPromt, out.getLog());
+		assertEquals(testPrompt, out.getLog());
 	}
 	
 	@Test

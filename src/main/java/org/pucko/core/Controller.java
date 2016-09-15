@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.pucko.commands.Command;
 
 public class Controller{
-	
-	CommandParser commandParser;
-	WorkingDirectory workingDirectory;
-	CommandRunner commandRunner;
+
+	private final CommandParser commandParser;
+	private final WorkingDirectory workingDirectory;
+	private final CommandRunner commandRunner;
 
     public Controller(WorkingDirectory workingdirectory, CommandRunner commandrunner, CommandParser commandParser){
     	this.commandParser = commandParser;
