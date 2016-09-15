@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
-    private CommandFactory commandFactory;
+    private final CommandFactory commandFactory;
 
     public CommandParser(CommandFactory commandFactory){
         this.commandFactory = commandFactory;

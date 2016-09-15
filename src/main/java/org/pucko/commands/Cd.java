@@ -10,7 +10,7 @@ import org.pucko.core.WorkingDirectory;
 
 public class Cd extends Command {
     private Path newPath;
-    private Path oldPath = getWorkingDirectory();
+    private final Path oldPath = getWorkingDirectory();
 
     /**
      * @param args             Arguments used during execution of command.

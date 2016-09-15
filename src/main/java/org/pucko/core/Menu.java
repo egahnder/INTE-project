@@ -3,8 +3,8 @@ package org.pucko.core;
 import java.util.Scanner;
 
 public class Menu implements OutputHandler {
-	private Scanner scanner;
-	private Controller controller;
+	private final Scanner scanner;
+	private final Controller controller;
 
 	public Menu(Controller controller, Scanner scanner) {
 		this.scanner = scanner;

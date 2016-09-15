@@ -7,9 +7,9 @@ import org.pucko.commands.Command;
 
 public class Controller{
 
-	private CommandParser commandParser;
-	private WorkingDirectory workingDirectory;
-	private CommandRunner commandRunner;
+	private final CommandParser commandParser;
+	private final WorkingDirectory workingDirectory;
+	private final CommandRunner commandRunner;
 
     public Controller(WorkingDirectory workingdirectory, CommandRunner commandrunner, CommandParser commandParser){
     	this.commandParser = commandParser;
