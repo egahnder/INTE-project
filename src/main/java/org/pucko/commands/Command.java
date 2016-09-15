@@ -90,6 +90,15 @@ public abstract class Command implements OutputHandler {
         invalidateForUndo();
     }
 
+    protected final ArrayList<String> getArgs(){
+        ArrayList<String> newList = new ArrayList<>();
+        for (String arg : args) {
+            newList.add(arg);
+        }
+        return newList;
+
+    }
+
     /**
      * returns argument for a Command
      * @param index index of command argument.
