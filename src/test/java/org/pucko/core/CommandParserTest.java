@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.pucko.commands.Command;
+import org.pucko.commands.DefaultCommand;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,9 @@ public class CommandParserTest {
 
     @Mock
     private ArrayList<String> mockedArray;
+
+    @Mock
+    private Command mockCommand;
 
     @Before
     public void setUp(){
@@ -65,4 +70,10 @@ public class CommandParserTest {
         assertThat(commands, is(not(empty())));
     }
 
+    @Test
+    public void testTwoCommandsWIthNoArgs(){
+        when(factory.createCommand(any(), any(), any(), any())).thenReturn(mockCommand);
+        ArrayList<Command> commands = parser.parseCommands("test1 && test2", workingDirectory, outputHandler);
+        assertThat(commands.size(), is(2));
+    }
 }
