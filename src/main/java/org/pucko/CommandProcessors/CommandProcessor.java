@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public abstract class CommandProcessor {
 
-    protected CommandProcessor nextProcessor;
+    private CommandProcessor nextProcessor;
     protected final CommandFactory commandFactory;
 
     public CommandProcessor(CommandFactory commandFactory){
@@ -29,10 +29,14 @@ public abstract class CommandProcessor {
         }
     }
 
-    protected Command createCommandsFromStrings(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler) {
+    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler) {
         String[] commandArray = commandString.split(" ");
         commandString = commandArray[0];
         ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
         return commandFactory.createCommand(commandString, args, workingDirectory, outputHandler);
+    }
+
+    public void setNextProcessor(CommandProcessor nextProcessor){
+        this.nextProcessor = nextProcessor;
     }
 }
