@@ -44,6 +44,6 @@ public class DefaultProcessorTest {
     public void testProcessorCallsFactory(){
         processor.process("test command", workingDirectory, outputHandler);
         ArrayList<String> args = new ArrayList<>(Arrays.asList("test command".split(" ")));
-        verify(factory, times(1)).createCommand("test", args, workingDirectory, outputHandler);
+        verify(factory, times(1)).createCommand("test", args, workingDirectory, outputHandler, outputHandler);
     }
 }

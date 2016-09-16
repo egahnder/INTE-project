@@ -29,11 +29,15 @@ public abstract class CommandProcessor {
         }
     }
 
-    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler) {
+    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler){
+        return createCommandFromString(commandString, workingDirectory, outputHandler, outputHandler);
+    }
+
+    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler) {
         String[] commandArray = commandString.split(" ");
         commandString = commandArray[0];
         ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
-        return commandFactory.createCommand(commandString, args, workingDirectory, outputHandler);
+        return commandFactory.createCommand(commandString, args, workingDirectory, outputHandler, errorHandler);
     }
 
     public void setNextProcessor(CommandProcessor nextProcessor){

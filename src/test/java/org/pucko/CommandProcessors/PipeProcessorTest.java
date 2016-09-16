@@ -56,9 +56,9 @@ public class PipeProcessorTest {
 
     @Test
     public void testPipedCommandCallsFactoryWithCommandAsOutputHandler(){
-        when(commandFactory.createCommand(eq("test1"), any(), eq(workingDirectory), eq(outputHandler))).thenReturn(firstCommand);
+        when(commandFactory.createCommand(eq("test1"), any(), eq(workingDirectory), eq(outputHandler), eq(outputHandler))).thenReturn(firstCommand);
         processor.process("test1 | test2", workingDirectory, outputHandler);
-        verify(commandFactory, times(1)).createCommand(eq("test2"), any(), eq(workingDirectory), eq(firstCommand));
+        verify(commandFactory, times(1)).createCommand(eq("test2"), any(), eq(workingDirectory), eq(firstCommand), eq(outputHandler));
     }
 
     @Test
