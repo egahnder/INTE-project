@@ -43,9 +43,9 @@ public class Cd extends Command {
 
             commando = getArg(1);
 
-            if (commando.equals("..")) {
+            if ("..".equals(commando)) {
                 newPath = oldPath.getParent();
-            } else if (commando.equals(".")) {
+            } else if (".".equals(commando)) {
                 parsePeriod(commando);
             } else if (commando.startsWith("~")) {
                 parseTilde();
@@ -79,7 +79,7 @@ public class Cd extends Command {
 
     private void parseSlash(String input) {
         if (input.length() > 1) {
-            input = input.substring(1);
+            newPath = newPath.resolve(Paths.get(input.substring(1)));
         }
         newPath = newPath.resolve(Paths.get(input));
 
