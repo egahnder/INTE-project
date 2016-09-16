@@ -92,6 +92,7 @@ public abstract class Command implements OutputHandler {
 
     protected final ArrayList<String> getArgs(){
         ArrayList<String> newList = new ArrayList<>();
+        if (args != null)
         for (String arg : args) {
             newList.add(arg);
         }
