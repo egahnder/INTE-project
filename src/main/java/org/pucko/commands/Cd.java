@@ -95,7 +95,7 @@ public class Cd extends Command {
 
         // If args is null, return false
 
-        if (getArg(1) == null || getArgs().contains(null)) {
+        if (getArgs().contains(null)) {
             error("cd: No argument provided");
             return false;
         }
