@@ -4,10 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pucko.commands.Command;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class ControllerTest {
@@ -48,6 +50,13 @@ public class ControllerTest {
 		when(path.toString()).thenReturn(pathString);
 		when(workingDirectory.getPath()).thenReturn(path);
 		String prompt = controller.getPrompt();
-		assertEquals(pathString+" $ ", prompt);
+		assertEquals(pathString+"$ ", prompt);
+	}
+
+	@Test
+	public void testPromtShortensHomeDir(){
+        Path path = Paths.get(System.getProperty("user.home"));
+		when(workingDirectory.getPath()).thenReturn(path);
+        assertThat(controller.getPrompt(), is("~$ "));
 	}
 }
