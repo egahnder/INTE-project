@@ -48,7 +48,7 @@ public class CommandParserTest {
         parser.parseCommands("Test", workingDirectory, outputHandler);
         verify(factory, times(1)).createCommand(eq("Test"), argsCaptor.capture(), eq(workingDirectory), eq(outputHandler));
         ArrayList<String> argsList = argsCaptor.getValue();
-        assertThat(argsList, is(empty()));
+        assertThat(argsList, hasSize(1));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class CommandParserTest {
         parser.parseCommands("Command arg1 arg2 arg3", workingDirectory, outputHandler);
         verify(factory, times(1)).createCommand(eq("Command"), argsCaptor.capture(), eq(workingDirectory), eq(outputHandler));
         ArrayList<String> argsList = argsCaptor.getValue();
-        assertThat(argsList, contains("arg1", "arg2", "arg3"));
+        assertThat(argsList, contains("Command", "arg1", "arg2", "arg3"));
     }
 
     @Test
