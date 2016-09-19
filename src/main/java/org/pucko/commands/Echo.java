@@ -6,21 +6,21 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
-    private final ArrayList<String> localArgs;
 
     public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh) {
         super(args, wd, oh, eh);
-        localArgs = args;
     }
 
     @Override
     public boolean execute() {
-        String outputString = "";
-        for (String s : localArgs) {
-            outputString += s + " ";
+        StringBuilder sb = new StringBuilder();
+        ArrayList<String> args = getArgs();
+        args.remove(0);
+        for (String s : args) {
+            sb.append(s);
+            sb.append(" ");
         }
-        outputString = outputString.trim();
-        output(outputString);
+        output(sb.toString().trim());
         return true;
     }
 
@@ -37,7 +37,8 @@ public class Echo extends Command {
     @Override
     public boolean verifyExecutable() {
 
-        return localArgs != null && localArgs.size() != 0;
+
+        return getArgs() != null && getArgs().size() != 0;
 
     }
 

@@ -1,30 +1,37 @@
 package org.pucko.core;
 
+import org.pucko.CommandProcessors.CommandProcessor;
 import org.pucko.commands.Command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
-    private final CommandFactory commandFactory;
+    private final CommandProcessor commandProcessor;
 
-    public CommandParser(CommandFactory commandFactory){
-        this.commandFactory = commandFactory;
+    public CommandParser(CommandProcessor commandProcessor){
+        this.commandProcessor = commandProcessor;
     }
 
-    public ArrayList<Command> parseCommands(String commands, WorkingDirectory workingDirectory, OutputHandler outputHandler){
-        ArrayList<Command> commandList = new ArrayList<>();
-        String[] commandArray = commands.split("\\s+");
-        String commandString = commandArray[0];
-        if (commandArray.length > 1) {
-            commandArray = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+    public ArrayList<Command> parseCommands(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler){
+        ArrayList<String> commandStrings = splitMultipleCommands(command);
+        ArrayList<Command> commands = new ArrayList<>();
+        for(String commandString : commandStrings){
+            commands.addAll(commandProcessor.process(commandString, workingDirectory, outputHandler));
+        }
+
+        return commands;
+    }
+
+    private ArrayList<String> splitMultipleCommands(String command) {
+        ArrayList<String> commandStrings = new ArrayList<>();
+        if (command.matches("[^\\s&]+( [^(\\s&)]+)* && [^\\s&]+( [^(\\s&)]+)*( && [^\\s&]+( [^(\\s&)]+)*)*")){
+            String[] splitCommands = command.split(" && ");
+                commandStrings.addAll(Arrays.asList(splitCommands));
         }
         else {
-            commandArray = new String[0];
+            commandStrings.add(command);
         }
-        ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
-        Command command = commandFactory.createCommand(commandString, args, workingDirectory, outputHandler);
-        commandList.add(command);
-        return commandList;
+        return commandStrings;
     }
 }

@@ -24,7 +24,12 @@ public class Controller{
 	
 	public String getPrompt(){
 		Path path = workingDirectory.getPath();
-		return path.toString()+" $ ";
+		String pathString = path.toString();
+		String homeString = System.getProperty("user.home");
+		if (pathString.startsWith(homeString)){
+			pathString = pathString.replaceFirst(homeString, "~");
+		}
+		return pathString+"$ ";
 	}
 	
 }

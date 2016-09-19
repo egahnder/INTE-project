@@ -37,6 +37,7 @@ public class CdTest {
         oldDir = testDir.toPath();
         args = new ArrayList<>();
         wd = new WorkingDirectory(oldDir);
+        args.add("cd");
 
     }
 
@@ -45,7 +46,7 @@ public class CdTest {
 
         args.add("bar");
 
-        newDir = testFolder.newFolder(args.get(0));
+        newDir = testFolder.newFolder(args.get(1));
         newPath = newDir.toPath();
 
         Cd cd = new Cd(args, wd, oh, eh);
@@ -139,20 +140,12 @@ public class CdTest {
     }
 
     @Test
-    public void testPrintsErrorOnNoParam() {
-        Cd cd = new Cd(args, wd, oh, eh);
-        cd.runCommand();
-
-        verify(eh, times(1)).handleOutput("cd: No argument provided");
-    }
-
-    @Test
     public void testPrintsErrorOnPathDoesNotExist() {
         args.add("NonexistentDir");
         Cd cd = new Cd(args, wd, oh, eh);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(0));
+        verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(1));
     }
 
     @Test

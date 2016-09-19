@@ -9,8 +9,9 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Cd extends Command {
-    private Path newPath;
+    private Path newPath = Paths.get("/");
     private final Path oldPath = getWorkingDirectory();
+    private String commando;
 
     /**
      * @param args             Arguments used during execution of command.
@@ -36,20 +37,52 @@ public class Cd extends Command {
         // If the argument is ".." create the new Path by calling getParent() on the old path
         // If the argument is "~" create a Path to user home
         // Otherwise create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
-
-        if (getArg(0).equals("..")) {
-            newPath = oldPath.getParent();
-        } else if (getArg(0).equals(".")) {
-            newPath = oldPath;
-        } else if (getArg(0).equals("~")) {
-            String homePath = System.getProperty("user.home");
-            newPath = Paths.get(homePath);
-        } else if (getArg(0).equals("/")) {
-            newPath = Paths.get("/");
+        if (getArgs().size() == 1) {
+            newPath = Paths.get(System.getProperty("user.home"));
         } else {
-            newPath = oldPath.resolve(Paths.get(getArg(0)));
 
+            commando = getArg(1);
+
+            if ("..".equals(commando)) {
+                newPath = oldPath.getParent();
+            } else if (".".equals(commando)) {
+                parsePeriod(commando);
+            } else if (commando.startsWith("~")) {
+                parseTilde();
+            } else if (commando.startsWith("/")) {
+                parseSlash(commando);
+            } else {
+                newPath = oldPath.resolve(Paths.get(commando));
+
+            }
         }
+    }
+
+    private void parsePeriod( String input) {
+        newPath = oldPath.normalize();
+        if (input.length() > 1) {
+            newPath = oldPath.resolve(Paths.get(input));
+        }
+    }
+
+    private void parseTilde() {
+        newPath = Paths.get(System.getProperty("user.home"));
+        if (commando.length() > 1) {
+            String[] splitCommandos = commando.split("~");
+            if (splitCommandos[1].startsWith("/")) {
+                parseSlash(splitCommandos[1]);
+            } else if (splitCommandos[1].startsWith(".")) {
+                parsePeriod(splitCommandos[1]);
+            }
+        }
+    }
+
+    private void parseSlash(String input) {
+        if (input.length() > 1) {
+            newPath = newPath.resolve(Paths.get(input.substring(1)));
+        }
+        newPath = newPath.resolve(Paths.get(input));
+
     }
 
     @Override
@@ -61,15 +94,9 @@ public class Cd extends Command {
     protected boolean verifyExecutable() {
 
         // If args is null, return false
-        try {
-            getArg(0);
-        } catch (IndexOutOfBoundsException | NullPointerException e) {
-            error("cd: No argument provided");
-            return false;
-        }
 
-        if (getArg(0) == null) {
-            error("cd: No argument provided");
+        if (getArgs().contains(null)) {
+            error("cd: Invalid Argument");
             return false;
         }
 
@@ -84,7 +111,7 @@ public class Cd extends Command {
 
         //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
-            error("cd: No such file or directory: " +getArg(0));
+            error("cd: No such file or directory: " +getArg(1));
             return false;
         }
 
