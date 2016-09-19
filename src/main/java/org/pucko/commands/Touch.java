@@ -30,7 +30,9 @@ public class Touch extends Command {
         Path argsPath;
         Path newPath;
 
-        for (int i = 0; i < 3; i++) {
+        ArrayList<String> args = getArgs();
+
+        for (int i = 0; i < args.size(); i++) {
 
             argsPath = Paths.get(getArg(i));
             newPath = currentDir.resolve(argsPath);
@@ -50,8 +52,10 @@ public class Touch extends Command {
 
     @Override
     protected boolean verifyExecutable() {
-        return false;
+        return true;
     }
+
+    //Göra kontroller på input så att execute kan köras
 
     @Override
     protected boolean undo() {
