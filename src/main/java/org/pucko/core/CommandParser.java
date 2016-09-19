@@ -1,21 +1,26 @@
 package org.pucko.core;
 
+import org.pucko.CommandProcessors.CommandProcessor;
 import org.pucko.commands.Command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
-    private final CommandFactory commandFactory;
+    private final CommandProcessor commandProcessor;
 
-    public CommandParser(CommandFactory commandFactory){
-        this.commandFactory = commandFactory;
+    public CommandParser(CommandProcessor commandProcessor){
+        this.commandProcessor = commandProcessor;
     }
 
     public ArrayList<Command> parseCommands(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler){
-        ArrayList<String> commands = splitMultipleCommands(command);
+        ArrayList<String> commandStrings = splitMultipleCommands(command);
+        ArrayList<Command> commands = new ArrayList<>();
+        for(String commandString : commandStrings){
+            commands.addAll(commandProcessor.process(commandString, workingDirectory, outputHandler));
+        }
 
-        return createCommandsFromStrings(commands, workingDirectory, outputHandler);
+        return commands;
     }
 
     private ArrayList<String> splitMultipleCommands(String command) {
@@ -29,19 +34,4 @@ public class CommandParser {
         }
         return commandStrings;
     }
-
-    private ArrayList<Command> createCommandsFromStrings(ArrayList<String> strings, WorkingDirectory workingDirectory, OutputHandler outputHandler){
-        ArrayList<Command> commands = new ArrayList<>();
-        for (String commandString : strings) {
-            String[] commandArray = commandString.split(" ");
-            commandString = commandArray[0];
-            ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
-            Command command = commandFactory.createCommand(commandString, args, workingDirectory, outputHandler);
-            commands.add(command);
-        }
-        return commands;
-
-    }
 }
-
-//[^\s&]+( [^(\s&)]+)* && [^\s&]+( [^(\s&)]+)*( && [^\s&]+( [^(\s&)]+)*)*
