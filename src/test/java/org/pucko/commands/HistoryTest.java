@@ -48,6 +48,15 @@ public class HistoryTest {
     }
 
     @Test
+    public void testVerifyExecutableReturnsFalseWhenArgIsZero() {
+        String[] input = {"history", "0"};
+
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        assertFalse(h.verifyExecutable());
+
+    }
+
+    @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArraySize() {
 
         String[] input = {"history", "5"};
@@ -77,6 +86,18 @@ public class HistoryTest {
 
 
     }
+
+    @Test
+    public void testVerifyExecutableReturnsTrueWithNoArg() {
+
+        String[] input = {"history"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        assertTrue(h.verifyExecutable());
+
+    }
+
+
 
     private ArrayList<String> populateArrayList(String[] input) {
         ArrayList<String> output = new ArrayList<>();

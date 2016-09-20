@@ -31,18 +31,20 @@ public class History extends Command {
     @Override
     protected boolean verifyExecutable() {
 
-        int commandNumber = Integer.parseInt(getArg(1));
+        if (getArgs().size() > 1) {
 
-        if (commandNumber > getInputHandler().getHistory().size()) {
-            error("Number greater than command history");
-            return false;
+            int commandNumber = Integer.parseInt(getArg(1));
+
+            if (commandNumber > getInputHandler().getHistory().size()) {
+                error("Number greater than command history");
+                return false;
+            }
+
+
+            if (commandNumber < 1) {
+                return false;
+            }
         }
-
-
-        if (commandNumber < 0) {
-            return false;
-        }
-
         return true;
     }
 
