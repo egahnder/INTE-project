@@ -6,6 +6,7 @@ public class Menu implements OutputHandler {
 	private final Scanner scanner;
 	private final Controller controller;
 
+
 	public Menu(Controller controller, Scanner scanner) {
 		this.scanner = scanner;
 		this.controller = controller;

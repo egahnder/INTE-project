@@ -65,5 +65,14 @@ public class MenuTest {
 		assertEquals("test\n", out.getLog());
 	}
 
+	@Test
+    public void testMenuAddsHistory(){
+
+        String inputString = "echo Hello World";
+        input.provideLines(inputString);
+        menu.run();
+        verify(menu, times(1)).addHistory(inputString);
+
+    }
 
 }
