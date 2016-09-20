@@ -20,6 +20,7 @@ public class MenuTest {
 	private Controller controller;
 	private Scanner scanner;
 	private Menu menu;
+
 	@Rule
 	public ExpectedSystemExit exit = ExpectedSystemExit.none();
 	
@@ -41,7 +42,7 @@ public class MenuTest {
 		String inputString = "";		
 		input.provideLines(inputString);
 		menu.run();
-		verify(controller, times(1)).parseCommand(inputString, menu);
+		verify(controller, times(1)).parseCommand(inputString, menu, menu);
 	}
 	
 	@Test
@@ -71,8 +72,16 @@ public class MenuTest {
         String inputString = "echo Hello World";
         input.provideLines(inputString);
         menu.run();
-        verify(menu, times(1)).addHistory(inputString);
+        assertTrue(menu.getHistory().size() == 1);
 
+    }
+
+    @Test
+    public void testMenuAddsCorrectString(){
+        String inputString = "echo Hello World";
+        input.provideLines(inputString);
+        menu.run();
+        assertEquals(inputString, menu.getHistory().get(0));
     }
 
 }

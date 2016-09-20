@@ -1,15 +1,45 @@
 package org.pucko.commands;
 
+import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.mockito.Mock;
+import org.pucko.core.InputHandler;
+import org.pucko.core.OutputHandler;
+import org.pucko.core.WorkingDirectory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * Created by Tobias on 20/09/16.
  */
 public class HistoryTest {
 
+    @Mock
+    private WorkingDirectory workingDirectory;
+    @Mock
+    private OutputHandler outputHandler;
+    @Mock
+    private OutputHandler errorHandler;
+    @Mock
+    private InputHandler inputHandler;
 
+    @Before
+    public void setUp() {
+        initMocks(this);
+    }
 
+    @Test
+    public void testVerifyExecutableReturnsFalseWhenArgIsNegative() {
 
+        ArrayList<String> inputArgs = new ArrayList<>();
+        inputArgs.add("-1");
 
+        History h = new History(inputArgs, workingDirectory, outputHandler, errorHandler, inputHandler);
+        assertFalse(h.verifyExecutable());
 
+    }
 }

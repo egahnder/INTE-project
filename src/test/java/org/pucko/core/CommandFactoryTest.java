@@ -23,6 +23,7 @@ public class CommandFactoryTest {
     private CommandFactory commandFactory;
     private WorkingDirectory workingDirectory;
     private OutputHandler outputHandler;
+    private InputHandler inputHandler;
 
     @Before
     public void setUp(){
@@ -30,6 +31,7 @@ public class CommandFactoryTest {
         commandFactory = new CommandFactory();
         workingDirectory = mock(WorkingDirectory.class);
         outputHandler = mock(OutputHandler.class);
+        inputHandler = mock(InputHandler.class);
     }
 
     @Test
@@ -54,7 +56,7 @@ public class CommandFactoryTest {
     }
 
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {
-        Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler);
+        Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler, inputHandler);
         assertThat(command, is(instanceOf(commandClass)));
     }
 
