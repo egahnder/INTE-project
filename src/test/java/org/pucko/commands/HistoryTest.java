@@ -2,7 +2,9 @@ package org.pucko.commands;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.mockito.Mock;
 import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
@@ -35,11 +37,18 @@ public class HistoryTest {
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsNegative() {
 
-        ArrayList<String> inputArgs = new ArrayList<>();
-        inputArgs.add("-1");
+        String[] input = {"history", "-1"};
 
-        History h = new History(inputArgs, workingDirectory, outputHandler, errorHandler, inputHandler);
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
         assertFalse(h.verifyExecutable());
+
+    }
+
+
+    private ArrayList<String> populateArrayList(String[] input) {
+        ArrayList<String> output = new ArrayList<>();
+        Collections.addAll(output, input);
+        return output;
 
     }
 }
