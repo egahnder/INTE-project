@@ -13,6 +13,7 @@ import org.pucko.core.WorkingDirectory;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -44,14 +45,21 @@ public class HistoryTest {
 
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArray() {
 
         String[] input = {"history", "5"};
-
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
         h.verifyExecutable();
 
+        ArrayList<String> mockArray = mock(ArrayList.class);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(2);
+
+        verify(errorHandler, times(1)).handleOutput("Number greater than command history");
+        assertFalse(h.verifyExecutable());
     }
 
 
