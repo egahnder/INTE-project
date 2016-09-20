@@ -44,6 +44,16 @@ public class HistoryTest {
 
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArray() {
+
+        String[] input = {"history", "5"};
+
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        h.verifyExecutable();
+
+    }
+
 
     private ArrayList<String> populateArrayList(String[] input) {
         ArrayList<String> output = new ArrayList<>();
