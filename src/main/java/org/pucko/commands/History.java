@@ -33,7 +33,6 @@ public class History extends Command {
 
         int commandNumber = Integer.parseInt(getArg(1));
 
-
         if (commandNumber > getInputHandler().getHistory().size()) {
             error("Number greater than command history");
             return false;

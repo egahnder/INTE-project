@@ -29,6 +29,8 @@ public class HistoryTest {
     private OutputHandler errorHandler;
     @Mock
     private InputHandler inputHandler;
+    @Mock
+    private ArrayList<String> mockArray;
 
     @Before
     public void setUp() {
@@ -46,22 +48,35 @@ public class HistoryTest {
     }
 
     @Test
-    public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArray() {
+    public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArraySize() {
 
         String[] input = {"history", "5"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         h.verifyExecutable();
 
-        ArrayList<String> mockArray = mock(ArrayList.class);
-
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(2);
+        when(mockArray.size()).thenReturn(4);
 
         verify(errorHandler, times(1)).handleOutput("Number greater than command history");
         assertFalse(h.verifyExecutable());
     }
 
+
+    @Test
+    public void testVerifyExecutableReturnsTrueWhenArgIsEqualToHistoryArraySize() {
+
+        String[] input = {"history", "3"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.verifyExecutable();
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(3);
+        assertTrue(h.verifyExecutable());
+
+
+    }
 
     private ArrayList<String> populateArrayList(String[] input) {
         ArrayList<String> output = new ArrayList<>();
