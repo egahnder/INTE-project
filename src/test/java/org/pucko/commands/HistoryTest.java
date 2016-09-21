@@ -46,7 +46,7 @@ public class HistoryTest {
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.get(1)).thenReturn("pwd");
+        when(mockArray.get(0)).thenReturn("pwd");
         when(mockArray.size()).thenReturn(5);
 
         h.runCommand();
@@ -55,19 +55,41 @@ public class HistoryTest {
     }
 
     @Test
-    public void testExecutePrintsLatestCommand(){
+    public void testExecutePrintsLatestCommand() {
 
         String[] input = {"history", "5"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.get(5)).thenReturn("echo Hello World");
+        when(mockArray.get(4)).thenReturn("echo Hello World");
         when(mockArray.size()).thenReturn(5);
 
         h.runCommand();
 
         verify(outputHandler, times(1)).handleOutput("echo Hello World");
 
+    }
+
+    @Test
+    public void testExecutePrintsCompleteHistoryArray() {
+
+        String[] input = {"history"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(5);
+        when(mockArray.get(0)).thenReturn("cd ..");
+        when(mockArray.get(1)).thenReturn("pwd");
+        when(mockArray.get(2)).thenReturn("history 4");
+        when(mockArray.get(3)).thenReturn("touch test.fil");
+        when(mockArray.get(4)).thenReturn("echo Hello World");
+
+        h.runCommand();
+        verify(outputHandler, times(1)).handleOutput("1\tcd ..");
+        verify(outputHandler, times(1)).handleOutput("2\tpwd");
+        verify(outputHandler, times(1)).handleOutput("3\thistory 4");
+        verify(outputHandler, times(1)).handleOutput("4\ttouch test.fil");
+        verify(outputHandler, times(1)).handleOutput("5\techo Hello World");
     }
 
 
@@ -86,9 +108,11 @@ public class HistoryTest {
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsZero() {
         String[] input = {"history", "0"};
-
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
-        assertFalse(h.verifyExecutable());
+
+        boolean result = h.verifyExecutable();
+        verify(errorHandler, times(1)).handleOutput("Command number has to be > 0");
+        assertFalse(result);
 
     }
 
