@@ -24,7 +24,12 @@ public class History extends Command {
 
     @Override
     protected boolean execute() {
-        return false;
+
+        int temp = Integer.parseInt(getArg(1));
+        String tempString = getInputHandler().getHistory().get(temp);
+        output(tempString);
+
+        return true;
     }
     //plocka int från getArg(1) och skicka in i inputHandler.getHistory().get(int) och skicka det till outputHandler.
 
@@ -48,7 +53,7 @@ public class History extends Command {
                 error("Only numbers are accepted");
                 return false;
             }
-            
+
             if (commandNumber > getInputHandler().getHistory().size()) {
                 error("Number greater than command history");
                 return false;

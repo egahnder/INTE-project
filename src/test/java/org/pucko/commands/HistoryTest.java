@@ -38,17 +38,22 @@ public class HistoryTest {
     }
 
 
-
     // input == 1
-  //  @Test
-   // public void testExecutePrintsEarliestCommand(){
+    @Test
+    public void testExecutePrintsEarliestCommand() {
 
-     //   String[] input = {"history", "1"};
-    //  History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
-     //   assertTrue(true);
+        String[] input = {"history", "1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.get(1)).thenReturn("pwd");
+
+        h.execute();
+
+        verify(outputHandler, times(1)).handleOutput("pwd");
 
 
-//    }
+    }
 
 
     //TEST 1 input == "-1"
@@ -146,10 +151,9 @@ public class HistoryTest {
     }
 
 
-
     //TEST 8 input == "1", "3"
     @Test
-    public void testVerifyExecutableReturnsFalseWhenTooManyArgs(){
+    public void testVerifyExecutableReturnsFalseWhenTooManyArgs() {
 
         String[] input = {"history", "1", "3"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
@@ -168,7 +172,6 @@ public class HistoryTest {
         return output;
 
     }
-
 
 
 }
