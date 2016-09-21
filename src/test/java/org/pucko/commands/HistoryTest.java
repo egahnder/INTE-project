@@ -37,6 +37,7 @@ public class HistoryTest {
         initMocks(this);
     }
 
+    //TEST 1 input == "-1"
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsNegative() {
 
@@ -47,6 +48,7 @@ public class HistoryTest {
 
     }
 
+    //TEST 2 input == "0"
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsZero() {
         String[] input = {"history", "0"};
@@ -56,6 +58,38 @@ public class HistoryTest {
 
     }
 
+
+    //TEST 3 input == "1"
+    @Test
+    public void testVerifyExecutableReturnsTrueWhenArgIsPositive() {
+        String[] input = {"history", "1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(1);
+
+        assertTrue(h.verifyExecutable());
+
+
+    }
+
+    //TEST 4 input == args.size()
+    @Test
+    public void testVerifyExecutableReturnsTrueWhenArgIsEqualToHistoryArraySize() {
+
+        String[] input = {"history", "3"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.verifyExecutable();
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(3);
+        assertTrue(h.verifyExecutable());
+
+
+    }
+
+    //TEST 5 input == args.size() + 1
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArraySize() {
 
@@ -72,21 +106,23 @@ public class HistoryTest {
     }
 
 
+    //TEST 6 input == characters
     @Test
-    public void testVerifyExecutableReturnsTrueWhenArgIsEqualToHistoryArraySize() {
+    public void testVerifyExecutableReturnsFalseWithCharArg() {
 
-        String[] input = {"history", "3"};
+        String[] input = {"history", "hello"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         h.verifyExecutable();
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(3);
-        assertTrue(h.verifyExecutable());
+        verify(errorHandler, times(1)).handleOutput("Only numbers are accepted");
 
+        assertFalse(h.verifyExecutable());
 
     }
 
+
+    //TEST 7 input == empty
     @Test
     public void testVerifyExecutableReturnsTrueWithNoArg() {
 
@@ -96,7 +132,6 @@ public class HistoryTest {
         assertTrue(h.verifyExecutable());
 
     }
-
 
 
     private ArrayList<String> populateArrayList(String[] input) {

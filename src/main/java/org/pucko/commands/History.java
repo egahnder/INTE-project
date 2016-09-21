@@ -33,22 +33,28 @@ public class History extends Command {
 
         if (getArgs().size() > 1) {
 
-            int commandNumber = Integer.parseInt(getArg(1));
+            int commandNumber;
 
+            try {
+                commandNumber = Integer.parseInt(getArg(1));
+            } catch (NumberFormatException e) {
+                error("Only numbers are accepted");
+                return false;
+            }
             if (commandNumber > getInputHandler().getHistory().size()) {
                 error("Number greater than command history");
                 return false;
             }
-
-
+            
             if (commandNumber < 1) {
                 return false;
             }
+
+            return true;
         }
         return true;
     }
 
-    //Kontroll av input i args, om invalid klass return false, else return true
 
     @Override
     protected boolean undo() {
