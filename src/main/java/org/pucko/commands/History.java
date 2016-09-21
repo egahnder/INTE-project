@@ -25,27 +25,22 @@ public class History extends Command {
 
     @Override
     protected boolean execute() {
+        int lastCommandToPrint;
+        int commandIndex = 1;
+        ArrayList<String> commandHistory = getInputHandler().getHistory();
 
         if (printHistory) {
-
-            ArrayList<String> temp = getInputHandler().getHistory();
-
-            int index = 1;
-
-            for (int i = 0; i < temp.size(); i++) {
-                String tempString = temp.get(i);
-                output(index + "\t" + tempString);
-                index++;
-            }
-            return true;
-
+            lastCommandToPrint = commandHistory.size();
+        } else {
+            lastCommandToPrint = Integer.parseInt(getArg(1));
         }
 
-        int temp = Integer.parseInt(getArg(1));
-        String tempString = getInputHandler().getHistory().get(temp-1);
-        output(tempString);
-
+        for (int i = 0; i < lastCommandToPrint; i++) {
+            output(commandIndex + "\t" + commandHistory.get(i));
+            commandIndex++;
+        }
         return true;
+
     }
 
     @Override

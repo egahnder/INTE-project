@@ -40,34 +40,45 @@ public class HistoryTest {
 
     // input == 1
     @Test
-    public void testExecutePrintsEarliestCommand() {
+    public void testExecutePrintsFirstCommand() {
 
         String[] input = {"history", "1"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.get(0)).thenReturn("pwd");
         when(mockArray.size()).thenReturn(5);
+        when(mockArray.get(0)).thenReturn("cd ..");
+        when(mockArray.get(1)).thenReturn("pwd");
+        when(mockArray.get(2)).thenReturn("history 4");
+        when(mockArray.get(3)).thenReturn("touch test.fil");
+        when(mockArray.get(4)).thenReturn("echo Hello World");
 
         h.runCommand();
 
-        verify(outputHandler, times(1)).handleOutput("pwd");
+        verify(outputHandler, times(1)).handleOutput("1\tcd ..");
     }
 
     @Test
-    public void testExecutePrintsLatestCommand() {
+    public void testExecutePrintsLastCommand() {
 
         String[] input = {"history", "5"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.get(4)).thenReturn("echo Hello World");
         when(mockArray.size()).thenReturn(5);
+        when(mockArray.get(0)).thenReturn("cd ..");
+        when(mockArray.get(1)).thenReturn("pwd");
+        when(mockArray.get(2)).thenReturn("history 4");
+        when(mockArray.get(3)).thenReturn("touch test.fil");
+        when(mockArray.get(4)).thenReturn("echo Hello World");
 
         h.runCommand();
 
-        verify(outputHandler, times(1)).handleOutput("echo Hello World");
-
+        verify(outputHandler, times(1)).handleOutput("1\tcd ..");
+        verify(outputHandler, times(1)).handleOutput("2\tpwd");
+        verify(outputHandler, times(1)).handleOutput("3\thistory 4");
+        verify(outputHandler, times(1)).handleOutput("4\ttouch test.fil");
+        verify(outputHandler, times(1)).handleOutput("5\techo Hello World");
     }
 
     @Test
