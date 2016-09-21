@@ -28,10 +28,17 @@ public class History extends Command {
     }
     //plocka int från getArg(1) och skicka in i inputHandler.getHistory().get(int) och skicka det till outputHandler.
 
+
     @Override
     protected boolean verifyExecutable() {
 
-        if (getArgs().size() > 1) {
+        int argsSize = getArgs().size();
+
+        if (argsSize == 1) {
+            return true;
+        }
+
+        if (argsSize == 2) {
 
             int commandNumber;
 
@@ -41,20 +48,21 @@ public class History extends Command {
                 error("Only numbers are accepted");
                 return false;
             }
+            
             if (commandNumber > getInputHandler().getHistory().size()) {
                 error("Number greater than command history");
                 return false;
             }
-            
+
             if (commandNumber < 1) {
                 return false;
             }
-
             return true;
         }
-        return true;
-    }
 
+        error("Too many arguments");
+        return false;
+    }
 
     @Override
     protected boolean undo() {

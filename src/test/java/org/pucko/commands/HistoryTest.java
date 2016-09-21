@@ -37,6 +37,20 @@ public class HistoryTest {
         initMocks(this);
     }
 
+
+
+    // input == 1
+  //  @Test
+   // public void testExecutePrintsEarliestCommand(){
+
+     //   String[] input = {"history", "1"};
+    //  History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+     //   assertTrue(true);
+
+
+//    }
+
+
     //TEST 1 input == "-1"
     @Test
     public void testVerifyExecutableReturnsFalseWhenArgIsNegative() {
@@ -80,8 +94,6 @@ public class HistoryTest {
         String[] input = {"history", "3"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        h.verifyExecutable();
-
         when(inputHandler.getHistory()).thenReturn(mockArray);
         when(mockArray.size()).thenReturn(3);
         assertTrue(h.verifyExecutable());
@@ -96,13 +108,13 @@ public class HistoryTest {
         String[] input = {"history", "5"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        h.verifyExecutable();
+        boolean result = h.verifyExecutable();
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
         when(mockArray.size()).thenReturn(4);
 
         verify(errorHandler, times(1)).handleOutput("Number greater than command history");
-        assertFalse(h.verifyExecutable());
+        assertFalse(result);
     }
 
 
@@ -113,11 +125,11 @@ public class HistoryTest {
         String[] input = {"history", "hello"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        h.verifyExecutable();
+        boolean result = h.verifyExecutable();
 
         verify(errorHandler, times(1)).handleOutput("Only numbers are accepted");
 
-        assertFalse(h.verifyExecutable());
+        assertFalse(result);
 
     }
 
@@ -134,10 +146,29 @@ public class HistoryTest {
     }
 
 
+
+    //TEST 8 input == "1", "3"
+    @Test
+    public void testVerifyExecutableReturnsFalseWhenTooManyArgs(){
+
+        String[] input = {"history", "1", "3"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(15);
+
+        assertFalse(h.verifyExecutable());
+
+    }
+
+
     private ArrayList<String> populateArrayList(String[] input) {
         ArrayList<String> output = new ArrayList<>();
         Collections.addAll(output, input);
         return output;
 
     }
+
+
+
 }
