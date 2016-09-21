@@ -47,11 +47,26 @@ public class HistoryTest {
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
         when(mockArray.get(1)).thenReturn("pwd");
+        when(mockArray.size()).thenReturn(5);
 
-        h.execute();
+        h.runCommand();
 
         verify(outputHandler, times(1)).handleOutput("pwd");
+    }
 
+    @Test
+    public void testExecutePrintsLatestCommand(){
+
+        String[] input = {"history", "5"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.get(5)).thenReturn("echo Hello World");
+        when(mockArray.size()).thenReturn(5);
+
+        h.runCommand();
+
+        verify(outputHandler, times(1)).handleOutput("echo Hello World");
 
     }
 
