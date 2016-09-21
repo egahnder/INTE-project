@@ -19,6 +19,8 @@ public class CommandFactory {
                 return new Pwd(args, workingDirectory, outputHandler, errorHandler, inputHandler);
             case "cd":
                 return new Cd(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+            case "history":
+                return new History(args, workingDirectory, outputHandler, errorHandler, inputHandler);
             default:
                 return new DefaultCommand(args, workingDirectory, outputHandler, errorHandler, inputHandler);
         }
