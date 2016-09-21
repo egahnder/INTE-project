@@ -38,6 +38,21 @@ public class HistoryTest {
     }
 
 
+    @Test
+    public void testExecuteWithEmptyHistory() {
+
+        String[] input = {"history", "1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(mockArray);
+        when(mockArray.size()).thenReturn(1);
+
+        h.runCommand();
+
+        verify(errorHandler, times(1)).handleOutput("No command history available");
+
+    }
+
     // input == 1
     @Test
     public void testExecutePrintsFirstCommand() {
@@ -48,10 +63,6 @@ public class HistoryTest {
         when(inputHandler.getHistory()).thenReturn(mockArray);
         when(mockArray.size()).thenReturn(5);
         when(mockArray.get(0)).thenReturn("cd ..");
-        when(mockArray.get(1)).thenReturn("pwd");
-        when(mockArray.get(2)).thenReturn("history 4");
-        when(mockArray.get(3)).thenReturn("touch test.fil");
-        when(mockArray.get(4)).thenReturn("echo Hello World");
 
         h.runCommand();
 
@@ -93,14 +104,12 @@ public class HistoryTest {
         when(mockArray.get(1)).thenReturn("pwd");
         when(mockArray.get(2)).thenReturn("history 4");
         when(mockArray.get(3)).thenReturn("touch test.fil");
-        when(mockArray.get(4)).thenReturn("echo Hello World");
 
         h.runCommand();
         verify(outputHandler, times(1)).handleOutput("1\tcd ..");
         verify(outputHandler, times(1)).handleOutput("2\tpwd");
         verify(outputHandler, times(1)).handleOutput("3\thistory 4");
         verify(outputHandler, times(1)).handleOutput("4\ttouch test.fil");
-        verify(outputHandler, times(1)).handleOutput("5\techo Hello World");
     }
 
 
@@ -135,7 +144,7 @@ public class HistoryTest {
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
         when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(1);
+        when(mockArray.size()).thenReturn(2);
 
         assertTrue(h.verifyExecutable());
 
