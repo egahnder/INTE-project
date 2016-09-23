@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import static org.mockito.InOrder.*;
 import org.mockito.Mock;
 import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
@@ -21,6 +22,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class HistoryTest {
 
+    //git push origin feature/develop-history
+
     @Mock
     private WorkingDirectory workingDirectory;
     @Mock
@@ -35,6 +38,8 @@ public class HistoryTest {
     @Before
     public void setUp() {
         initMocks(this);
+        //skapa riktig arraylist, populera. history, 5 pos
+
     }
 
 
@@ -98,6 +103,8 @@ public class HistoryTest {
         String[] input = {"history"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
+
+
         when(inputHandler.getHistory()).thenReturn(mockArray);
         when(mockArray.size()).thenReturn(5);
         when(mockArray.get(0)).thenReturn("cd ..");
@@ -120,7 +127,7 @@ public class HistoryTest {
         String[] input = {"history", "-1"};
 
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
-        assertFalse(h.verifyExecutable());
+        assertFalse(h.runCommand());
 
     }
 
