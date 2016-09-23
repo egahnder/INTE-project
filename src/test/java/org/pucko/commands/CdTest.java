@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.*;
+
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -20,6 +22,7 @@ public class CdTest {
 
     private OutputHandler oh;
     private OutputHandler eh;
+    private InputHandler ih;
     private WorkingDirectory wd;
     private Path oldDir;
     private File newDir;
@@ -33,6 +36,7 @@ public class CdTest {
     public void setUp() throws Exception {
         oh = mock(OutputHandler.class);
         eh = mock(OutputHandler.class);
+        ih = mock(InputHandler.class);
         File testDir = testFolder.getRoot();
         oldDir = testDir.toPath();
         args = new ArrayList<>();
@@ -49,7 +53,7 @@ public class CdTest {
         newDir = testFolder.newFolder(args.get(1));
         newPath = newDir.toPath();
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
 
         cd.runCommand();
 
@@ -64,7 +68,7 @@ public class CdTest {
 
         newPath = oldDir.getParent();
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
 
         cd.runCommand();
 
@@ -79,7 +83,7 @@ public class CdTest {
 
         args.add("..");
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
 
         // Make sure cd returns false since there are no directories above /
         assertEquals(false, cd.runCommand());
@@ -92,7 +96,7 @@ public class CdTest {
         // Add the ~ (Tilde) symbol that corresponds to the user home directory to the ArrayList
         args.add("~");
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
         cd.runCommand();
 
         String homePath = System.getProperty("user.home");
@@ -108,7 +112,7 @@ public class CdTest {
         // Add the / symbol that corresponds to the System Root to the ArrayList
         args.add("/");
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
         cd.runCommand();
 
         Path newPath = Paths.get("/");
@@ -122,7 +126,7 @@ public class CdTest {
 
         args.add("invalidDir");
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
 
         assertEquals(false, cd.runCommand());
 
@@ -133,7 +137,7 @@ public class CdTest {
 
         args.add(null);
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh, ih);
 
         assertEquals(false, cd.runCommand());
 
@@ -142,7 +146,7 @@ public class CdTest {
     @Test
     public void testPrintsErrorOnPathDoesNotExist() {
         args.add("NonexistentDir");
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh,ih);
         cd.runCommand();
 
         verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(1));
@@ -154,7 +158,7 @@ public class CdTest {
         newDir = testFolder.newFolder("nonReadableDir");
         newDir.setReadable(false);
 
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh,ih);
         cd.runCommand();
 
         verify(eh, times(1)).handleOutput("cd: You do not have permission to access this directory");
@@ -164,7 +168,7 @@ public class CdTest {
     public void testDotStaysInSameDirectory() throws IOException {
 
         args.add(".");
-        Cd cd = new Cd(args, wd, oh, eh);
+        Cd cd = new Cd(args, wd, oh, eh,ih);
         cd.runCommand();
 
         assertEquals(oldDir, wd.getPath());

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.pucko.commands.Command;
 import org.pucko.core.CommandFactory;
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -37,6 +38,8 @@ public class PipeProcessorTest {
     @Mock
     private OutputHandler outputHandler;
     @Mock
+    private InputHandler inputHandler;
+    @Mock
     private ArrayList<String> mockArgs;
     @Mock
     private CommandProcessor mockProcessor;
@@ -50,21 +53,21 @@ public class PipeProcessorTest {
 
     @Test
     public void testOnePipeReturnsTwoCommands(){
-        ArrayList<Command> commands = processor.process("test1 | test2", workingDirectory, outputHandler);
+        ArrayList<Command> commands = processor.process("test1 | test2", workingDirectory, outputHandler, inputHandler);
         assertThat(commands.size(), is(2));
     }
 
     @Test
     public void testPipedCommandCallsFactoryWithCommandAsOutputHandler(){
-        when(commandFactory.createCommand(eq("test1"), any(), eq(workingDirectory), eq(outputHandler), eq(outputHandler))).thenReturn(firstCommand);
-        processor.process("test1 | test2", workingDirectory, outputHandler);
-        verify(commandFactory, times(1)).createCommand(eq("test2"), any(), eq(workingDirectory), eq(firstCommand), eq(outputHandler));
+        when(commandFactory.createCommand(eq("test1"), any(), eq(workingDirectory), eq(outputHandler), eq(outputHandler), eq(inputHandler))).thenReturn(firstCommand);
+        processor.process("test1 | test2", workingDirectory, outputHandler, inputHandler);
+        verify(commandFactory, times(1)).createCommand(eq("test2"), any(), eq(workingDirectory), eq(firstCommand), eq(outputHandler), eq(inputHandler));
     }
 
     @Test
     public void testWrongInputCallsNext(){
         processor.setNextProcessor(mockProcessor);
-        processor.process("invalidCommand", workingDirectory, outputHandler);
-        verify(mockProcessor, times(1)).process("invalidCommand", workingDirectory, outputHandler);
+        processor.process("invalidCommand", workingDirectory, outputHandler, inputHandler);
+        verify(mockProcessor, times(1)).process("invalidCommand", workingDirectory, outputHandler, inputHandler);
     }
 }

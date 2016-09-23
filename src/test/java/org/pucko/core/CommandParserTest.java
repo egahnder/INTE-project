@@ -23,6 +23,7 @@ public class CommandParserTest {
     private CommandParser parser;
     private WorkingDirectory workingDirectory;
     private OutputHandler outputHandler;
+    private InputHandler inputHandler;
     private ArrayList<Command> commandList;
     @Mock
     private Command command;
@@ -45,22 +46,22 @@ public class CommandParserTest {
 
     @Test
     public void testCommandProcessorIsCalledWithNoArgsCommand(){
-        parser.parseCommands("Test", workingDirectory, outputHandler);
-        verify(commandProcessor, times(1)).process(eq("Test"), eq(workingDirectory), eq(outputHandler));
+        parser.parseCommands("Test", workingDirectory, outputHandler, inputHandler);
+        verify(commandProcessor, times(1)).process(eq("Test"), eq(workingDirectory), eq(outputHandler), eq(inputHandler));
     }
 
     @Test
     public void testCommandFactoryIsCalledWithOneArgCommand(){
-        parser.parseCommands("Command arg1 arg2 arg3", workingDirectory, outputHandler);
-        verify(commandProcessor, times(1)).process(eq("Command arg1 arg2 arg3"), eq(workingDirectory), eq(outputHandler));
+        parser.parseCommands("Command arg1 arg2 arg3", workingDirectory, outputHandler, inputHandler);
+        verify(commandProcessor, times(1)).process(eq("Command arg1 arg2 arg3"), eq(workingDirectory), eq(outputHandler),eq(inputHandler));
 
     }
 
     @Test
     public void testCommandParserReturnsNotEmptyList(){
         populateCommandsList(commandList, mock(Command.class));
-        when(commandProcessor.process(any(), any(), any())).thenReturn(commandList);
-        ArrayList<Command> commands = parser.parseCommands("testString", workingDirectory, outputHandler);
+        when(commandProcessor.process(any(), any(), any(), any())).thenReturn(commandList);
+        ArrayList<Command> commands = parser.parseCommands("testString", workingDirectory, outputHandler, inputHandler);
         assertThat(commands, is(not(empty())));
     }
 

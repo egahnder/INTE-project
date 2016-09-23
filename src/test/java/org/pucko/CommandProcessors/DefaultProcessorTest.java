@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.pucko.commands.Command;
 import org.pucko.core.CommandFactory;
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -33,6 +34,8 @@ public class DefaultProcessorTest {
     private WorkingDirectory workingDirectory;
     @Mock
     private OutputHandler outputHandler;
+    @Mock
+    private InputHandler inputHandler;
 
     @Before
     public void setUp(){
@@ -42,8 +45,8 @@ public class DefaultProcessorTest {
 
     @Test
     public void testProcessorCallsFactory(){
-        processor.process("test command", workingDirectory, outputHandler);
+        processor.process("test command", workingDirectory, outputHandler, inputHandler);
         ArrayList<String> args = new ArrayList<>(Arrays.asList("test command".split(" ")));
-        verify(factory, times(1)).createCommand("test", args, workingDirectory, outputHandler, outputHandler);
+        verify(factory, times(1)).createCommand("test", args, workingDirectory, outputHandler, outputHandler, inputHandler);
     }
 }

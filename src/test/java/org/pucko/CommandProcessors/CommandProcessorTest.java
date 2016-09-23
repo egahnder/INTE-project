@@ -10,18 +10,9 @@ import static org.mockito.Mockito.mock;
 
 public class CommandProcessorTest {
 
-    private CommandProcessor commandProcessor;
 
 
-    @Before
-    public void setUp(){
-        commandProcessor = mock(CommandProcessor.class, CALLS_REAL_METHODS);
-    }
 
-    @Test
-    public void testSendToNextProcessorReturnsEmptyArrayList(){
-        commandProcessor.sendToNextProcessor(null, null, null);
-    }
 
 
 }

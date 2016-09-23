@@ -2,6 +2,7 @@ package org.pucko.CommandProcessors;
 
 import org.pucko.commands.Command;
 import org.pucko.core.CommandFactory;
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -18,26 +19,26 @@ public abstract class CommandProcessor {
         this.commandFactory = commandFactory;
     }
 
-    public abstract ArrayList<Command> process(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler);
+    public abstract ArrayList<Command> process(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler);
 
-    protected ArrayList<Command> sendToNextProcessor(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler){
+    protected ArrayList<Command> sendToNextProcessor(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler){
         if (nextProcessor != null){
-            return nextProcessor.process(command, workingDirectory, outputHandler);
+            return nextProcessor.process(command, workingDirectory, outputHandler, inputHandler);
         }
         else{
             return new ArrayList<>();
         }
     }
 
-    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler){
-        return createCommandFromString(commandString, workingDirectory, outputHandler, outputHandler);
+    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler){
+        return createCommandFromString(commandString, workingDirectory, outputHandler, outputHandler, inputHandler);
     }
 
-    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler) {
+    protected Command createCommandFromString(String commandString, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler, InputHandler inputHandler) {
         String[] commandArray = commandString.split(" ");
         commandString = commandArray[0];
         ArrayList<String> args = new ArrayList<>(Arrays.asList(commandArray));
-        return commandFactory.createCommand(commandString, args, workingDirectory, outputHandler, errorHandler);
+        return commandFactory.createCommand(commandString, args, workingDirectory, outputHandler, errorHandler, inputHandler);
     }
 
     public void setNextProcessor(CommandProcessor nextProcessor){

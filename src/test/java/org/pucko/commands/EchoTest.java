@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -17,12 +18,14 @@ public class EchoTest {
 	private WorkingDirectory wd;
 	private OutputHandler oh;
 	private OutputHandler eh;
+	private InputHandler ih;
 
 	@Before
 	public void setUp() {
 		wd = mock(WorkingDirectory.class);
 		oh = mock(OutputHandler.class);
         eh = mock(OutputHandler.class);
+		ih = mock(InputHandler.class);
 	}
 
 	@Test
@@ -30,7 +33,7 @@ public class EchoTest {
         String[] input = {"echo", "Hello"};
         ArrayList<String> inputArgs = populateArrayList(input);
 
-		Echo e = new Echo(inputArgs, wd, oh, eh);
+		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
 		e.execute();
 		verify(oh, times(1)).handleOutput("Hello");
 
@@ -41,7 +44,7 @@ public class EchoTest {
 		String[] input = {"echo", "Hello", "World!" };
 		ArrayList<String> inputArgs = populateArrayList(input);
 
-		Echo e = new Echo(inputArgs, wd, oh, eh);
+		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
 		e.execute();
 		verify(oh, times(1)).handleOutput("Hello World!");
 
@@ -51,7 +54,7 @@ public class EchoTest {
 	public void testValidateWithZeroInput() {
 
 		ArrayList<String> input = new ArrayList<>();
-		Echo e = new Echo(input, wd, oh, eh);
+		Echo e = new Echo(input, wd, oh, eh, ih);
 		assertFalse(e.runCommand());
 
 	}
@@ -60,7 +63,7 @@ public class EchoTest {
 	public void testValidateWithValidInput() {
         String[] argsArray = {"echo",  "Hello"};
         ArrayList<String> inputArgs = populateArrayList(argsArray);
-		Echo e = new Echo(inputArgs, wd, oh, eh);
+		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
 
 		assertTrue(e.runCommand());
 
@@ -70,7 +73,7 @@ public class EchoTest {
 	public void testExecute() {
         String[] argsArray = {"echo", "Hello"};
 		ArrayList<String> inputArgs = populateArrayList(argsArray);
-		Echo e = new Echo(inputArgs, wd, oh, eh);
+		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
 		assertTrue(e.execute());
 	}
 
@@ -78,7 +81,7 @@ public class EchoTest {
 	public void testEchoDosentRepeatEcho(){
 	    String[] argsArray = {"echo", "test"};
         ArrayList<String> args = populateArrayList(argsArray);
-        Command command = new Echo(args, wd, oh, eh);
+        Command command = new Echo(args, wd, oh, eh, ih);
         command.runCommand();
         verify(oh, times(1)).handleOutput("test");
 	}

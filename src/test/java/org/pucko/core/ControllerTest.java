@@ -18,6 +18,8 @@ public class ControllerTest {
 	private CommandRunner commandRunner;
 	private Controller controller;
 	private OutputHandler outputHandler;
+	private InputHandler inputHandler;
+
 
 	@Before
 	public void setUp(){
@@ -31,15 +33,15 @@ public class ControllerTest {
 	@Test
 	public void testControllerCallsFactoryWithCommandString(){
 		String command = "command";
-		controller.parseCommand(command, outputHandler);
-		verify(commandParser, times(1)).parseCommands(command, workingDirectory, outputHandler);
+		controller.parseCommand(command, outputHandler, inputHandler);
+		verify(commandParser, times(1)).parseCommands(command, workingDirectory, outputHandler, inputHandler);
 	}
 	
 	@Test
 	public void testControllerSendsCommandsToRunner(){
 		ArrayList<Command> commandList = new ArrayList<>();
-		when(commandParser.parseCommands("", workingDirectory, outputHandler)).thenReturn(commandList);
-		controller.parseCommand("", outputHandler);
+		when(commandParser.parseCommands("", workingDirectory, outputHandler, inputHandler)).thenReturn(commandList);
+		controller.parseCommand("", outputHandler, inputHandler);
 		verify(commandRunner, times(1)).runCommands(commandList);
 	}
 	

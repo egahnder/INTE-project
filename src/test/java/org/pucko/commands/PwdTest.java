@@ -12,6 +12,7 @@ import static org.mockito.Mockito.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
@@ -21,6 +22,7 @@ public class PwdTest {
 	private OutputHandler oh;
 	private ArrayList<String> input;
 	private OutputHandler eh;
+	private InputHandler ih;
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
@@ -30,6 +32,7 @@ public class PwdTest {
 		wd = mock(WorkingDirectory.class);
 		oh = mock(OutputHandler.class);
         eh = mock(OutputHandler.class);
+		ih = mock(InputHandler.class);
 		input = new ArrayList<>();
 	}
 
@@ -37,7 +40,7 @@ public class PwdTest {
 	public void testExecuteSetsOutput() {
 		Path tempDir = testFolder.getRoot().toPath();
 		when(wd.getPath()).thenReturn(tempDir);
-		Pwd p = new Pwd(input, wd, oh, eh);
+		Pwd p = new Pwd(input, wd, oh, eh, ih);
 		p.execute();
 		verify(oh, times(1)).handleOutput(tempDir.toAbsolutePath().toString());
 

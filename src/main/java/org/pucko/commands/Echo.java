@@ -2,13 +2,14 @@ package org.pucko.commands;
 
 import java.util.ArrayList;
 
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
 
-    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh) {
-        super(args, wd, oh, eh);
+    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh, InputHandler inputHandler) {
+        super(args, wd, oh, eh, inputHandler);
     }
 
     @Override

@@ -17,8 +17,8 @@ public class Controller{
     	this.commandRunner = commandrunner;
     }
 
-	public void parseCommand(String input, OutputHandler outputHandler) {
-		ArrayList<Command> commands = commandParser.parseCommands(input, workingDirectory, outputHandler);
+	public void parseCommand(String input, OutputHandler outputHandler, InputHandler inputHandler) {
+		ArrayList<Command> commands = commandParser.parseCommands(input, workingDirectory, outputHandler, inputHandler);
 		commandRunner.runCommands(commands);
 	}
 	
