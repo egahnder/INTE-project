@@ -13,11 +13,11 @@ public class CommandParser {
         this.commandProcessor = commandProcessor;
     }
 
-    public ArrayList<Command> parseCommands(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler){
+    public ArrayList<Command> parseCommands(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler){
         ArrayList<String> commandStrings = splitMultipleCommands(command);
         ArrayList<Command> commands = new ArrayList<>();
         for(String commandString : commandStrings){
-            commands.addAll(commandProcessor.process(commandString, workingDirectory, outputHandler));
+            commands.addAll(commandProcessor.process(commandString, workingDirectory, outputHandler, inputHandler));
         }
 
         return commands;
