@@ -55,6 +55,12 @@ public class CommandFactoryTest {
         testCommandIsCreated("echo", Echo.class);
     }
 
+    @Test
+    public void testCommandFactoryReturnsHistoryCommand(){
+        testCommandIsCreated("history", History .class);
+    }
+
+
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {
         Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler, inputHandler);
         assertThat(command, is(instanceOf(commandClass)));
