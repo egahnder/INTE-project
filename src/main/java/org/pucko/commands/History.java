@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class History extends Command {
 
     private boolean printCompleteHistory;
+    private int commandNumber;
 
     /**
      * @param args             Arguments used during execution of command.
@@ -25,17 +26,14 @@ public class History extends Command {
 
     @Override
     protected boolean execute() {
-        int lastCommandToPrint;
         int commandIndex = 1;
         ArrayList<String> commandHistory = getInputHandler().getHistory();
 
         if (printCompleteHistory) {
-            lastCommandToPrint = commandHistory.size() - 1;
-        } else {
-            lastCommandToPrint = Integer.parseInt(getArg(1));
+            commandNumber = commandHistory.size() - 1;
         }
 
-        for (int i = 0; i < lastCommandToPrint; i++) {
+        for (int i = 0; i < commandNumber; i++) {
             output(commandIndex + "\t" + commandHistory.get(i));
             commandIndex++;
         }
@@ -60,8 +58,6 @@ public class History extends Command {
         }
 
         if (argsSize == 2) {
-
-            int commandNumber;
 
             try {
                 commandNumber = Integer.parseInt(getArg(1));

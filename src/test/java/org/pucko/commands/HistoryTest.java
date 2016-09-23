@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import static org.mockito.InOrder.*;
+
 import org.mockito.Mock;
 import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
@@ -32,42 +33,31 @@ public class HistoryTest {
     private OutputHandler errorHandler;
     @Mock
     private InputHandler inputHandler;
-    @Mock
-    private ArrayList<String> mockArray;
+    private ArrayList<String> commandHistory;
 
     @Before
     public void setUp() {
         initMocks(this);
-        //skapa riktig arraylist, populera. history, 5 pos
+
+        commandHistory = new ArrayList<>();
+        commandHistory.add("cd ..");
+        commandHistory.add("pwd");
+        commandHistory.add("history 4");
+        commandHistory.add("touch test.fil");
+        commandHistory.add("echo Hello World");
+        commandHistory.add("history");
 
     }
 
 
-    @Test
-    public void testExecuteWithEmptyHistory() {
 
-        String[] input = {"history", "1"};
-        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
-
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(1);
-
-        h.runCommand();
-
-        verify(errorHandler, times(1)).handleOutput("No command history available");
-
-    }
-
-    // input == 1
     @Test
     public void testExecutePrintsFirstCommand() {
 
         String[] input = {"history", "1"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(5);
-        when(mockArray.get(0)).thenReturn("cd ..");
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
 
         h.runCommand();
 
@@ -77,24 +67,18 @@ public class HistoryTest {
     @Test
     public void testExecutePrintsLastCommand() {
 
-        String[] input = {"history", "5"};
+        String[] input = {"history", "6"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(5);
-        when(mockArray.get(0)).thenReturn("cd ..");
-        when(mockArray.get(1)).thenReturn("pwd");
-        when(mockArray.get(2)).thenReturn("history 4");
-        when(mockArray.get(3)).thenReturn("touch test.fil");
-        when(mockArray.get(4)).thenReturn("echo Hello World");
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
 
         h.runCommand();
-
         verify(outputHandler, times(1)).handleOutput("1\tcd ..");
         verify(outputHandler, times(1)).handleOutput("2\tpwd");
         verify(outputHandler, times(1)).handleOutput("3\thistory 4");
         verify(outputHandler, times(1)).handleOutput("4\ttouch test.fil");
         verify(outputHandler, times(1)).handleOutput("5\techo Hello World");
+        verify(outputHandler, times(1)).handleOutput("6\thistory");
     }
 
     @Test
@@ -103,20 +87,15 @@ public class HistoryTest {
         String[] input = {"history"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-
-
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(5);
-        when(mockArray.get(0)).thenReturn("cd ..");
-        when(mockArray.get(1)).thenReturn("pwd");
-        when(mockArray.get(2)).thenReturn("history 4");
-        when(mockArray.get(3)).thenReturn("touch test.fil");
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
 
         h.runCommand();
         verify(outputHandler, times(1)).handleOutput("1\tcd ..");
         verify(outputHandler, times(1)).handleOutput("2\tpwd");
         verify(outputHandler, times(1)).handleOutput("3\thistory 4");
         verify(outputHandler, times(1)).handleOutput("4\ttouch test.fil");
+        verify(outputHandler, times(1)).handleOutput("5\techo Hello World");
+
     }
 
 
@@ -137,10 +116,7 @@ public class HistoryTest {
         String[] input = {"history", "0"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        boolean result = h.verifyExecutable();
-        verify(errorHandler, times(1)).handleOutput("Command number has to be > 0");
-        assertFalse(result);
-
+        assertFalse(h.runCommand());
     }
 
 
@@ -150,58 +126,45 @@ public class HistoryTest {
         String[] input = {"history", "1"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(2);
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
 
-        assertTrue(h.verifyExecutable());
-
-
+        assertTrue(h.runCommand());
     }
 
-    //TEST 4 input == args.size()
+    //TEST 4 input == history.size()
     @Test
     public void testVerifyExecutableReturnsTrueWhenArgIsEqualToHistoryArraySize() {
-
-        String[] input = {"history", "3"};
-        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
-
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(3);
-        assertTrue(h.verifyExecutable());
-
-
-    }
-
-    //TEST 5 input == args.size() + 1
-    @Test
-    public void testVerifyExecutableReturnsFalseWhenArgIsGreaterThanHistoryArraySize() {
 
         String[] input = {"history", "5"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        boolean result = h.verifyExecutable();
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
+        assertTrue(h.runCommand());
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(4);
 
-        verify(errorHandler, times(1)).handleOutput("Number greater than command history");
-        assertFalse(result);
+    }
+
+    //TEST 5 input == history.size() + 1
+    @Test
+    public void testVerifyExecutableReturnsFalseWhenArgGreaterThanCommandHistory() {
+
+        String[] input = {"history", "7"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
+
+        assertFalse(h.runCommand());
     }
 
 
-    //TEST 6 input == characters
+    //TEST 6 input == NaN
     @Test
     public void testVerifyExecutableReturnsFalseWithCharArg() {
 
         String[] input = {"history", "hello"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        boolean result = h.verifyExecutable();
-
-        verify(errorHandler, times(1)).handleOutput("Only numbers are accepted");
-
-        assertFalse(result);
-
+        assertFalse(h.runCommand());
     }
 
 
@@ -212,7 +175,7 @@ public class HistoryTest {
         String[] input = {"history"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        assertTrue(h.verifyExecutable());
+        assertTrue(h.runCommand());
 
     }
 
@@ -224,11 +187,76 @@ public class HistoryTest {
         String[] input = {"history", "1", "3"};
         History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        when(inputHandler.getHistory()).thenReturn(mockArray);
-        when(mockArray.size()).thenReturn(15);
+        when(inputHandler.getHistory()).thenReturn(commandHistory);
+        assertFalse(h.runCommand());
+    }
 
-        assertFalse(h.verifyExecutable());
+    //TEST 9
+    @Test
+    public void testVerifyExecutableReturnsFalseWhenEmptyCommandHistory() {
 
+        String[] input = {"history", "1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        ArrayList<String> emptyCommandHistory = new ArrayList<>();
+        emptyCommandHistory.add("history");
+        when(inputHandler.getHistory()).thenReturn(emptyCommandHistory);
+
+        assertFalse(h.runCommand());
+    }
+
+
+    //Error Message Tests
+
+    @Test
+    public void testErrorMsgWhenArgNegative() {
+        String[] input = {"history", "-1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.runCommand();
+        verify(errorHandler, times(1)).handleOutput("Command number has to be > 0");
+    }
+
+    @Test
+    public void testErrorMsgWhenArgGreaterThanCommandHistory() {
+        String[] input = {"history", "6"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.runCommand();
+        verify(errorHandler, times(1)).handleOutput("Number greater than command history");
+    }
+
+    @Test
+    public void testErrorMsgWhenArgNaN() {
+        String[] input = {"history", "hello"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.runCommand();
+        verify(errorHandler, times(1)).handleOutput("Only numbers are accepted");
+    }
+
+    @Test
+    public void testErrorMsgWhenTooManyArgs() {
+        String[] input = {"history", "1", "3"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        h.runCommand();
+        verify(errorHandler, times(1)).handleOutput("Too many arguments");
+    }
+
+    @Test
+    public void testErrorMsgWhenEmptyCommandHistory() {
+
+        String[] input = {"history", "1"};
+        History h = new History(populateArrayList(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        ArrayList<String> emptyCommandHistory = new ArrayList<>();
+        emptyCommandHistory.add("history");
+        when(inputHandler.getHistory()).thenReturn(emptyCommandHistory);
+
+        h.runCommand();
+
+        verify(errorHandler, times(1)).handleOutput("No command history available");
     }
 
 
