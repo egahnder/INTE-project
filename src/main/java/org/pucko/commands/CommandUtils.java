@@ -16,7 +16,7 @@ public class CommandUtils {
         public UtilsBuilder addErrorHandler(OutputHandler outputHandler){
             return null;
         }
-        public UtilsBuilder addOutoutHandler(OutputHandler outputHandler){
+        public UtilsBuilder addOutputHandler(OutputHandler outputHandler){
             return null;
         }
         public UtilsBuilder addInputHandler(InputHandler inputHandler){
