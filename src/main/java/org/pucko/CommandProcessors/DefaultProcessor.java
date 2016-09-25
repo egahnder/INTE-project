@@ -1,6 +1,8 @@
 package org.pucko.CommandProcessors;
 
 import org.pucko.commands.Command;
+import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandUtils.UtilsBuilder;
 import org.pucko.core.CommandFactory;
 import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
@@ -17,9 +19,11 @@ public class DefaultProcessor extends CommandProcessor {
     }
 
     @Override
-    public ArrayList<Command> process(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler) {
+    public ArrayList<Command> process(String command, CommandArguments commandArguments) {
         ArrayList<Command> commands = new ArrayList<>();
-        commands.add(createCommandFromString(command, workingDirectory, outputHandler, inputHandler));
+        ArrayList<String> args = splitCommand(command);
+        UtilsBuilder utilsBuilder = getUtilsBuilder(commandArguments, args);
+        commands.add(commandFactory.createCommand(args.get(0), utilsBuilder.build()));
         return commands;
     }
 }

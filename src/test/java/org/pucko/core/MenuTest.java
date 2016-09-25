@@ -7,19 +7,30 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandUtils;
 
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.Scanner;
 
 public class MenuTest {
-	private Controller controller;
-	private Scanner scanner;
 	private Menu menu;
+
+    @Mock
+    private CommandArguments commandArguments;
+    @Mock
+    private Controller controller;
+    @Mock
+    private WorkingDirectory workingDirectory;
 
 	@Rule
 	public ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -29,20 +40,21 @@ public class MenuTest {
 	
 	@Rule
 	public final TextFromStandardInputStream input = emptyStandardInputStream();
-	
+
+    @Rule
+    private ArgumentCaptor<CommandArguments> argumentsCaptor;
+
 	@Before
 	public void setUp(){
-		controller = mock(Controller.class);
-		scanner = new Scanner(System.in);
-		menu = new Menu(controller, scanner);
+		initMocks(this);
+		menu = new Menu(controller, workingDirectory);
 	}
 	
 	@Test
-	public void testControllerIsCalledWhenUserGivesInput(){	
-		String inputString = "";		
-		input.provideLines(inputString);
+	public void testControllerIsCalledWhenUserGivesInput(){
+		input.provideLines("");
 		menu.run();
-		verify(controller, times(1)).parseCommand(inputString, menu, menu);
+		verify(controller, times(1)).parseCommand("", argumentsCaptor.capture());
 	}
 	
 	@Test

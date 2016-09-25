@@ -2,6 +2,7 @@ package org.pucko.core;
 
 import org.pucko.CommandProcessors.CommandProcessor;
 import org.pucko.commands.Command;
+import org.pucko.commands.CommandArguments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +14,11 @@ public class CommandParser {
         this.commandProcessor = commandProcessor;
     }
 
-    public ArrayList<Command> parseCommands(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler){
+    public ArrayList<Command> parseCommands(String command, CommandArguments commandArguments){
         ArrayList<String> commandStrings = splitMultipleCommands(command);
         ArrayList<Command> commands = new ArrayList<>();
         for(String commandString : commandStrings){
-            commands.addAll(commandProcessor.process(commandString, workingDirectory, outputHandler, inputHandler));
+            commands.addAll(commandProcessor.process(commandString, commandArguments));
         }
 
         return commands;

@@ -9,12 +9,10 @@ import org.pucko.core.WorkingDirectory;
  * Created by eric on 2016-09-24.
  */
 public class CommandArguments {
-    private InputHandler inputHandler;
-    private OutputHandler outputHandler;
-    private OutputHandler errorHandler;
-    private WorkingDirectory workingDirectory;
-
-    private CommandArguments(){}
+    private final InputHandler inputHandler;
+    private final OutputHandler outputHandler;
+    private final OutputHandler errorHandler;
+    private final WorkingDirectory workingDirectory;
 
     private CommandArguments(WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler, InputHandler inputHandler) {
         this.inputHandler = inputHandler;
@@ -27,12 +25,20 @@ public class CommandArguments {
         return new ArgumentsBuilder();
     }
 
-    public UtilsBuilder transferData(UtilsBuilder utilsBuilder){
-        utilsBuilder.addWorkingDirectory(workingDirectory);
-        utilsBuilder.addErrorHandler(errorHandler);
-        utilsBuilder.addOutputHandler(outputHandler);
-        utilsBuilder.addInputHandler(inputHandler);
-        return utilsBuilder;
+    public InputHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public OutputHandler getOutputHandler() {
+        return outputHandler;
+    }
+
+    public OutputHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    public WorkingDirectory getWorkingDirectory() {
+        return workingDirectory;
     }
 
     public static class ArgumentsBuilder{

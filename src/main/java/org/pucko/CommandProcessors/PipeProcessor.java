@@ -2,10 +2,9 @@ package org.pucko.CommandProcessors;
 
 
 import org.pucko.commands.Command;
+import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandUtils.UtilsBuilder;
 import org.pucko.core.CommandFactory;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,22 +17,27 @@ public class PipeProcessor extends CommandProcessor {
     }
 
     @Override
-    public ArrayList<Command> process(String command, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler) {
+    public ArrayList<Command> process(String command, CommandArguments commandArguments) {
         ArrayList<Command> commands = new ArrayList<>();
         if(command.matches("[^(\\s\\|)]+( [^(\\s\\|)]+)* \\| [^(\\s\\|)]+( [^(\\s\\|)]+)*( \\| [^(\\s\\|)]+( [^(\\s\\|)]+)*)*")){
-            String[] splitCommnds = command.split(" \\| ");
-            Command commandToPipeTo = createCommandFromString(splitCommnds[0], workingDirectory, outputHandler, outputHandler, inputHandler);
+            String[] splitCommands = command.split(" \\| ");
+            ArrayList<String> args = splitCommand(splitCommands[0]);
+            UtilsBuilder utilsBuilder = getUtilsBuilder(commandArguments, args);
+            Command commandToPipeTo = commandFactory.createCommand(splitCommands[0], utilsBuilder.build() );
             commands.add(commandToPipeTo);
-            splitCommnds = Arrays.copyOfRange(splitCommnds, 1, splitCommnds.length);
-            for (String stringCommand : splitCommnds) {
-                Command newCommand = createCommandFromString(stringCommand, workingDirectory, commandToPipeTo, outputHandler, inputHandler);
+            splitCommands = Arrays.copyOfRange(splitCommands, 1, splitCommands.length);
+            for (String stringCommand : splitCommands) {
+                args = splitCommand(stringCommand);
+                utilsBuilder = getUtilsBuilder(commandArguments, args);
+                utilsBuilder.addOutputHandler(commandToPipeTo);
+                Command newCommand = commandFactory.createCommand(args.get(0), utilsBuilder.build());
                 commandToPipeTo = newCommand;
                 commands.add(newCommand);
                 Collections.reverse(commands);
             }
         }
         else{
-            commands = sendToNextProcessor(command, workingDirectory, outputHandler, inputHandler);
+            commands = sendToNextProcessor(command, commandArguments);
         }
         return commands;
     }

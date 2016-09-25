@@ -6,23 +6,19 @@ import java.util.ArrayList;
 
 public class CommandFactory {
 
-    public Command createCommand(String command, ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, InputHandler inputHandler){
-        return createCommand(command, args, workingDirectory, outputHandler, outputHandler, inputHandler);
-    }
-
-    public Command createCommand(String command, ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler, InputHandler inputHandler){
+    public Command createCommand(String command, CommandUtils commandUtils){
 
         switch (command){
             case "echo":
-                return new Echo(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+                return new Echo(commandUtils);
             case "pwd":
-                return new Pwd(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+                return new Pwd(commandUtils);
             case "cd":
-                return new Cd(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+                return new Cd(commandUtils);
             case "history":
-                return new History(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+                return new History(commandUtils);
             default:
-                return new DefaultCommand(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+                return new DefaultCommand(commandUtils);
         }
     }
 

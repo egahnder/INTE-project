@@ -15,8 +15,8 @@ public class Program {
 		CommandParser commandParser = new CommandParser(pipeProcessor);
 		CommandRunner commandRunner = new CommandRunner();
 		WorkingDirectory workingDirectory = new WorkingDirectory();
-		Controller controller = new Controller(workingDirectory, commandRunner, commandParser);
-		Menu menu = new Menu(controller, new Scanner(System.in));
+		Controller controller = new Controller(commandRunner, commandParser);
+		Menu menu = new Menu(controller, workingDirectory);
 		menu.run();
 	}
 
