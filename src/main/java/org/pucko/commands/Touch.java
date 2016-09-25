@@ -34,7 +34,8 @@ public class Touch extends Command {
             try {
                 Files.createFile(getWorkingDirectory().resolve(Paths.get(s)));
             } catch (FileAlreadyExistsException e) {
-                error("File already exist.");
+                error("File already exists");
+                return false;
             } catch (IOException e) {
             }
         }

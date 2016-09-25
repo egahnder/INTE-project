@@ -101,6 +101,17 @@ public class TouchTest {
     }
 
     @Test
+    public void testReturnsFalseWhenFileAlreadyExists() throws IOException {
+        when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        testFolder.newFile("filnamn");
+        assertFalse(t.runCommand());
+    }
+
+
+    @Test
     public void testReturnsFalseWhenNoFileName() {
         when(workingDirectory.getPath()).thenReturn(folderPath);
         String[] input = {"touch"};
@@ -116,6 +127,19 @@ public class TouchTest {
         Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
         t.runCommand();
         verify(errorHandler, times(1)).handleOutput("Filename is missing");
+    }
+
+    @Test
+    public void testErrorMsgWhenFileAlreadyExists() throws IOException {
+        when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        testFolder.newFile("filnamn");
+        t.runCommand();
+
+        verify(errorHandler, times(1)).handleOutput("File already exists");
+
     }
 
 
