@@ -27,27 +27,17 @@ public class Touch extends Command {
     @Override
     public boolean execute() {
 
-        Path currentDir = getWorkingDirectory();
-        Path argsPath;
-        Path newPath;
-
         ArrayList<String> args = getArgs();
-
 
         for (String s : args) {
 
-            argsPath = Paths.get(s);
-            newPath = currentDir.resolve(argsPath);
-
             try {
-                Files.createFile(newPath);
+                Files.createFile(getWorkingDirectory().resolve(Paths.get(s)));
             } catch (FileAlreadyExistsException e) {
                 error("File already exist.");
             } catch (IOException e) {
             }
-
         }
-        
         return true;
     }
 
