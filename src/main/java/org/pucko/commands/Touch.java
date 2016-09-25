@@ -13,14 +13,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 public class Touch extends Command {
 
 
-    public Touch(ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler) {
-        super(args, workingDirectory, outputHandler, errorHandler);
+    public Touch(ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler, InputHandler inputHandler) {
+        super(args, workingDirectory, outputHandler, errorHandler, inputHandler);
     }
 
     @Override
@@ -32,9 +33,10 @@ public class Touch extends Command {
 
         ArrayList<String> args = getArgs();
 
-        for (int i = 0; i < args.size(); i++) {
 
-            argsPath = Paths.get(getArg(i));
+        for (String s : args) {
+
+            argsPath = Paths.get(s);
             newPath = currentDir.resolve(argsPath);
 
             try {
@@ -45,17 +47,20 @@ public class Touch extends Command {
             }
 
         }
-
-
+        
         return true;
     }
 
     @Override
     protected boolean verifyExecutable() {
-        return true;
-    }
 
-    //Göra kontroller på input så att execute kan köras
+        if (getArgs().size() < 2) {
+            error("Filename is missing");
+            return false;
+        }
+        return true;
+
+    }
 
     @Override
     protected boolean undo() {

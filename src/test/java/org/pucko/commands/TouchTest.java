@@ -15,9 +15,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.mockito.Mock;
+import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 import org.pucko.testutilities.ArgsPopulator;
@@ -27,10 +31,16 @@ import org.junit.Rule;
 public class TouchTest {
 
     @Mock
-    WorkingDirectory workingDirectory;
-    OutputHandler outputHandler;
-    OutputHandler errorHandler;
-    ArgsPopulator argsPopulator;
+    private WorkingDirectory workingDirectory;
+    @Mock
+    private OutputHandler outputHandler;
+    @Mock
+    private OutputHandler errorHandler;
+    @Mock
+    private InputHandler inputHandler;
+
+    private ArgsPopulator argsPopulator;
+    private Path folderPath;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -39,78 +49,93 @@ public class TouchTest {
     public void setUp() {
         initMocks(this);
         argsPopulator = new ArgsPopulator();
+        folderPath = testFolder.getRoot().toPath();
     }
 
-
     @Test
-    public void testExecuteCreatesSingleFile() throws IOException {
+    public void testCreatesSingleFile() throws IOException {
 
-        Path folderPath = testFolder.getRoot().toPath();
         when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        String[] input = {"filnamn"};
-
-
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler);
-
-        Path filePath = folderPath.resolve("filnamn");
+        ArrayList<Path> filePathArray = createPathArray(input);
         t.runCommand();
-        assertTrue(new File(filePath.toString()).isFile());
-
+        assertFiles(filePathArray);
     }
 
     @Test
-    public void testExecuteCreatesTwoFiles() throws IOException {
+    public void testCreatesTwoFiles() throws IOException {
 
-        Path folderPath = testFolder.getRoot().toPath();
         when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn1", "filnamn2"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        String[] input = {"filnamn1", "filnamn2"};
-
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler);
-
-        Path filePath1 = folderPath.resolve("filnamn1");
-        Path filePath2 = folderPath.resolve("filnamn2");
-
+        ArrayList<Path> filePathArray = createPathArray(input);
         t.runCommand();
-        assertTrue(new File(filePath1.toString()).isFile());
-        assertTrue(new File(filePath2.toString()).isFile());
-
+        assertFiles(filePathArray);
     }
 
     @Test
-    public void testExecuteCreatesMultipleFiles() throws IOException {
+    public void testCreatesMultipleFiles() throws IOException {
 
-        Path folderPath = testFolder.getRoot().toPath();
         when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
 
-        String[] input = {"filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6"};
-
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler);
-
-        Path filePath1 = folderPath.resolve("filnamn1");
-        Path filePath2 = folderPath.resolve("filnamn2");
-        Path filePath3 = folderPath.resolve("filnamn3");
-        Path filePath4 = folderPath.resolve("filnamn4");
-        Path filePath5 = folderPath.resolve("filnamn5");
-        Path filePath6 = folderPath.resolve("filnamn6");
-
+        ArrayList<Path> filePathArray = createPathArray(input);
         t.runCommand();
+        assertFiles(filePathArray);
+    }
 
-        assertTrue(new File(filePath1.toString()).isFile());
-        assertTrue(new File(filePath2.toString()).isFile());
-        assertTrue(new File(filePath3.toString()).isFile());
-        assertTrue(new File(filePath4.toString()).isFile());
-        assertTrue(new File(filePath5.toString()).isFile());
-        assertTrue(new File(filePath6.toString()).isFile());
+
+    @Test
+    public void testReturnsTrueWithOneFile() {
+
+        when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch", "filnamn"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+
+        assertTrue(t.runCommand());
+
     }
 
     @Test
-    public void textExecuteReturnsTrue() {
+    public void testReturnsFalseWhenNoFileName() {
+        when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        assertFalse(t.runCommand());
+    }
 
 
-        //Lös ut skapandet av 1, 2 och 6 filer och anropa i testen.
-        //t.runCommand() ska anropas.
+    @Test
+    public void testErrorMsgWhenNoFileName() {
+        when(workingDirectory.getPath()).thenReturn(folderPath);
+        String[] input = {"touch"};
+        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        t.runCommand();
+        verify(errorHandler, times(1)).handleOutput("Filename is missing");
+    }
+
+
+    private ArrayList<Path> createPathArray(String[] input) {
+
+        Path filePath;
+        ArrayList<Path> filePathArray = new ArrayList<>();
+
+        for (String s : input) {
+            filePath = folderPath.resolve(s);
+            filePathArray.add(filePath);
+        }
+        return filePathArray;
+    }
+
+    private void assertFiles(ArrayList<Path> filePathArray) {
+        for (Path p : filePathArray) {
+            assertTrue("File: " + p.toString(), new File(p.toString()).isFile());
+        }
+
     }
 
 }
