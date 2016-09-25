@@ -59,9 +59,6 @@ public class Menu implements OutputHandler, InputHandler {
         return pathString+"$ ";
     }
 
-
-
-
 	@Override
 	public void handleOutput(String output) {
 		System.out.println(output);
