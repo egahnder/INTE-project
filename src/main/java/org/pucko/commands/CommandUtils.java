@@ -31,7 +31,7 @@ public class CommandUtils {
     }
 
     public Path getWorkingDirectory() {
-        return null;
+        return workingDirectory.getPath();
     }
 
     public void changeWorkingDirectory(Path path) {

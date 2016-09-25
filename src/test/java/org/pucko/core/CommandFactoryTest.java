@@ -18,20 +18,23 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CommandFactoryTest {
 
+    private CommandFactory commandFactory;
+
     @Mock
     private ArrayList<String> mockList;
-    private CommandFactory commandFactory;
+    @Mock
     private WorkingDirectory workingDirectory;
+    @Mock
     private OutputHandler outputHandler;
+    @Mock
     private InputHandler inputHandler;
+    @Mock
+    private CommandUtils commandUtils;
 
     @Before
     public void setUp(){
         initMocks(this);
         commandFactory = new CommandFactory();
-        workingDirectory = mock(WorkingDirectory.class);
-        outputHandler = mock(OutputHandler.class);
-        inputHandler = mock(InputHandler.class);
     }
 
     @Test
@@ -62,7 +65,7 @@ public class CommandFactoryTest {
 
 
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {
-        Command command = commandFactory.createCommand(commandString, mockList, workingDirectory, outputHandler, inputHandler);
+        Command command = commandFactory.createCommand(commandString, commandUtils);
         assertThat(command, is(instanceOf(commandClass)));
     }
 

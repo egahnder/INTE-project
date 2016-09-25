@@ -16,7 +16,8 @@ public class Program {
 		CommandRunner commandRunner = new CommandRunner();
 		WorkingDirectory workingDirectory = new WorkingDirectory();
 		Controller controller = new Controller(commandRunner, commandParser);
-		Menu menu = new Menu(controller, workingDirectory);
+		ArgumentsBuilderFactory argumentsBuilderFactory = new ArgumentsBuilderFactory();
+		Menu menu = new Menu(controller, workingDirectory, argumentsBuilderFactory);
 		menu.run();
 	}
 
