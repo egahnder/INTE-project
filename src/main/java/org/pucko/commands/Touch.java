@@ -48,6 +48,8 @@ public class Touch extends Command {
         if (getArgs().size() < 2) {
             error("Filename is missing");
             return false;
+        } else if (!Files.isReadable(getWorkingDirectory())) {
+            error("touch: can not make 'touch' on <<"+getArg(1) +">>: permission denied");
         }
         return true;
 
