@@ -9,18 +9,22 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
+import org.pucko.answers.SelfReturningAnswer;
 import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandArguments.ArgumentsBuilder;
 
-import static org.junit.Assert.*;
-import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
-
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MenuTest {
 	private Menu menu;
+    private ArgumentsBuilder argumentsBuilder;
 
+    @Mock
+    private ArgumentsBuilderFactory argumentsBuilderFactory;
     @Mock
     private CommandArguments commandArguments;
     @Mock
@@ -40,16 +44,48 @@ public class MenuTest {
 	@Before
 	public void setUp(){
 		initMocks(this);
-		menu = new Menu(controller, workingDirectory);
+        argumentsBuilder = mock(ArgumentsBuilder.class, new SelfReturningAnswer());
+        when(argumentsBuilderFactory.createBuilder()).thenReturn(argumentsBuilder);
+		menu = new Menu(controller, workingDirectory, argumentsBuilderFactory);
         when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
+
 	}
 	
 	@Test
-	public void testControllerIsCalledWhenUserGivesInput(){
-//		input.provideLines("");
-//		menu.run();
-//		verify(controller, times(1)).parseCommand("", argumentsCaptor.capture());
+	public void testArgumentsBuilderAddsWorkingDirectory(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addWorkingDirectory(workingDirectory);
 	}
+
+	@Test
+    public void testArgumentsBuilderAddsInputHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addInputHandler(menu);
+    }
+
+    @Test
+    public void testArgumentsBuilderAddsErrorHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addErrorHandler(menu);
+    }
+
+    @Test
+    public void testArgumentsBuilderAddsOutputHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addOutputHandler(menu);
+    }
+
+    @Test
+    public void testControllerIsCalledWithCommandArguments(){
+        when(argumentsBuilder.build()).thenReturn(commandArguments);
+        input.provideLines("");
+        menu.run();
+        verify(controller, times(1)).parseCommand("", commandArguments);
+    }
 	
 	@Test
 	public void testSystemExit(){
@@ -73,7 +109,6 @@ public class MenuTest {
 
 	@Test
     public void testMenuAddsHistory(){
-
         String inputString = "echo Hello World";
         input.provideLines(inputString);
         menu.run();
