@@ -20,8 +20,8 @@ import org.pucko.core.WorkingDirectory;
 public class Touch extends Command {
 
 
-    public Touch(ArrayList<String> args, WorkingDirectory workingDirectory, OutputHandler outputHandler, OutputHandler errorHandler, InputHandler inputHandler) {
-        super(args, workingDirectory, outputHandler, errorHandler, inputHandler);
+    public Touch(CommandUtils commandUtils) {
+        super(commandUtils);
     }
 
     @Override

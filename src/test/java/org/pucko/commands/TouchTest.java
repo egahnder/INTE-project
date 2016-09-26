@@ -7,6 +7,7 @@ package org.pucko.commands;
 
 import static org.junit.Assert.*;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -15,30 +16,21 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.mockito.Mock;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 import org.pucko.testutilities.ArgsPopulator;
 import org.junit.Before;
 import org.junit.Rule;
 
+import static org.pucko.testutilities.TestUtils.setArgs;
+
+
 public class TouchTest {
 
     @Mock
-    private WorkingDirectory workingDirectory;
-    @Mock
-    private OutputHandler outputHandler;
-    @Mock
-    private OutputHandler errorHandler;
-    @Mock
-    private InputHandler inputHandler;
-
+    private CommandUtils commandUtils;
     private ArgsPopulator argsPopulator;
     private Path folderPath;
 
@@ -55,11 +47,12 @@ public class TouchTest {
     @Test
     public void testCreatesSingleFile() throws IOException {
 
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
 
-        ArrayList<Path> filePathArray = createPathArray(input);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
+
+        ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
         t.runCommand();
         assertFiles(filePathArray);
     }
@@ -67,11 +60,11 @@ public class TouchTest {
     @Test
     public void testCreatesTwoFiles() throws IOException {
 
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn1", "filnamn2"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn1", "filnamn2");
+        Touch t = new Touch(commandUtils);
 
-        ArrayList<Path> filePathArray = createPathArray(input);
+        ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
         t.runCommand();
         assertFiles(filePathArray);
     }
@@ -79,11 +72,11 @@ public class TouchTest {
     @Test
     public void testCreatesMultipleFiles() throws IOException {
 
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6");
+        Touch t = new Touch(commandUtils);
 
-        ArrayList<Path> filePathArray = createPathArray(input);
+        ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
         t.runCommand();
         assertFiles(filePathArray);
     }
@@ -92,9 +85,9 @@ public class TouchTest {
     @Test
     public void testReturnsTrueWithOneFile() {
 
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
 
         assertTrue(t.runCommand());
 
@@ -102,9 +95,9 @@ public class TouchTest {
 
     @Test
     public void testReturnsFalseWhenFileAlreadyExists() throws IOException {
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
 
         testFolder.newFile("filnamn");
         assertFalse(t.runCommand());
@@ -113,37 +106,38 @@ public class TouchTest {
 
     @Test
     public void testReturnsFalseWhenNoFileName() {
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch");
+        Touch t = new Touch(commandUtils);
         assertFalse(t.runCommand());
     }
 
 
     @Test
     public void testErrorMsgWhenNoFileName() {
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch");
+        Touch t = new Touch(commandUtils);
         t.runCommand();
-        verify(errorHandler, times(1)).handleOutput("Filename is missing");
+        verify(commandUtils, times(1)).error("Filename is missing");
     }
 
     @Test
     public void testErrorMsgWhenFileAlreadyExists() throws IOException {
-        when(workingDirectory.getPath()).thenReturn(folderPath);
-        String[] input = {"touch", "filnamn"};
-        Touch t = new Touch(argsPopulator.populate(input), workingDirectory, outputHandler, errorHandler, inputHandler);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
 
         testFolder.newFile("filnamn");
         t.runCommand();
 
-        verify(errorHandler, times(1)).handleOutput("File already exists");
+        verify(commandUtils, times(1)).error("File already exists");
 
     }
 
 
-    private ArrayList<Path> createPathArray(String[] input) {
+    private ArrayList<Path> createPathArray(ImmutableList<String> input) {
 
         Path filePath;
         ArrayList<Path> filePathArray = new ArrayList<>();
