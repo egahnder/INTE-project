@@ -50,6 +50,7 @@ public class Touch extends Command {
             return false;
         } else if (!Files.isReadable(getWorkingDirectory())) {
             error("touch: can not make 'touch' on <<"+getArg(1) +">>: permission denied");
+            return false;
         }
         return true;
 
