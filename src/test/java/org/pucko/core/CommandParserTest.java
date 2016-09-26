@@ -2,18 +2,18 @@ package org.pucko.core;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.pucko.CommandProcessors.CommandProcessor;
 import org.pucko.commands.Command;
-import org.pucko.commands.DefaultCommand;
+import org.pucko.commands.CommandArguments;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -21,9 +21,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class CommandParserTest {
 
     private CommandParser parser;
-    private WorkingDirectory workingDirectory;
-    private OutputHandler outputHandler;
-    private InputHandler inputHandler;
     private ArrayList<Command> commandList;
     @Mock
     private Command command;
@@ -33,51 +30,37 @@ public class CommandParserTest {
     private CommandProcessor commandProcessor;
     @Mock
     private CommandFactory factory;
+    @Mock
+    private CommandArguments commandArguments;
 
     @Before
     public void setUp(){
         initMocks(this);
         parser = new CommandParser(commandProcessor);
-        workingDirectory = mock(WorkingDirectory.class);
-        outputHandler = mock(OutputHandler.class);
         commandList = new ArrayList<>();
 
     }
 
     @Test
     public void testCommandProcessorIsCalledWithNoArgsCommand(){
-        parser.parseCommands("Test", workingDirectory, outputHandler, inputHandler);
-        verify(commandProcessor, times(1)).process(eq("Test"), eq(workingDirectory), eq(outputHandler), eq(inputHandler));
+        parser.parseCommands("Test", commandArguments);
+        verify(commandProcessor, times(1)).process("Test", commandArguments);
     }
 
     @Test
-    public void testCommandFactoryIsCalledWithOneArgCommand(){
-        parser.parseCommands("Command arg1 arg2 arg3", workingDirectory, outputHandler, inputHandler);
-        verify(commandProcessor, times(1)).process(eq("Command arg1 arg2 arg3"), eq(workingDirectory), eq(outputHandler),eq(inputHandler));
+    public void testCommandFactoryIsCalledWithMultipleArgCommand(){
+        parser.parseCommands("Command arg1 arg2 arg3", commandArguments);
+        verify(commandProcessor, times(1)).process("Command arg1 arg2 arg3", commandArguments);
 
     }
 
     @Test
     public void testCommandParserReturnsNotEmptyList(){
         populateCommandsList(commandList, mock(Command.class));
-        when(commandProcessor.process(any(), any(), any(), any())).thenReturn(commandList);
-        ArrayList<Command> commands = parser.parseCommands("testString", workingDirectory, outputHandler, inputHandler);
+        when(commandProcessor.process(any(String.class), any(CommandArguments.class))).thenReturn(commandList);
+        ArrayList<Command> commands = parser.parseCommands("testString", commandArguments);
         assertThat(commands, is(not(empty())));
     }
-
-//    @Test
-//    public void testTwoCommandsWIthNoArgs(){
-//        when(P.createCommand(any(), any(), any(), any())).thenReturn(mockCommand);
-//        ArrayList<Command> commands = parser.parseCommands("test1 && test2", workingDirectory, outputHandler);
-//        assertThat(commands.size(), is(2));
-//    }
-
-//    @Test
-//    public void testMultipleCommandIsCallsProcessorTwice(){
-//        ArrayList<Command> commands = parser.parseCommands("test1 && test2", workingDirectory, outputHandler);
-//        inOrder().verify(commandProcessor, times(1)).process(eq("test1"), any(), any());
-//        inOrder().verify(commandProcessor, times(1)).process(eq("test2"), any(), any());
-//    }
 
     private void populateCommandsList(ArrayList<Command> commandList, Command...commands){
         for (Command command : commands){

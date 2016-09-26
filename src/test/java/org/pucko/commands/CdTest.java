@@ -1,6 +1,11 @@
 package org.pucko.commands;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,82 +13,66 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.*;
-
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.pucko.testutilities.TestUtils.setArgs;
+import static org.pucko.testutilities.TestUtils.setWorkingDirectory;
 
 public class CdTest {
 
-    private OutputHandler oh;
-    private OutputHandler eh;
-    private InputHandler ih;
-    private WorkingDirectory wd;
+    @Mock
+    private CommandUtils commandUtils;
     private Path oldDir;
     private File newDir;
     private Path newPath;
-    private ArrayList<String> args;
+    private Cd cd;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws Exception {
-        oh = mock(OutputHandler.class);
-        eh = mock(OutputHandler.class);
-        ih = mock(InputHandler.class);
+        initMocks(this);
         File testDir = testFolder.getRoot();
         oldDir = testDir.toPath();
-        args = new ArrayList<>();
-        wd = new WorkingDirectory(oldDir);
-        args.add("cd");
 
     }
 
     @Test
     public void testChildDir() throws IOException {
-
-        args.add("bar");
-
-        newDir = testFolder.newFolder(args.get(1));
+        setArgs(commandUtils, "cd", "bar");
+        newDir = testFolder.newFolder("bar");
         newPath = newDir.toPath();
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
-
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
-
-        assertEquals(newPath, wd.getPath());
-
+        verify(commandUtils, times(1)).changeWorkingDirectory(newPath);
     }
 
     @Test
     public void testParentDir() throws IOException {
 
-        args.add("..");
+        setArgs(commandUtils, "cd", "..");
 
         newPath = oldDir.getParent();
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
-
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
-
-        assertEquals(newPath, wd.getPath());
+        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
+        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
+        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
 
     }
 
     @Test
     public void testParentDirWhenInSystemRoot() throws IOException {
 
-        setWorkingDirectoryPath("/");
 
-        args.add("..");
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
+        setArgs(commandUtils, "cd", "..");
+        setWorkingDirectory(commandUtils, "/");
+        cd = new Cd(commandUtils);
 
         // Make sure cd returns false since there are no directories above /
         assertEquals(false, cd.runCommand());
@@ -94,15 +83,16 @@ public class CdTest {
     public void testHomeDir() throws IOException {
 
         // Add the ~ (Tilde) symbol that corresponds to the user home directory to the ArrayList
-        args.add("~");
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
+        setArgs(commandUtils, "cd", "~");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
 
         String homePath = System.getProperty("user.home");
         Path newPath = Paths.get(homePath);
-
-        assertEquals(newPath, wd.getPath());
+        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
+        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
+        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
 
     }
 
@@ -110,73 +100,59 @@ public class CdTest {
     public void testSystemRoot() throws IOException {
 
         // Add the / symbol that corresponds to the System Root to the ArrayList
-        args.add("/");
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
+        setArgs(commandUtils, "cd", "/");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
 
         Path newPath = Paths.get("/");
-
-        assertEquals(newPath, wd.getPath());
+        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
+        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
+        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
 
     }
 
     @Test
     public void testInvalidDir() throws IOException {
 
-        args.add("invalidDir");
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
-
-        assertEquals(false, cd.runCommand());
-
-    }
-
-    @Test
-    public void testNullPath() {
-
-        args.add(null);
-
-        Cd cd = new Cd(args, wd, oh, eh, ih);
-
+        setArgs(commandUtils, "cd", "invalidDir");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         assertEquals(false, cd.runCommand());
 
     }
 
     @Test
     public void testPrintsErrorOnPathDoesNotExist() {
-        args.add("NonexistentDir");
-        Cd cd = new Cd(args, wd, oh, eh,ih);
+        setArgs(commandUtils, "cd", "NonexistentDir");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("cd: No such file or directory: " +args.get(1));
+        verify(commandUtils, times(1)).error("cd: No such file or directory: " +"NonexistentDir");
     }
 
     @Test
     public void testPrintsErrorOnDirectoryNotReadable() throws IOException {
-        args.add("nonReadableDir");
+        setArgs(commandUtils, "cd", "nonReadableDir");
         newDir = testFolder.newFolder("nonReadableDir");
         newDir.setReadable(false);
-
-        Cd cd = new Cd(args, wd, oh, eh,ih);
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
 
-        verify(eh, times(1)).handleOutput("cd: You do not have permission to access this directory");
+        verify(commandUtils, times(1)).error("cd: You do not have permission to access this directory");
     }
 
     @Test
     public void testDotStaysInSameDirectory() throws IOException {
 
-        args.add(".");
-        Cd cd = new Cd(args, wd, oh, eh,ih);
+        setArgs(commandUtils, "cd", ".");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
         cd.runCommand();
-
-        assertEquals(oldDir, wd.getPath());
+        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
+        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
+        assertEquals(oldDir.toString(), pathArgumentCaptor.getValue().toString());
     }
-
-    private void setWorkingDirectoryPath(String path) {
-
-        wd.changePath(Paths.get(path));
-    }
-
 }

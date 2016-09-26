@@ -4,32 +4,22 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.pucko.commands.Command;
+import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandUtils;
+import org.pucko.commands.CommandUtils.UtilsBuilder;
 
 public class Controller{
 
 	private final CommandParser commandParser;
-	private final WorkingDirectory workingDirectory;
 	private final CommandRunner commandRunner;
 
-    public Controller(WorkingDirectory workingdirectory, CommandRunner commandrunner, CommandParser commandParser){
+    public Controller(CommandRunner commandrunner, CommandParser commandParser){
     	this.commandParser = commandParser;
-    	this.workingDirectory = workingdirectory;
     	this.commandRunner = commandrunner;
     }
 
-	public void parseCommand(String input, OutputHandler outputHandler, InputHandler inputHandler) {
-		ArrayList<Command> commands = commandParser.parseCommands(input, workingDirectory, outputHandler, inputHandler);
+	public void parseCommand(String command, CommandArguments commandArguments) {
+		ArrayList<Command> commands = commandParser.parseCommands(command, commandArguments);
 		commandRunner.runCommands(commands);
 	}
-	
-	public String getPrompt(){
-		Path path = workingDirectory.getPath();
-		String pathString = path.toString();
-		String homeString = System.getProperty("user.home");
-		if (pathString.startsWith(homeString)){
-			pathString = pathString.replaceFirst(homeString, "~");
-		}
-		return pathString+"$ ";
-	}
-	
 }

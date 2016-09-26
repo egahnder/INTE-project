@@ -7,43 +7,85 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
+import org.junit.rules.TemporaryFolder;
+import org.mockito.Mock;
+import org.pucko.answers.SelfReturningAnswer;
+import org.pucko.commands.CommandArguments;
+import org.pucko.commands.CommandArguments.ArgumentsBuilder;
 
-import static org.junit.Assert.*;
-import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
-
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 import static org.mockito.Mockito.*;
-
-import java.util.Scanner;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MenuTest {
-	private Controller controller;
-	private Scanner scanner;
 	private Menu menu;
+    private ArgumentsBuilder argumentsBuilder;
+
+    @Mock
+    private ArgumentsBuilderFactory argumentsBuilderFactory;
+    @Mock
+    private CommandArguments commandArguments;
+    @Mock
+    private Controller controller;
+    @Mock
+    private WorkingDirectory workingDirectory;
 
 	@Rule
 	public ExpectedSystemExit exit = ExpectedSystemExit.none();
-	
 	@Rule
 	public SystemOutRule out = new SystemOutRule().enableLog();
-	
 	@Rule
 	public final TextFromStandardInputStream input = emptyStandardInputStream();
-	
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
 	@Before
 	public void setUp(){
-		controller = mock(Controller.class);
-		scanner = new Scanner(System.in);
-		menu = new Menu(controller, scanner);
+		initMocks(this);
+        argumentsBuilder = mock(ArgumentsBuilder.class, new SelfReturningAnswer());
+        when(argumentsBuilderFactory.createBuilder()).thenReturn(argumentsBuilder);
+		menu = new Menu(controller, workingDirectory, argumentsBuilderFactory);
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
+
 	}
 	
 	@Test
-	public void testControllerIsCalledWhenUserGivesInput(){	
-		String inputString = "";		
-		input.provideLines(inputString);
-		menu.run();
-		verify(controller, times(1)).parseCommand(inputString, menu, menu);
+	public void testArgumentsBuilderAddsWorkingDirectory(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addWorkingDirectory(workingDirectory);
 	}
+
+	@Test
+    public void testArgumentsBuilderAddsInputHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addInputHandler(menu);
+    }
+
+    @Test
+    public void testArgumentsBuilderAddsErrorHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addErrorHandler(menu);
+    }
+
+    @Test
+    public void testArgumentsBuilderAddsOutputHandler(){
+        input.provideLines("");
+        menu.run();
+        verify(argumentsBuilder, times(1)).addOutputHandler(menu);
+    }
+
+    @Test
+    public void testControllerIsCalledWithCommandArguments(){
+        when(argumentsBuilder.build()).thenReturn(commandArguments);
+        input.provideLines("");
+        menu.run();
+        verify(controller, times(1)).parseCommand("", commandArguments);
+    }
 	
 	@Test
 	public void testSystemExit(){
@@ -54,10 +96,9 @@ public class MenuTest {
 	
 	@Test
 	public void testSystemOutIsCalledWithPrompt(){
-		String testPrompt = "test";
-		when(controller.getPrompt()).thenReturn(testPrompt);
+        String expectedPrompt = temporaryFolder.getRoot().toPath().toString()+"$ ";
 		menu.run();
-		assertEquals(testPrompt, out.getLog());
+		assertEquals(expectedPrompt, out.getLog());
 	}
 	
 	@Test
@@ -68,7 +109,6 @@ public class MenuTest {
 
 	@Test
     public void testMenuAddsHistory(){
-
         String inputString = "echo Hello World";
         input.provideLines(inputString);
         menu.run();

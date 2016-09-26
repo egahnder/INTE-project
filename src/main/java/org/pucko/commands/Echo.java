@@ -8,8 +8,12 @@ import org.pucko.core.WorkingDirectory;
 
 public class Echo extends Command {
 
-    public Echo(ArrayList<String> args, WorkingDirectory wd, OutputHandler oh, OutputHandler eh, InputHandler inputHandler) {
-        super(args, wd, oh, eh, inputHandler);
+
+    /**
+     * @param commandUtils Utils used for IO operations, command arguments, working directory etc.
+     */
+    public Echo(CommandUtils commandUtils) {
+        super(commandUtils);
     }
 
     @Override

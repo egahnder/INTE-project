@@ -1,96 +1,71 @@
 package org.pucko.commands;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.pucko.testutilities.TestUtils.setArgs;
 
 public class EchoTest {
-
-	private WorkingDirectory wd;
-	private OutputHandler oh;
-	private OutputHandler eh;
-	private InputHandler ih;
+    
+    private Echo echo;
+    
+    @Mock
+    private CommandUtils commandUtils;
 
 	@Before
 	public void setUp() {
-		wd = mock(WorkingDirectory.class);
-		oh = mock(OutputHandler.class);
-        eh = mock(OutputHandler.class);
-		ih = mock(InputHandler.class);
+        initMocks(this);
+        echo = new Echo(commandUtils);
 	}
 
 	@Test
 	public void testExecuteSetsSingleWordOutput() {
-        String[] input = {"echo", "Hello"};
-        ArrayList<String> inputArgs = populateArrayList(input);
+        setArgs(commandUtils, "echo", "Hello");
 
-		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
-		e.execute();
-		verify(oh, times(1)).handleOutput("Hello");
-
+		echo.execute();
+		verify(commandUtils, times(1)).output("Hello");
 	}
 
 	@Test
 	public void testExecuteSetsMultipleWordOutput() {
-		String[] input = {"echo", "Hello", "World!" };
-		ArrayList<String> inputArgs = populateArrayList(input);
+		setArgs(commandUtils, "echo", "Hello", "World!");
 
-		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
-		e.execute();
-		verify(oh, times(1)).handleOutput("Hello World!");
+		echo.execute();
+		verify(commandUtils, times(1)).output("Hello World!");
 
 	}
 
 	@Test
 	public void testValidateWithZeroInput() {
 
-		ArrayList<String> input = new ArrayList<>();
-		Echo e = new Echo(input, wd, oh, eh, ih);
-		assertFalse(e.runCommand());
+		setArgs(commandUtils);
+		assertFalse(echo.runCommand());
 
 	}
 
 	@Test
 	public void testValidateWithValidInput() {
-        String[] argsArray = {"echo",  "Hello"};
-        ArrayList<String> inputArgs = populateArrayList(argsArray);
-		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
-
-		assertTrue(e.runCommand());
+        setArgs(commandUtils, "echo",  "Hello");
+		assertTrue(echo.runCommand());
 
 	}
 
 	@Test
 	public void testExecute() {
-        String[] argsArray = {"echo", "Hello"};
-		ArrayList<String> inputArgs = populateArrayList(argsArray);
-		Echo e = new Echo(inputArgs, wd, oh, eh, ih);
-		assertTrue(e.execute());
+        setArgs(commandUtils, "echo", "Hello");
+		assertTrue(echo.execute());
 	}
 
 	@Test
 	public void testEchoDosentRepeatEcho(){
-	    String[] argsArray = {"echo", "test"};
-        ArrayList<String> args = populateArrayList(argsArray);
-        Command command = new Echo(args, wd, oh, eh, ih);
-        command.runCommand();
-        verify(oh, times(1)).handleOutput("test");
+	    setArgs(commandUtils, "echo", "test");
+        echo.runCommand();
+        verify(commandUtils, times(1)).output("test");
 	}
-
-	private ArrayList<String> populateArrayList(String[] input) {
-		ArrayList<String> output = new ArrayList<>();
-        Collections.addAll(output, input);
-		return output;
-
-	}
-
 }
