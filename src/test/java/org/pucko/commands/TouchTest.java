@@ -137,7 +137,7 @@ public class TouchTest {
     }
 
     @Test
-    public void testFailsOnDirectoryNotReadable() {
+    public void testErrorMsgOnDirectoryNotReadable() {
         testFolder.getRoot().setReadable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
         setArgs(commandUtils, "touch", "filnamn");
@@ -146,6 +146,16 @@ public class TouchTest {
         t.runCommand();
 
         verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<filnamn>>: permission denied");
+    }
+
+    @Test
+    public void testReturnsFalseOnDirectoryNotReadable() {
+        testFolder.getRoot().setReadable(false);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
+
+        assertFalse(t.runCommand());
     }
 
     private ArrayList<Path> createPathArray(ImmutableList<String> input) {
