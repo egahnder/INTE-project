@@ -149,6 +149,28 @@ public class TouchTest {
     }
 
     @Test
+    public void testReturnsFalseOnDirectoryNotWritable() {
+        testFolder.getRoot().setWritable(false);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
+
+        assertFalse(t.runCommand());
+    }
+
+    @Test
+    public void testErrorMsgOnDirectoryNotWritable() {
+        testFolder.getRoot().setWritable(false);
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, "touch", "filnamn");
+        Touch t = new Touch(commandUtils);
+
+        t.runCommand();
+
+        verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<filnamn>>: permission denied");
+    }
+
+    @Test
     public void testReturnsFalseOnDirectoryNotReadable() {
         testFolder.getRoot().setReadable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
