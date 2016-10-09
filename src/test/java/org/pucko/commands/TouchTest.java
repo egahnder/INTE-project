@@ -33,6 +33,8 @@ public class TouchTest {
     private CommandUtils commandUtils;
     private ArgsPopulator argsPopulator;
     private Path folderPath;
+    private static final String VALID_TOUCH_COMMAND = "touch";
+    private static final String VALID_FILENAME = "filename";
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -49,7 +51,7 @@ public class TouchTest {
 
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
 
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
@@ -61,7 +63,7 @@ public class TouchTest {
     public void testCreatesTwoFiles() throws IOException {
 
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn1", "filnamn2");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, "filnamn", "filnamn1", "filnamn2");
         Touch t = new Touch(commandUtils);
 
         ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
@@ -73,7 +75,7 @@ public class TouchTest {
     public void testCreatesMultipleFiles() throws IOException {
 
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6");
+        setArgs(commandUtils, "filnamn", "filnamn1", "filnamn2", "filnamn3", "filnamn4", "filnamn5", "filnamn6");
         Touch t = new Touch(commandUtils);
 
         ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
@@ -86,7 +88,7 @@ public class TouchTest {
     public void testReturnsTrueWithOneFile() {
 
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         assertTrue(t.runCommand());
@@ -96,10 +98,10 @@ public class TouchTest {
     @Test
     public void testReturnsFalseWhenFileAlreadyExists() throws IOException {
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
-        testFolder.newFile("filnamn");
+        testFolder.newFile(VALID_FILENAME);
         assertFalse(t.runCommand());
     }
 
@@ -107,7 +109,7 @@ public class TouchTest {
     @Test
     public void testReturnsFalseWhenNoFileName() {
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND);
         Touch t = new Touch(commandUtils);
         assertFalse(t.runCommand());
     }
@@ -116,7 +118,7 @@ public class TouchTest {
     @Test
     public void testErrorMsgWhenNoFileName() {
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND);
         Touch t = new Touch(commandUtils);
         t.runCommand();
         verify(commandUtils, times(1)).error("Filename is missing");
@@ -126,10 +128,10 @@ public class TouchTest {
     public void testErrorMsgWhenFileAlreadyExists() throws IOException {
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
 
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
-        testFolder.newFile("filnamn");
+        testFolder.newFile(VALID_FILENAME);
         t.runCommand();
 
         verify(commandUtils, times(1)).error("File already exists");
@@ -140,19 +142,19 @@ public class TouchTest {
     public void testErrorMsgOnDirectoryNotReadable() {
         testFolder.getRoot().setReadable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         t.runCommand();
 
-        verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<filnamn>>: permission denied");
+        verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<"+VALID_FILENAME+">>: permission denied");
     }
 
     @Test
     public void testReturnsFalseOnDirectoryNotWritable() {
         testFolder.getRoot().setWritable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         assertFalse(t.runCommand());
@@ -162,19 +164,19 @@ public class TouchTest {
     public void testErrorMsgOnDirectoryNotWritable() {
         testFolder.getRoot().setWritable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         t.runCommand();
 
-        verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<filnamn>>: permission denied");
+        verify(commandUtils, times(1)).error("touch: can not make 'touch' on <<"+VALID_FILENAME+">>: permission denied");
     }
 
     @Test
     public void testReturnsFalseOnDirectoryNotReadable() {
         testFolder.getRoot().setReadable(false);
         when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
-        setArgs(commandUtils, "touch", "filnamn");
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
         assertFalse(t.runCommand());
