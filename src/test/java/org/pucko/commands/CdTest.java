@@ -42,8 +42,8 @@ public class CdTest {
 
     @Test
     public void testChildDir() throws IOException {
-        setArgs(commandUtils, "cd", "bar");
-        newDir = testFolder.newFolder("bar");
+        setArgs(commandUtils, "cd", "validdir");
+        newDir = testFolder.newFolder("validdir");
         newPath = newDir.toPath();
         setWorkingDirectory(commandUtils, oldDir.toString());
         cd = new Cd(commandUtils);
