@@ -11,4 +11,4 @@
 * Tobias Ahnhem - tahnhem
 
 ## Classdiagram
-* https://www.lucidchart.com/invitations/accept/ada8c51c-4dd3-4d89-aa60-0c9b5ec7fa3a
+* https://github.com/egahnder/INTE-project/blob/develop/INTE-Diagram.png
