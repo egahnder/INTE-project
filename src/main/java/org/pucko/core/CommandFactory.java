@@ -17,6 +17,9 @@ public class CommandFactory {
                 return new Cd(commandUtils);
             case "history":
                 return new History(commandUtils);
+            case "touch":
+                return new Touch(commandUtils);
+
             default:
                 return new DefaultCommand(commandUtils);
         }
