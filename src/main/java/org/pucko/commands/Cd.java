@@ -14,9 +14,6 @@ public class Cd extends Command {
     private final Path oldPath = getWorkingDirectory();
     private String commando;
 
-    /**
-     * @param commandUtils Utils used for IO operations, command arguments, working directory etc.
-     */
     public Cd(CommandUtils commandUtils) {
         super(commandUtils);
     }
@@ -31,9 +28,7 @@ public class Cd extends Command {
 
     private void resolveNewPath() {
 
-        // If the argument is ".." create the new Path by calling getParent() on the old path
-        // If the argument is "~" create a Path to user home
-        // Otherwise create the newPath by sticking the new Path from the args ArrayList onto the oldPath with resolve
+
         if (getArgs().size() == 1) {
             newPath = Paths.get(System.getProperty("user.home"));
         } else {
@@ -90,8 +85,6 @@ public class Cd extends Command {
     @Override
     protected boolean verifyExecutable() {
 
-        // If args is null, return false
-
         if (getArgs().contains(null)) {
             error("cd: Invalid Argument");
             return false;
@@ -99,26 +92,21 @@ public class Cd extends Command {
 
         resolveNewPath();
 
-        // Lets make sure the path exists
         if (newPath == null) {
             error("cd: No such file or directory");
             return false;
-
         }
 
-        //Lets make sure the directory exists
         if (!Files.exists(newPath)) {
             error("cd: No such file or directory: " +getArg(1));
             return false;
         }
 
-        //Lets make sure the directory is readable
         if (!Files.isReadable(newPath)) {
             error("cd: You do not have permission to access this directory");
             return false;
         }
 
-        // If all tests pass, this command is validated
         return true;
     }
 

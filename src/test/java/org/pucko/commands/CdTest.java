@@ -42,8 +42,8 @@ public class CdTest {
 
     @Test
     public void testChildDir() throws IOException {
-        setArgs(commandUtils, "cd", "bar");
-        newDir = testFolder.newFolder("bar");
+        setArgs(commandUtils, "cd", "validdir");
+        newDir = testFolder.newFolder("validdir");
         newPath = newDir.toPath();
         setWorkingDirectory(commandUtils, oldDir.toString());
         cd = new Cd(commandUtils);
@@ -60,9 +60,7 @@ public class CdTest {
         setWorkingDirectory(commandUtils, oldDir.toString());
         cd = new Cd(commandUtils);
         cd.runCommand();
-        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
-        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
-        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
+        verify(commandUtils, times(1)).changeWorkingDirectory(newPath);
 
     }
 
@@ -90,9 +88,7 @@ public class CdTest {
 
         String homePath = System.getProperty("user.home");
         Path newPath = Paths.get(homePath);
-        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
-        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
-        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
+        verify(commandUtils, times(1)).changeWorkingDirectory(newPath);
 
     }
 
@@ -106,10 +102,7 @@ public class CdTest {
         cd.runCommand();
 
         Path newPath = Paths.get("/");
-        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
-        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
-        assertEquals(newPath.toString(), pathArgumentCaptor.getValue().toString());
-
+        verify(commandUtils, times(1)).changeWorkingDirectory(newPath);
     }
 
     @Test
@@ -151,8 +144,6 @@ public class CdTest {
         setWorkingDirectory(commandUtils, oldDir.toString());
         cd = new Cd(commandUtils);
         cd.runCommand();
-        ArgumentCaptor<Path> pathArgumentCaptor = ArgumentCaptor.forClass(Path.class);
-        verify(commandUtils, times(1)).changeWorkingDirectory(pathArgumentCaptor.capture());
-        assertEquals(oldDir.toString(), pathArgumentCaptor.getValue().toString());
+        verify(commandUtils, times(1)).changeWorkingDirectory(oldDir);
     }
 }
