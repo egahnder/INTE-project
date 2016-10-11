@@ -55,7 +55,7 @@ public class TouchTest {
         setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
-        List<Path> filePathArray = createPathArray(commandUtils.getArgs()).subList(1, commandUtils.getArgs().size());
+        List<Path> filePathArray = createPathArray(commandUtils.getArgs());
         t.runCommand();
         assertFiles(filePathArray);
     }
@@ -82,6 +82,21 @@ public class TouchTest {
         ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
         t.runCommand();
         assertFiles(filePathArray);
+    }
+
+    @Test
+    public void testDoesNotCreateTouchFile() { //Makes sure the command does not create a file from the command name
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
+        Touch t = new Touch(commandUtils);
+
+        List<Path> filePathArray = createPathArray(commandUtils.getArgs()).subList(1, commandUtils.getArgs().size());
+        t.runCommand();
+
+        Path p = folderPath.resolve(VALID_TOUCH_COMMAND);
+
+        assertFalse("File: " + p.toString(), new File(p.toString()).isFile());
     }
 
 
@@ -207,7 +222,9 @@ public class TouchTest {
     }
 
     private void assertFiles(List<Path> filePathArray) {
-        for (Path p : filePathArray) {
+        List<Path> filePaths = filePathArray.subList(1, commandUtils.getArgs().size());
+
+        for (Path p : filePaths) {
             assertTrue("File: " + p.toString(), new File(p.toString()).isFile());
         }
 
