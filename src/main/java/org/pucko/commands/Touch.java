@@ -37,6 +37,7 @@ public class Touch extends Command {
                 error("File already exists");
                 return false;
             } catch (IOException e) {
+                error("Illegal filename");
             }
         }
         return true;
