@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mockito.Mock;
 import org.pucko.testutilities.ArgsPopulator;
@@ -35,7 +36,7 @@ public class TouchTest {
     private Path folderPath;
     private static final String VALID_TOUCH_COMMAND = "touch";
     private static final String VALID_FILENAME = "filename";
-
+    private static final String ILLEGAL_FILENAME = "--:::_:_Ä*^^?=)(/&%&/()=\"!";
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
@@ -54,7 +55,7 @@ public class TouchTest {
         setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
-        ArrayList<Path> filePathArray = createPathArray(commandUtils.getArgs());
+        List<Path> filePathArray = createPathArray(commandUtils.getArgs()).subList(1, commandUtils.getArgs().size());
         t.runCommand();
         assertFiles(filePathArray);
     }
@@ -182,6 +183,17 @@ public class TouchTest {
         assertFalse(t.runCommand());
     }
 
+    @Test
+    public void testErrorOnIllegalFilename() {
+        when(commandUtils.getWorkingDirectory()).thenReturn(folderPath);
+        setArgs(commandUtils, VALID_TOUCH_COMMAND, ILLEGAL_FILENAME);
+        Touch t = new Touch(commandUtils);
+
+        t.runCommand();
+
+        verify(commandUtils, times(1)).error("Illegal filename");
+    }
+
     private ArrayList<Path> createPathArray(ImmutableList<String> input) {
 
         Path filePath;
@@ -194,7 +206,7 @@ public class TouchTest {
         return filePathArray;
     }
 
-    private void assertFiles(ArrayList<Path> filePathArray) {
+    private void assertFiles(List<Path> filePathArray) {
         for (Path p : filePathArray) {
             assertTrue("File: " + p.toString(), new File(p.toString()).isFile());
         }
