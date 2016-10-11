@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import org.pucko.core.InputHandler;
@@ -27,7 +28,7 @@ public class Touch extends Command {
     @Override
     public boolean execute() {
 
-        ArrayList<String> args = getArgs();
+        List<String> args = getArgs().subList(1, getArgs().size());
 
         for (String s : args) {
 
