@@ -8,9 +8,6 @@ import org.pucko.core.WorkingDirectory;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-/**
- * Created by eric on 2016-09-24.
- */
 public class CommandUtils {
     private WorkingDirectory workingDirectory;
     private OutputHandler outputHandler;
