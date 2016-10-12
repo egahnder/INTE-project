@@ -4,9 +4,6 @@ import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
-/**
- * Created by eric on 2016-09-24.
- */
 public class CommandArguments {
     private final InputHandler inputHandler;
     private final OutputHandler outputHandler;

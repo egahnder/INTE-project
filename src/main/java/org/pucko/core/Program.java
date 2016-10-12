@@ -5,8 +5,6 @@ import org.pucko.CommandProcessors.DefaultProcessor;
 import org.pucko.CommandProcessors.PipeProcessor;
 import org.pucko.commands.UtilsBuilderFactory;
 
-import java.util.Scanner;
-
 public class Program {
 
 	public static void main(String[] args) {

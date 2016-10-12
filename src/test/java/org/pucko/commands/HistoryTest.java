@@ -1,13 +1,9 @@
 package org.pucko.commands;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
-import static org.mockito.InOrder.*;
 
 import org.mockito.Mock;
 import org.pucko.core.InputHandler;
@@ -15,16 +11,12 @@ import org.pucko.core.OutputHandler;
 import org.pucko.core.WorkingDirectory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.pucko.testutilities.TestUtils.setArgs;
 import static org.pucko.testutilities.TestUtils.setHistory;
 
-/**
- * Created by Tobias on 20/09/16.
- */
 public class HistoryTest {
 
     //git push origin feature/develop-history

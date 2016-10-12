@@ -1,15 +1,7 @@
 package org.pucko.commands;
 
 import com.google.common.collect.ImmutableList;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
-import java.util.ArrayList;
-
-/**
- * Created by Tobias on 20/09/16.
- */
 public class History extends Command {
 
     private boolean printCompleteHistory;

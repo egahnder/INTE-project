@@ -1,22 +1,10 @@
-
 package org.pucko.commands;
-
-/**
- * Created by Tobias on 15/09/16.
- */
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-
-
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 public class Touch extends Command {
 

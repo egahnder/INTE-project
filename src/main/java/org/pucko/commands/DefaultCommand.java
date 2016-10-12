@@ -1,11 +1,5 @@
 package org.pucko.commands;
 
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
-
-import java.util.ArrayList;
-
 public class DefaultCommand extends Command {
 
 

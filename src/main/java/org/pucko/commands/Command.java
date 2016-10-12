@@ -4,9 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
-import org.pucko.core.InputHandler;
 import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 public abstract class Command implements OutputHandler {
 
@@ -89,9 +87,7 @@ public abstract class Command implements OutputHandler {
     protected final ArrayList<String> getArgs() {
         ArrayList<String> newList = new ArrayList<>();
         if (commandUtils.getArgs() != null)
-            for (String arg : commandUtils.getArgs()) {
-                newList.add(arg);
-            }
+            newList.addAll(commandUtils.getArgs());
         return newList;
 
     }

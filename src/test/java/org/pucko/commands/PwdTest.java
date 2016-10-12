@@ -1,7 +1,5 @@
 package org.pucko.commands;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,15 +12,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.mockito.Mock;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 public class PwdTest {
 
 	@Mock
     private CommandUtils commandUtils;
-	private ArrayList<String> input;
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
@@ -30,7 +24,6 @@ public class PwdTest {
 	@Before
 	public void setUp() {
         initMocks(this);
-		input = new ArrayList<>();
 	}
 
 	@Test

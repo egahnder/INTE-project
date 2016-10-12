@@ -8,9 +8,6 @@ import java.nio.file.Paths;
 
 import static org.mockito.Mockito.when;
 
-/**
- * Created by eric on 2016-09-25.
- */
 public class TestUtils {
 
     public static void setArgs(CommandUtils commandUtils, String...args) {
