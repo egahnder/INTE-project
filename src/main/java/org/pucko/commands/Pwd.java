@@ -21,14 +21,5 @@ public class Pwd extends Command {
 		return getWorkingDirectory() != null;
 	}
 
-	@Override
-	protected boolean undo() {
-		return false;
-	}
 
-
-	@Override
-	protected boolean verifyUndoable() {
-		return false;
-	}
 }

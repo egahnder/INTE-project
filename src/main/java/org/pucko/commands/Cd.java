@@ -45,7 +45,7 @@ public class Cd extends Command {
         }
     }
 
-    private void parsePeriod( String input) {
+    private void parsePeriod(String input) {
         newPath = oldPath.normalize();
         if (input.length() > 1) {
             newPath = oldPath.resolve(Paths.get(input));
@@ -72,10 +72,6 @@ public class Cd extends Command {
 
     }
 
-    @Override
-    protected boolean verifyUndoable() {
-        return false;
-    }
 
     @Override
     protected boolean verifyExecutable() {
@@ -93,7 +89,7 @@ public class Cd extends Command {
         }
 
         if (!Files.exists(newPath)) {
-            error("cd: No such file or directory: " +getArg(1));
+            error("cd: No such file or directory: " + getArg(1));
             return false;
         }
 
@@ -103,11 +99,6 @@ public class Cd extends Command {
         }
 
         return true;
-    }
-
-    @Override
-    protected boolean undo() {
-        return false;
     }
 
 

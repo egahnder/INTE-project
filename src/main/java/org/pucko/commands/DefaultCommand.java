@@ -20,13 +20,5 @@ public class DefaultCommand extends Command {
         return false;
     }
 
-    @Override
-    protected boolean undo() {
-        return false;
-    }
 
-    @Override
-    protected boolean verifyUndoable() {
-        return false;
-    }
 }
