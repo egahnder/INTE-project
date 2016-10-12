@@ -3,11 +3,6 @@ package org.pucko.commands;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 public class Cd extends Command {
     private Path newPath = Paths.get("/");

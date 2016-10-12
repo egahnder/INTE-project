@@ -1,12 +1,6 @@
-
 package org.pucko.commands;
 
-/**
- * Created by Tobias on 15/09/16.
- */
-
 import static org.junit.Assert.*;
-
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -91,7 +85,7 @@ public class TouchTest {
         setArgs(commandUtils, VALID_TOUCH_COMMAND, VALID_FILENAME);
         Touch t = new Touch(commandUtils);
 
-        List<Path> filePathArray = createPathArray(commandUtils.getArgs()).subList(1, commandUtils.getArgs().size());
+        createPathArray(commandUtils.getArgs()).subList(1, commandUtils.getArgs().size());
         t.runCommand();
 
         Path p = folderPath.resolve(VALID_TOUCH_COMMAND);

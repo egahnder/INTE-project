@@ -5,15 +5,9 @@ import org.pucko.commands.CommandArguments;
 import org.pucko.commands.CommandUtils.UtilsBuilder;
 import org.pucko.commands.UtilsBuilderFactory;
 import org.pucko.core.CommandFactory;
-import org.pucko.core.InputHandler;
-import org.pucko.core.OutputHandler;
-import org.pucko.core.WorkingDirectory;
 
 import java.util.ArrayList;
 
-/**
- * Created by eric on 2016-09-16.
- */
 public class DefaultProcessor extends CommandProcessor {
 
     public DefaultProcessor(CommandFactory commandFactory, UtilsBuilderFactory utilsBuilderFactory) {

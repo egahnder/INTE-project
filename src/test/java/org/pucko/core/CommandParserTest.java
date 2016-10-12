@@ -8,12 +8,12 @@ import org.pucko.commands.Command;
 import org.pucko.commands.CommandArguments;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -63,8 +63,6 @@ public class CommandParserTest {
     }
 
     private void populateCommandsList(ArrayList<Command> commandList, Command...commands){
-        for (Command command : commands){
-            commandList.add(command);
-        }
+        Collections.addAll(commandList, commands);
     }
 }
