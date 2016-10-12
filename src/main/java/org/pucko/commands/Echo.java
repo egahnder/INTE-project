@@ -25,15 +25,7 @@ public class Echo extends Command {
         return true;
     }
 
-    @Override
-    protected boolean undo() {
-        return false;
-    }
 
-    @Override
-    protected boolean verifyUndoable() {
-        return false;
-    }
 
     @Override
     public boolean verifyExecutable() {

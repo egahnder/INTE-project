@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.Mock;
-import org.pucko.testutilities.ArgsPopulator;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -26,7 +25,6 @@ public class TouchTest {
 
     @Mock
     private CommandUtils commandUtils;
-    private ArgsPopulator argsPopulator;
     private Path folderPath;
     private static final String VALID_TOUCH_COMMAND = "touch";
     private static final String VALID_FILENAME = "filename";
@@ -37,7 +35,6 @@ public class TouchTest {
     @Before
     public void setUp() {
         initMocks(this);
-        argsPopulator = new ArgsPopulator();
         folderPath = testFolder.getRoot().toPath();
     }
 

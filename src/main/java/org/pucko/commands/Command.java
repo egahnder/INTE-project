@@ -11,11 +11,9 @@ public abstract class Command implements OutputHandler {
     private CommandUtils commandUtils;
     private boolean validForExecute;
     private boolean executable;
-    private boolean validForUndo;
-    private boolean undoable;
+
 
     /**
-     *
      * @param commandUtils Utils used for IO operations, command arguments, working directory etc.
      */
     public Command(CommandUtils commandUtils) {
@@ -45,9 +43,6 @@ public abstract class Command implements OutputHandler {
      *
      * @return true if method was run without any exceptions, otherwise false.
      */
-    protected abstract boolean undo();
-
-    protected abstract boolean verifyUndoable();
 
 
     /**
@@ -61,16 +56,6 @@ public abstract class Command implements OutputHandler {
         return executable && execute();
     }
 
-    /**
-     * @return true if the command was reverted properly or if the command was never executed. Returns false if there
-     * was an error reverting the command.
-     */
-    public boolean revertCommand() {
-        if (!validForUndo) {
-            validateForUndo();
-        }
-        return undoable && undo();
-    }
 
     /**
      * Appends argument to command. Invalidates for undo and execution.
@@ -81,7 +66,6 @@ public abstract class Command implements OutputHandler {
     public void handleOutput(String output) {
         commandUtils.addArg(output);
         invalidateForExecution();
-        invalidateForUndo();
     }
 
     protected final ArrayList<String> getArgs() {
@@ -116,7 +100,6 @@ public abstract class Command implements OutputHandler {
     protected final void setWorkingDirectory(Path newPath) {
         commandUtils.changeWorkingDirectory(newPath);
         invalidateForExecution();
-        invalidateForUndo();
     }
 
     /**
@@ -159,19 +142,6 @@ public abstract class Command implements OutputHandler {
         validForExecute = false;
     }
 
-    /**
-     * Validates that command can be undone.
-     */
-    private void validateForUndo() {
-        undoable = verifyUndoable();
-        validForExecute = true;
-    }
 
-    /**
-     * Invalidates command from being undone.
-     */
-    private void invalidateForUndo() {
-        validForUndo = false;
-    }
 }
 
