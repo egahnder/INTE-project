@@ -86,8 +86,10 @@ public abstract class Command implements OutputHandler {
 
     protected final ArrayList<String> getArgs() {
         ArrayList<String> newList = new ArrayList<>();
-        if (commandUtils.getArgs() != null)
+        if (commandUtils.getArgs() != null) {
             newList.addAll(commandUtils.getArgs());
+        }
+
         return newList;
 
     }
@@ -99,7 +101,7 @@ public abstract class Command implements OutputHandler {
      * @return argument for command.
      */
     protected final String getArg(int index) {
-        return commandUtils.getArgs().get((index));
+        return commandUtils.getArgs().get(index);
     }
 
     protected final ImmutableList getHistory() {
