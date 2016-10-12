@@ -38,22 +38,9 @@ public class CommandRunnerTest {
 		}
 	}
 	
-	@Test
-	public void testRemainingCommandsAreNotCalledAfterInvalidCommand(){
-		setCommandValidations(false, true, true);
-		commandRunner.runCommands(commands);
-		verify(secondCommand, never()).runCommand();
-		verify(thirdCommand, never()).runCommand();
-	}
+
 	
-	@Test
-	public void testInvalidCommandWillCallUndoOnPreviousCommands(){
-		InOrder inOrder = inOrder(firstCommand, secondCommand);
-		setCommandValidations(true, true, false);
-		commandRunner.runCommands(commands);
-		inOrder.verify(secondCommand, times(1)).revertCommand();
-		inOrder.verify(firstCommand, times(1)).revertCommand();
-	}
+
 
 	private void setCommandValidations(boolean first, boolean second, boolean third){
 		when(firstCommand.runCommand()).thenReturn(first);
