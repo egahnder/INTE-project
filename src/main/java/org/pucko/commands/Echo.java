@@ -19,7 +19,7 @@ public class Echo extends Command {
         args.remove(0);
         for (String s : args) {
             sb.append(s);
-            sb.append(" ");
+            sb.append(' ');
         }
         output(sb.toString().trim());
         return true;
