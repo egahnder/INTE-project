@@ -13,6 +13,9 @@ import org.pucko.answers.SelfReturningAnswer;
 import org.pucko.commands.CommandArguments;
 import org.pucko.commands.CommandArguments.ArgumentsBuilder;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
@@ -47,12 +50,11 @@ public class MenuTest {
         argumentsBuilder = mock(ArgumentsBuilder.class, new SelfReturningAnswer());
         when(argumentsBuilderFactory.createBuilder()).thenReturn(argumentsBuilder);
 		menu = new Menu(controller, workingDirectory, argumentsBuilderFactory);
-        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
-
 	}
 	
 	@Test
 	public void testArgumentsBuilderAddsWorkingDirectory(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         input.provideLines("");
         menu.run();
         verify(argumentsBuilder, times(1)).addWorkingDirectory(workingDirectory);
@@ -60,6 +62,7 @@ public class MenuTest {
 
 	@Test
     public void testArgumentsBuilderAddsInputHandler(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         input.provideLines("");
         menu.run();
         verify(argumentsBuilder, times(1)).addInputHandler(menu);
@@ -67,6 +70,7 @@ public class MenuTest {
 
     @Test
     public void testArgumentsBuilderAddsErrorHandler(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         input.provideLines("");
         menu.run();
         verify(argumentsBuilder, times(1)).addErrorHandler(menu);
@@ -74,6 +78,7 @@ public class MenuTest {
 
     @Test
     public void testArgumentsBuilderAddsOutputHandler(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         input.provideLines("");
         menu.run();
         verify(argumentsBuilder, times(1)).addOutputHandler(menu);
@@ -81,6 +86,7 @@ public class MenuTest {
 
     @Test
     public void testControllerIsCalledWithCommandArguments(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         when(argumentsBuilder.build()).thenReturn(commandArguments);
         input.provideLines("");
         menu.run();
@@ -89,6 +95,7 @@ public class MenuTest {
 	
 	@Test
 	public void testSystemExit(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
 		input.provideLines("exit");
 		exit.expectSystemExitWithStatus(0);
 		menu.run();
@@ -96,6 +103,7 @@ public class MenuTest {
 	
 	@Test
 	public void testSystemOutIsCalledWithPrompt(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         String expectedPrompt = temporaryFolder.getRoot().toPath().toString()+"$ ";
 		menu.run();
 		assertEquals(expectedPrompt, out.getLog());
@@ -109,6 +117,7 @@ public class MenuTest {
 
 	@Test
     public void testMenuAddsHistory(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         String inputString = "echo Hello World";
         input.provideLines(inputString);
         menu.run();
@@ -118,10 +127,20 @@ public class MenuTest {
 
     @Test
     public void testMenuAddsCorrectString(){
+        when(workingDirectory.getPath()).thenReturn(temporaryFolder.getRoot().toPath());
         String inputString = "echo Hello World";
         input.provideLines(inputString);
         menu.run();
         assertEquals(inputString, menu.getHistory().get(0));
+    }
+
+    @Test
+    public void testMenuReplacesHomeWithTilde(){
+        Path path = Paths.get(System.getProperty("user.home"));
+        when(workingDirectory.getPath()).thenReturn(path);
+        menu.run();
+        String output = out.getLog();
+        assertEquals("~$ ", output);
     }
 
 }
