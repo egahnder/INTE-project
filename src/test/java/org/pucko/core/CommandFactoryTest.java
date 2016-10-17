@@ -62,6 +62,11 @@ public class CommandFactoryTest {
         testCommandIsCreated("history", History .class);
     }
 
+    @Test
+    public void testCommandFactoryReturnsTouchCommand(){
+        testCommandIsCreated("touch", Touch .class);
+    }
+
 
     private void testCommandIsCreated(String commandString, Class<?> commandClass) {
         Command command = commandFactory.createCommand(commandString, commandUtils);
