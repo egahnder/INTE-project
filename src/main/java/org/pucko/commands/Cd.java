@@ -3,11 +3,12 @@ package org.pucko.commands;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Cd extends Command {
     private Path newPath = Paths.get("/");
     private final Path oldPath = getWorkingDirectory();
-    private String commando;
+    private String argument;
 
     public Cd(CommandUtils commandUtils) {
         super(commandUtils);
@@ -22,74 +23,29 @@ public class Cd extends Command {
     }
 
     private void resolveNewPath() {
-
-
-        if (getArgs().size() == 1) {
+        ArrayList<String> arguments = getArgs();
+        if (arguments.size() == 1) {
             newPath = Paths.get(System.getProperty("user.home"));
-        } else {
+            return;
 
-            commando = getArg(1);
-
-            if ("..".equals(commando)) {
-                newPath = oldPath.getParent();
-            } else if (".".equals(commando)) {
-                parsePeriod(commando);
-            } else if (commando.startsWith("~")) {
-                parseTilde();
-            } else if (commando.startsWith("/")) {
-                parseSlash(commando);
-            } else {
-                newPath = oldPath.resolve(Paths.get(commando));
-
-            }
         }
-    }
+        argument = arguments.get(1);
 
-    private void parsePeriod(String input) {
-        newPath = oldPath.normalize();
-        if (input.length() > 1) {
-            newPath = oldPath.resolve(Paths.get(input));
+        if (arguments.get(1).startsWith("~")) {
+            argument = arguments.get(1).replaceFirst("~", System.getProperty("user.home"));
         }
-    }
 
-    private void parseTilde() {
-        newPath = Paths.get(System.getProperty("user.home"));
-        if (commando.length() > 1) {
-            String[] splitCommandos = commando.split("~");
-            if (splitCommandos[1].startsWith("/")) {
-                parseSlash(splitCommandos[1]);
-            } else if (splitCommandos[1].startsWith(".")) {
-                parsePeriod(splitCommandos[1]);
-            }
-        }
-    }
-
-    private void parseSlash(String input) {
-        if (input.length() > 1) {
-            newPath = newPath.resolve(Paths.get(input.substring(1)));
-        }
-        newPath = newPath.resolve(Paths.get(input));
-
+        newPath = oldPath.resolve(Paths.get(argument)).normalize();
     }
 
 
     @Override
     protected boolean verifyExecutable() {
 
-        if (getArgs().contains(null)) {
-            error("cd: Invalid Argument");
-            return false;
-        }
-
         resolveNewPath();
 
-        if (newPath == null) {
-            error("cd: No such file or directory");
-            return false;
-        }
-
         if (!Files.exists(newPath)) {
-            error("cd: No such file or directory: " + getArg(1));
+            error("cd: No such file or directory: " + getArgs().get(1));
             return false;
         }
 
