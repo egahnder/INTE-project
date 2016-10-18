@@ -10,6 +10,9 @@
 * Eric Egan - etegan
 * Tobias Ahnhem - tahnhem
 
-## Classdiagram
+## Class Diagram
 * https://github.com/egahnder/INTE-project/blob/develop/simple_diagram.png
 * https://github.com/egahnder/INTE-project/blob/develop/detailed_diagram.png
+
+## Sequence Diagram
+* https://github.com/egahnder/INTE-project/blob/develop/sequence.png
