@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Cd extends Command {
     private Path newPath = Paths.get("/");
     private final Path oldPath = getWorkingDirectory();
-    private String argument;
 
     public Cd(CommandUtils commandUtils) {
         super(commandUtils);
@@ -29,7 +28,8 @@ public class Cd extends Command {
             return;
 
         }
-        argument = arguments.get(1);
+
+        String argument = arguments.get(1);
 
         if (arguments.get(1).startsWith("~")) {
             argument = arguments.get(1).replaceFirst("~", System.getProperty("user.home"));
