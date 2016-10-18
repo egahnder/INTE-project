@@ -62,6 +62,13 @@ public class CommandParserTest {
         assertThat(commands, is(not(empty())));
     }
 
+    @Test
+    public void testProcessorIsCalledTwice(){
+        parser.parseCommands("Test1 && Test2", commandArguments);
+        verify(commandProcessor, times(1)).process("Test1", commandArguments);
+        verify(commandProcessor, times(1)).process("Test2", commandArguments);
+    }
+
     private void populateCommandsList(ArrayList<Command> commandList, Command...commands){
         Collections.addAll(commandList, commands);
     }

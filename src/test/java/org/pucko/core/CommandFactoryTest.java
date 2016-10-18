@@ -59,7 +59,12 @@ public class CommandFactoryTest {
 
     @Test
     public void testCommandFactoryReturnsHistoryCommand(){
-        testCommandIsCreated("history", History .class);
+        testCommandIsCreated("history", History.class);
+    }
+
+    @Test
+    public void testCommandFactoryReturnsTouchCommand(){
+        testCommandIsCreated("touch", Touch .class);
     }
 
 

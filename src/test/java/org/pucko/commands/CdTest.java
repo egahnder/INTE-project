@@ -65,13 +65,13 @@ public class CdTest {
     @Test
     public void testParentDirWhenInSystemRoot() throws IOException {
 
-
         setArgs(commandUtils, "cd", "..");
         setWorkingDirectory(commandUtils, "/");
         cd = new Cd(commandUtils);
 
-        // Make sure cd returns false since there are no directories above /
-        assertEquals(false, cd.runCommand());
+        cd.runCommand();
+
+        verify(commandUtils, times(1)).changeWorkingDirectory(Paths.get("/"));
 
     }
 
@@ -136,6 +136,16 @@ public class CdTest {
     }
 
     @Test
+    public void testNoArgument() throws IOException {
+
+        setArgs(commandUtils, "cd");
+        setWorkingDirectory(commandUtils, oldDir.toString());
+        cd = new Cd(commandUtils);
+        cd.runCommand();
+        verify(commandUtils, times(1)).changeWorkingDirectory(Paths.get(System.getProperty("user.home")));
+    }
+
+    @Test
     public void testDotStaysInSameDirectory() throws IOException {
 
         setArgs(commandUtils, "cd", ".");
@@ -144,4 +154,5 @@ public class CdTest {
         cd.runCommand();
         verify(commandUtils, times(1)).changeWorkingDirectory(oldDir);
     }
+
 }
