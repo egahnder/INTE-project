@@ -11,4 +11,5 @@
 * Tobias Ahnhem - tahnhem
 
 ## Classdiagram
-* https://raw.githubusercontent.com/egahnder/INTE-project/develop/Inte-diagram.png
+* https://github.com/egahnder/INTE-project/blob/develop/simple_diagram.png
+* https://github.com/egahnder/INTE-project/blob/develop/detailed_diagram.png
