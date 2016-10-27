@@ -11,11 +11,11 @@ It is by no means complete or fully tested, but could maybe be used
 as a starting point in a naïve bash implementation.
 
 ## Class Diagram
-* https://github.com/egahnder/INTE-project/blob/develop/simple_diagram.png
-* https://github.com/egahnder/INTE-project/blob/develop/detailed_diagram.png
+* https://github.com/egahnder/jash/blob/develop/simple_diagram.png
+* https://github.com/egahnder/jash/blob/develop/detailed_diagram.png
 
 ## Sequence Diagram
-* https://github.com/egahnder/INTE-project/blob/develop/sequence.png
+* https://github.com/egahnder/jash/blob/develop/sequence.png
 
 ## License
 GNU GPLv3
